@@ -1,0 +1,8 @@
+{
+  "_about": "Lania story overlay. Premise from the ledger's draft reading of the revenant hunt (draft); the contact waits at the Party marker in Bayfshear (canon: the party is there on day 13).",
+  "premise": "A returning dead thing walks in Kaharlale, seat of the Sect of the Friendly, and no one there may say so aloud. The bounties come from abroad, from Krusetlev and Thalasha, where it can be named. You took the commission in Adrer.",
+  "contact": {"description": "A thin traveller with fen mud on her boots, lodging in the Fatewell guest room."},
+  "topics": {
+    "swangel": {"lodger|guest|traveller|contact|woman": "The one in the guest room came two days before you, asking for travellers out of Adrer. She paid in advance. I don't ask more than that."}
+  }
+}
