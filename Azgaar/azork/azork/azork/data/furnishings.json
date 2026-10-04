@@ -1,0 +1,1908 @@
+{
+ "_about": "Default furnishings by room purpose, generic room purposes, dungeon themes and loot. Content packs can override. All entries are invention (provenance new).",
+ "purposes": {
+  "kitchen": {
+   "items": [
+    {
+     "name": "iron stove",
+     "nouns": [
+      "stove",
+      "oven"
+     ],
+     "adjectives": [
+      "iron",
+      "black"
+     ],
+     "here": "An iron stove squats against the wall, still warm.",
+     "flags": [
+      "scenery",
+      "container",
+      "openable"
+     ],
+     "actions": {
+      "touch": {
+       "text": "Warm, not hot. Someone cooked here today."
+      },
+      "lookin": {
+       "text": "Grey ash and the end of a log."
+      },
+      "cook": {
+       "text": "You warm some of your rations on the stove. It improves them more than you expected.",
+       "time": 15,
+       "meal": true
+      }
+     }
+    },
+    {
+     "name": "scrubbed table",
+     "nouns": [
+      "table"
+     ],
+     "adjectives": [
+      "scrubbed",
+      "kitchen"
+     ],
+     "here": "A scrubbed table takes up the middle of the room.",
+     "flags": [
+      "scenery"
+     ]
+    },
+    {
+     "name": "pantry shelf",
+     "nouns": [
+      "shelf",
+      "pantry",
+      "shelves"
+     ],
+     "adjectives": [
+      "pantry"
+     ],
+     "here": "Shelves of jars and crocks line one side.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "text": "Behind the pickled eels you find a heel of bread.",
+       "once": true,
+       "spawn": {
+        "name": "heel of bread",
+        "nouns": [
+         "bread",
+         "heel"
+        ],
+        "weight": 0.3,
+        "flags": [
+         "takeable",
+         "food"
+        ],
+        "uses": 1
+       }
+      }
+     }
+    }
+   ],
+   "absent": "There is no stove. A sooty square on the wall marks where one stood, and a note pinned there reads: TINKER HAS IT. BACK BY MARKET DAY."
+  },
+  "bedroom": {
+   "items": [
+    {
+     "name": "bed",
+     "nouns": [
+      "bed"
+     ],
+     "adjectives": [
+      "wide",
+      "curtained"
+     ],
+     "here": "A curtained bed fills one corner.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "sleep": {
+       "text": "You lie down in someone else's bed and sleep badly.",
+       "rest": 6
+      },
+      "lookunder": {
+       "text": "A chamber pot, thankfully empty."
+      }
+     }
+    },
+    {
+     "name": "clothes chest",
+     "nouns": [
+      "chest"
+     ],
+     "adjectives": [
+      "clothes",
+      "wooden"
+     ],
+     "here": "A wooden chest stands at the foot of the bed.",
+     "flags": [
+      "scenery",
+      "container",
+      "openable"
+     ],
+     "contents": [
+      {
+       "name": "wool shawl",
+       "nouns": [
+        "shawl"
+       ],
+       "adjectives": [
+        "wool"
+       ],
+       "weight": 0.5,
+       "flags": [
+        "takeable",
+        "wearable"
+       ]
+      }
+     ]
+    }
+   ],
+   "absent": "There is no bed, only a mattress of rushes on the floor, which somebody has clearly been sleeping on in protest."
+  },
+  "guest room": {
+   "items": [
+    {
+     "name": "narrow bed",
+     "nouns": [
+      "bed"
+     ],
+     "adjectives": [
+      "narrow"
+     ],
+     "here": "A narrow bed is made up with clean linen.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "sleep": {
+       "text": "The linen smells of smoke and lavender. You sleep well.",
+       "rest": 7
+      }
+     }
+    },
+    {
+     "name": "washstand",
+     "nouns": [
+      "washstand",
+      "basin",
+      "jug"
+     ],
+     "adjectives": [
+      "wash"
+     ],
+     "here": "A washstand holds a basin and a jug of water.",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "use": {
+       "text": "You wash the fen off your face and hands. Much better.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "children's room": {
+   "items": [
+    {
+     "name": "row of small beds",
+     "nouns": [
+      "beds",
+      "bed"
+     ],
+     "adjectives": [
+      "small"
+     ],
+     "here": "Three small beds stand in a row, none of them made.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "sleep": {
+       "text": "Your feet hang over the end. You give up after an hour.",
+       "rest": 1
+      }
+     }
+    },
+    {
+     "name": "wooden horse",
+     "nouns": [
+      "horse",
+      "toy"
+     ],
+     "adjectives": [
+      "wooden",
+      "toy"
+     ],
+     "here": "A wooden horse with a chewed ear lies on the floor.",
+     "weight": 0.6,
+     "flags": [
+      "takeable"
+     ],
+     "actions": {
+      "play": {
+       "text": "You gallop it along the floor. Nobody sees. Probably."
+      }
+     }
+    }
+   ]
+  },
+  "library": {
+   "items": [
+    {
+     "name": "bookshelves",
+     "nouns": [
+      "shelves",
+      "bookshelves",
+      "books",
+      "shelf"
+     ],
+     "adjectives": [
+      "book"
+     ],
+     "here": "Bookshelves reach the ceiling.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "text": "Between two ledgers you find a folded letter.",
+       "once": true,
+       "spawn": {
+        "name": "folded letter",
+        "nouns": [
+         "letter"
+        ],
+        "adjectives": [
+         "folded"
+        ],
+        "weight": 0.05,
+        "flags": [
+         "takeable",
+         "readable"
+        ],
+        "text": "@rumour"
+       }
+      }
+     }
+    },
+    {
+     "name": "reading chair",
+     "nouns": [
+      "chair"
+     ],
+     "adjectives": [
+      "reading",
+      "leather"
+     ],
+     "here": "A leather reading chair sits under a lamp.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You sink into the chair. It is very comfortable, which is dangerous on a timetable.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "study": {
+   "items": [
+    {
+     "name": "writing desk",
+     "nouns": [
+      "desk",
+      "drawer"
+     ],
+     "adjectives": [
+      "writing"
+     ],
+     "here": "A writing desk faces the window.",
+     "flags": [
+      "scenery",
+      "container",
+      "openable"
+     ],
+     "contents": [
+      {
+       "name": "stub of sealing wax",
+       "nouns": [
+        "wax",
+        "stub"
+       ],
+       "adjectives": [
+        "sealing"
+       ],
+       "weight": 0.05,
+       "flags": [
+        "takeable"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "living room": {
+   "items": [
+    {
+     "name": "hearth",
+     "nouns": [
+      "hearth",
+      "fire",
+      "fireplace"
+     ],
+     "here": "A wide hearth holds a low fire.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "touch": {
+       "text": "You warm your hands. Your fingers had forgotten what that was like."
+      },
+      "lookin": {
+       "text": "Embers, and a forgotten poker."
+      }
+     }
+    },
+    {
+     "name": "settle",
+     "nouns": [
+      "settle",
+      "bench"
+     ],
+     "here": "A high-backed settle faces the hearth.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You sit by the fire for a few minutes.",
+       "time": 10
+      }
+     }
+    },
+    {
+     "name": "rag rug",
+     "nouns": [
+      "rug"
+     ],
+     "adjectives": [
+      "rag"
+     ],
+     "here": "A rag rug covers the boards.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "lookunder": {
+       "text": "Under the rug, a loose board. Under the board, nothing at all. Someone got here first."
+      }
+     }
+    }
+   ]
+  },
+  "hall": {
+   "items": [
+    {
+     "name": "row of coat pegs",
+     "nouns": [
+      "pegs",
+      "peg",
+      "coats"
+     ],
+     "adjectives": [
+      "coat"
+     ],
+     "here": "Coats and oilskins hang from a row of pegs.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "text": "In an oilskin pocket you find a few coins.",
+       "once": true,
+       "spawn": {
+        "name": "handful of copper coins",
+        "nouns": [
+         "coins",
+         "copper"
+        ],
+        "adjectives": [
+         "copper"
+        ],
+        "weight": 0.1,
+        "flags": [
+         "takeable",
+         "money"
+        ],
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "absent": "The coat pegs are bare, and someone has hung a dead heron on one of them instead."
+  },
+  "stairhall": {
+   "items": [
+    {
+     "name": "carved newel post",
+     "nouns": [
+      "post",
+      "newel"
+     ],
+     "adjectives": [
+      "carved",
+      "newel"
+     ],
+     "here": "The stair rises from a carved newel post.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "touch": {
+       "text": "The carving is worn smooth by generations of hands."
+      }
+     }
+    }
+   ]
+  },
+  "trophy room": {
+   "items": [
+    {
+     "name": "mounted trophies",
+     "nouns": [
+      "trophies",
+      "trophy",
+      "heads"
+     ],
+     "adjectives": [
+      "mounted"
+     ],
+     "here": "Trophies of the hunt crowd the walls.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "touch": {
+       "text": "Dusty. One of them is less dead than it looks; it is only a very good carving."
+      }
+     }
+    }
+   ]
+  },
+  "dining room": {
+   "items": [
+    {
+     "name": "long table",
+     "nouns": [
+      "table"
+     ],
+     "adjectives": [
+      "long",
+      "dining"
+     ],
+     "here": "A long table is set for more people than live here.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "laboratory": {
+   "items": [
+    {
+     "name": "workbench",
+     "nouns": [
+      "workbench",
+      "bench"
+     ],
+     "here": "A workbench is crowded with glassware.",
+     "flags": [
+      "scenery"
+     ]
+    },
+    {
+     "name": "alembic",
+     "nouns": [
+      "alembic",
+      "glassware",
+      "still"
+     ],
+     "here": "",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "smell": {
+       "text": "Sulphur, and something sweeter underneath. Your eyes water."
+      },
+      "touch": {
+       "text": "Hot. You let go quickly."
+      }
+     }
+    }
+   ]
+  },
+  "chapel": {
+   "items": [
+    {
+     "name": "altar",
+     "nouns": [
+      "altar"
+     ],
+     "here": "A plain altar stands at the far wall.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "pray": {
+       "text": "You pray. The quiet is the only answer, which is an answer of a kind.",
+       "time": 10
+      }
+     }
+    },
+    {
+     "name": "votive candle",
+     "nouns": [
+      "candle"
+     ],
+     "adjectives": [
+      "votive"
+     ],
+     "here": "A votive candle burns on the altar.",
+     "weight": 0.2,
+     "flags": [
+      "takeable",
+      "light",
+      "lit"
+     ],
+     "fuel": 90
+    }
+   ]
+  },
+  "cellar": {
+   "items": [
+    {
+     "name": "row of barrels",
+     "nouns": [
+      "barrels",
+      "barrel",
+      "cask"
+     ],
+     "here": "Barrels line the walls.",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "drink": {
+       "text": "You tap a barrel. Small beer, sour and welcome.",
+       "drink": true
+      }
+     }
+    }
+   ]
+  },
+  "storage": {
+   "items": [
+    {
+     "name": "stack of crates",
+     "nouns": [
+      "crates",
+      "crate",
+      "sacks"
+     ],
+     "here": "Crates and sacks are stacked to the beams.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "text": "Among the sacks you find a coil of twine.",
+       "once": true,
+       "spawn": {
+        "name": "coil of twine",
+        "nouns": [
+         "twine"
+        ],
+        "weight": 0.2,
+        "flags": [
+         "takeable"
+        ]
+       }
+      }
+     }
+    }
+   ]
+  },
+  "landing": {
+   "items": [
+    {
+     "name": "window seat",
+     "nouns": [
+      "seat",
+      "window"
+     ],
+     "adjectives": [
+      "window"
+     ],
+     "here": "A window seat looks out over the road.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "From here you can see anyone coming along the road. Useful.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "parlour": {
+   "items": [
+    {
+     "name": "pair of good chairs",
+     "nouns": [
+      "chairs",
+      "chair"
+     ],
+     "adjectives": [
+      "good"
+     ],
+     "here": "Two good chairs face each other, kept for visitors.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You sit in the visitors' chair and feel like a visitor.",
+       "time": 2
+      }
+     }
+    }
+   ]
+  },
+  "workroom": {
+   "items": [
+    {
+     "name": "work table",
+     "nouns": [
+      "table"
+     ],
+     "adjectives": [
+      "work"
+     ],
+     "here": "A work table is covered in half-mended snares.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "store room": {
+   "items": [
+    {
+     "name": "stack of crates",
+     "nouns": [
+      "crates",
+      "crate"
+     ],
+     "here": "Crates are stacked against the walls.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "servants' room": {
+   "items": [
+    {
+     "name": "pallet bed",
+     "nouns": [
+      "bed",
+      "pallet"
+     ],
+     "adjectives": [
+      "pallet"
+     ],
+     "here": "A pallet bed lies under the window.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "sleep": {
+       "text": "You sleep on the pallet. It is better than the fen.",
+       "rest": 6
+      }
+     }
+    }
+   ]
+  },
+  "sewing room": {
+   "items": [
+    {
+     "name": "work basket",
+     "nouns": [
+      "basket"
+     ],
+     "adjectives": [
+      "work"
+     ],
+     "here": "A work basket spills thread and pins.",
+     "flags": [
+      "scenery",
+      "container"
+     ],
+     "contents": [
+      {
+       "name": "packet of needles",
+       "nouns": [
+        "needles",
+        "packet"
+       ],
+       "weight": 0.02,
+       "flags": [
+        "takeable"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "box room": {
+   "items": [
+    {
+     "name": "heap of old boxes",
+     "nouns": [
+      "boxes",
+      "heap"
+     ],
+     "here": "Old boxes are heaped to the ceiling.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "text": "Mostly moths. One box holds a cracked hand mirror.",
+       "once": true,
+       "spawn": {
+        "name": "cracked hand mirror",
+        "nouns": [
+         "mirror"
+        ],
+        "adjectives": [
+         "cracked",
+         "hand"
+        ],
+        "weight": 0.3,
+        "flags": [
+         "takeable"
+        ]
+       }
+      }
+     }
+    }
+   ]
+  },
+  "cold store": {
+   "items": [
+    {
+     "name": "stone slab",
+     "nouns": [
+      "slab"
+     ],
+     "adjectives": [
+      "stone"
+     ],
+     "here": "Smoked fish hang above a cold stone slab.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "smell": {
+       "text": "Smoke, salt and eel."
+      }
+     }
+    }
+   ]
+  },
+  "wine cellar": {
+   "items": [
+    {
+     "name": "wine rack",
+     "nouns": [
+      "rack",
+      "wine",
+      "bottles"
+     ],
+     "adjectives": [
+      "wine"
+     ],
+     "here": "A wine rack holds a few dusty bottles.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "servants' quarters": {
+   "items": [
+    {
+     "name": "row of bunks",
+     "nouns": [
+      "bunks",
+      "bunk"
+     ],
+     "here": "Two bunks are built into the wall.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "sleep": {
+       "text": "The bunk is short and hard. You sleep anyway.",
+       "rest": 6
+      }
+     }
+    }
+   ]
+  },
+  "throne room": {
+   "items": [
+    {
+     "name": "broken throne",
+     "nouns": [
+      "throne"
+     ],
+     "adjectives": [
+      "broken",
+      "stone"
+     ],
+     "here": "A stone throne stands on a dais, its back split in two.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You sit on the throne. For a moment the halls feel full of voices. Then they don't.",
+       "time": 2
+      }
+     }
+    }
+   ]
+  },
+  "audience hall": {
+   "items": [
+    {
+     "name": "faded banners",
+     "nouns": [
+      "banners",
+      "banner"
+     ],
+     "adjectives": [
+      "faded"
+     ],
+     "here": "Faded banners hang between the columns.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "feast hall": {
+   "items": [
+    {
+     "name": "trestle tables",
+     "nouns": [
+      "tables",
+      "table",
+      "trestles"
+     ],
+     "adjectives": [
+      "trestle"
+     ],
+     "here": "Trestle tables rot where the last feast left them.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "guard room": {
+   "items": [
+    {
+     "name": "overturned table",
+     "nouns": [
+      "table"
+     ],
+     "adjectives": [
+      "overturned"
+     ],
+     "here": "A table lies overturned, dice scattered around it.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "barracks": {
+   "items": [
+    {
+     "name": "rotten bunks",
+     "nouns": [
+      "bunks",
+      "bunk"
+     ],
+     "adjectives": [
+      "rotten"
+     ],
+     "here": "Rows of rotten bunks line the walls.",
+     "flags": [
+      "scenery",
+      "bed"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      },
+      "sleep": {
+       "text": "The bunk collapses under you. You sleep on the floor instead.",
+       "rest": 4
+      }
+     }
+    }
+   ]
+  },
+  "armoury": {
+   "items": [
+    {
+     "name": "weapon racks",
+     "nouns": [
+      "racks",
+      "rack"
+     ],
+     "adjectives": [
+      "weapon"
+     ],
+     "here": "Weapon racks stand empty but for rust.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "weapon",
+       "once": true
+      }
+     }
+    }
+   ],
+   "absent": "The armoury is empty. Someone has written, very neatly, a receipt for everything on the wall."
+  },
+  "treasury": {
+   "items": [
+    {
+     "name": "smashed strongboxes",
+     "nouns": [
+      "strongboxes",
+      "strongbox",
+      "boxes"
+     ],
+     "adjectives": [
+      "smashed"
+     ],
+     "here": "Strongboxes lie smashed open.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "treasure",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "kitchen ruin": {
+   "items": [
+    {
+     "name": "great hearth",
+     "nouns": [
+      "hearth"
+     ],
+     "adjectives": [
+      "great"
+     ],
+     "here": "A great hearth gapes, cold for centuries.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "lookin": {
+       "text": "Old bones, very small. Rats, you decide firmly."
+      }
+     }
+    }
+   ]
+  },
+  "chapel ruin": {
+   "items": [
+    {
+     "name": "cracked altar",
+     "nouns": [
+      "altar"
+     ],
+     "adjectives": [
+      "cracked"
+     ],
+     "here": "A cracked altar faces the door.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "pray": {
+       "text": "Something listens. It does not answer.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "storeroom": {
+   "items": [
+    {
+     "name": "broken jars",
+     "nouns": [
+      "jars",
+      "jar"
+     ],
+     "adjectives": [
+      "broken"
+     ],
+     "here": "Broken jars litter the floor.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "cell": {
+   "items": [
+    {
+     "name": "rusted manacles",
+     "nouns": [
+      "manacles",
+      "chains"
+     ],
+     "adjectives": [
+      "rusted"
+     ],
+     "here": "Rusted manacles hang from the wall.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "cistern": {
+   "items": [
+    {
+     "name": "dark water",
+     "nouns": [
+      "water",
+      "cistern"
+     ],
+     "adjectives": [
+      "dark"
+     ],
+     "here": "",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "drink": {
+       "text": "Cold and tasting of stone.",
+       "drink": true
+      }
+     }
+    }
+   ]
+  },
+  "well room": {
+   "items": [
+    {
+     "name": "well",
+     "nouns": [
+      "well"
+     ],
+     "here": "A stone well drops into darkness.",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "lookin": {
+       "text": "Far below, water. Further below, something that is not water."
+      },
+      "drink": {
+       "text": "You haul up a bucket. The water is clean.",
+       "drink": true,
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "shrine": {
+   "items": [
+    {
+     "name": "small shrine",
+     "nouns": [
+      "shrine",
+      "niche"
+     ],
+     "adjectives": [
+      "small"
+     ],
+     "here": "A small shrine is set into the curved wall.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "pray": {
+       "text": "You feel watched, kindly.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "sanctuary": {
+   "items": [
+    {
+     "name": "offering bowl",
+     "nouns": [
+      "bowl"
+     ],
+     "adjectives": [
+      "offering"
+     ],
+     "here": "A wide offering bowl stands on a plinth.",
+     "flags": [
+      "scenery",
+      "container"
+     ]
+    }
+   ]
+  },
+  "vestry": {
+   "items": [
+    {
+     "name": "robe chest",
+     "nouns": [
+      "chest"
+     ],
+     "adjectives": [
+      "robe"
+     ],
+     "here": "A chest of mouldering robes stands open.",
+     "flags": [
+      "scenery",
+      "container"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "meditation cell": {
+   "items": [
+    {
+     "name": "stone mat",
+     "nouns": [
+      "mat"
+     ],
+     "adjectives": [
+      "stone"
+     ],
+     "here": "A stone mat worn hollow by knees.",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You kneel. Your knees disagree with whoever made this.",
+       "time": 5
+      }
+     }
+    }
+   ]
+  },
+  "reliquary": {
+   "items": [
+    {
+     "name": "empty reliquaries",
+     "nouns": [
+      "reliquaries",
+      "reliquary"
+     ],
+     "adjectives": [
+      "empty"
+     ],
+     "here": "Small reliquaries stand open and empty.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "treasure",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "ossuary": {
+   "items": [
+    {
+     "name": "stacked bones",
+     "nouns": [
+      "bones",
+      "skulls"
+     ],
+     "adjectives": [
+      "stacked"
+     ],
+     "here": "Skulls and long bones are stacked in patient patterns.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      },
+      "touch": {
+       "text": "You decide not to."
+      }
+     }
+    }
+   ]
+  },
+  "embalming room": {
+   "items": [
+    {
+     "name": "stone table",
+     "nouns": [
+      "table"
+     ],
+     "adjectives": [
+      "stone"
+     ],
+     "here": "A stone table with channels cut in it.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "smell": {
+       "text": "Resin and something you would rather not name."
+      }
+     }
+    }
+   ]
+  },
+  "tomb chamber": {
+   "items": [
+    {
+     "name": "stone coffin",
+     "nouns": [
+      "coffin",
+      "sarcophagus"
+     ],
+     "adjectives": [
+      "stone"
+     ],
+     "here": "A stone coffin lies with its lid ajar.",
+     "flags": [
+      "scenery",
+      "container"
+     ],
+     "actions": {
+      "search": {
+       "loot": "treasure",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "offering room": {
+   "items": [
+    {
+     "name": "shelf of offerings",
+     "nouns": [
+      "offerings",
+      "shelf"
+     ],
+     "here": "A shelf holds offerings gone to dust.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "lair": {
+   "items": [
+    {
+     "name": "nest of bones",
+     "nouns": [
+      "nest",
+      "bones"
+     ],
+     "here": "A nest of bones and torn cloth fills the far end.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "treasure",
+       "once": true
+      }
+     }
+    }
+   ]
+  },
+  "vault": {
+   "items": [
+    {
+     "name": "plinth",
+     "nouns": [
+      "plinth",
+      "pedestal"
+     ],
+     "here": "A single plinth stands in the middle of the floor.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "passage": {
+   "items": []
+  },
+  "collapsed chamber": {
+   "items": [
+    {
+     "name": "heap of rubble",
+     "nouns": [
+      "rubble",
+      "heap",
+      "stones"
+     ],
+     "here": "Half the ceiling lies on the floor in a heap of rubble.",
+     "flags": [
+      "scenery"
+     ],
+     "actions": {
+      "search": {
+       "loot": "any",
+       "once": true,
+       "time": 10
+      }
+     }
+    }
+   ]
+  },
+  "taproom": {
+   "items": [
+    {
+     "name": "long bar",
+     "nouns": [
+      "bar",
+      "counter"
+     ],
+     "adjectives": [
+      "long"
+     ],
+     "here": "A long bar runs the length of the room, ringed with old cups.",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "drink": {
+       "text": "The ale is thin and cheerful. You feel slightly better about the road.",
+       "drink": true,
+       "time": 15
+      }
+     }
+    },
+    {
+     "name": "notice board",
+     "nouns": [
+      "board",
+      "notices",
+      "notice"
+     ],
+     "adjectives": [
+      "notice"
+     ],
+     "here": "A notice board by the door is shingled with paper.",
+     "flags": [
+      "scenery",
+      "readable"
+     ],
+     "text": "@notices"
+    },
+    {
+     "name": "benches",
+     "nouns": [
+      "benches",
+      "bench",
+      "tables"
+     ],
+     "here": "",
+     "flags": [
+      "scenery",
+      "seat"
+     ],
+     "actions": {
+      "sit": {
+       "text": "You sit and listen. Half the room is talking about the road.",
+       "time": 20
+      }
+     }
+    }
+   ]
+  },
+  "guild hall": {
+   "items": [
+    {
+     "name": "bounty board",
+     "nouns": [
+      "board",
+      "bounties",
+      "notices"
+     ],
+     "adjectives": [
+      "bounty"
+     ],
+     "here": "A bounty board fills one wall, papered with writs and warnings.",
+     "flags": [
+      "scenery",
+      "readable"
+     ],
+     "text": "@bounties"
+    }
+   ]
+  },
+  "clerk's office": {
+   "items": [
+    {
+     "name": "tall desk",
+     "nouns": [
+      "desk"
+     ],
+     "adjectives": [
+      "tall"
+     ],
+     "here": "A tall desk stands behind a rail, ledgers stacked on it.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "market hall": {
+   "items": [
+    {
+     "name": "stalls",
+     "nouns": [
+      "stalls",
+      "stall",
+      "goods"
+     ],
+     "here": "Stalls crowd the hall, the traders calling their prices.",
+     "flags": [
+      "scenery",
+      "shop"
+     ]
+    }
+   ]
+  },
+  "market square": {
+   "items": [
+    {
+     "name": "market stalls",
+     "nouns": [
+      "stalls",
+      "stall",
+      "market"
+     ],
+     "adjectives": [
+      "market"
+     ],
+     "here": "Market stalls fill the square under striped awnings.",
+     "flags": [
+      "scenery",
+      "shop"
+     ]
+    },
+    {
+     "name": "well",
+     "nouns": [
+      "well"
+     ],
+     "here": "A public well stands at the centre.",
+     "flags": [
+      "scenery",
+      "water_source"
+     ],
+     "actions": {
+      "drink": {
+       "text": "You draw a bucket. Clean and cold.",
+       "drink": true,
+       "time": 3
+      }
+     }
+    }
+   ]
+  },
+  "strongroom": {
+   "items": [
+    {
+     "name": "iron-bound chests",
+     "nouns": [
+      "chests",
+      "chest"
+     ],
+     "adjectives": [
+      "iron-bound"
+     ],
+     "here": "Iron-bound chests line the walls, all locked.",
+     "flags": [
+      "scenery"
+     ]
+    }
+   ]
+  },
+  "harbour": {
+   "items": [
+    {
+     "name": "harbour master's hut",
+     "nouns": [
+      "hut",
+      "master"
+     ],
+     "here": "A harbour master's hut overlooks the quays; a slate lists ships and sailings.",
+     "flags": [
+      "scenery",
+      "readable",
+      "harbour"
+     ],
+     "text": "@sailings"
+    }
+   ]
+  },
+  "street": {
+   "items": []
+  }
+ },
+ "dwelling_generic": {
+  "ground": [
+   "parlour",
+   "workroom",
+   "store room",
+   "servants' room"
+  ],
+  "upper": [
+   "bedroom",
+   "sewing room",
+   "box room",
+   "children's room"
+  ],
+  "cellar": [
+   "cold store",
+   "servants' quarters",
+   "wine cellar"
+  ]
+ },
+ "dungeon_themes": {
+  "palace": {
+   "keywords": [
+    "hall",
+    "halls",
+    "palace",
+    "court",
+    "king",
+    "queen",
+    "throne",
+    "keep",
+    "castle"
+   ],
+   "big": [
+    "throne room",
+    "audience hall",
+    "feast hall"
+   ],
+   "medium": [
+    "guard room",
+    "barracks",
+    "armoury",
+    "treasury",
+    "kitchen ruin",
+    "chapel ruin"
+   ],
+   "small": [
+    "storeroom",
+    "cell"
+   ],
+   "water": "cistern",
+   "rotunda": "shrine",
+   "heart": "throne room"
+  },
+  "temple": {
+   "keywords": [
+    "shrine",
+    "temple",
+    "sanctum",
+    "chapel",
+    "monastery",
+    "abbey",
+    "church"
+   ],
+   "big": [
+    "sanctuary"
+   ],
+   "medium": [
+    "vestry",
+    "reliquary",
+    "storeroom"
+   ],
+   "small": [
+    "meditation cell",
+    "cell"
+   ],
+   "water": "well room",
+   "rotunda": "shrine",
+   "heart": "vault"
+  },
+  "tomb": {
+   "keywords": [
+    "crypt",
+    "tomb",
+    "barrow",
+    "necropolis",
+    "mausoleum",
+    "catacomb",
+    "grave"
+   ],
+   "big": [
+    "ossuary",
+    "offering room"
+   ],
+   "medium": [
+    "embalming room",
+    "tomb chamber",
+    "chapel ruin"
+   ],
+   "small": [
+    "cell",
+    "storeroom"
+   ],
+   "water": "cistern",
+   "rotunda": "shrine",
+   "heart": "tomb chamber"
+  },
+  "default": {
+   "keywords": [],
+   "big": [
+    "feast hall",
+    "barracks"
+   ],
+   "medium": [
+    "guard room",
+    "storeroom",
+    "armoury"
+   ],
+   "small": [
+    "cell",
+    "storeroom"
+   ],
+   "water": "well room",
+   "rotunda": "shrine",
+   "heart": "vault"
+  }
+ },
+ "loot": {
+  "any": [
+   {
+    "name": "handful of old coins",
+    "nouns": [
+     "coins"
+    ],
+    "adjectives": [
+     "old"
+    ],
+    "weight": 0.1,
+    "flags": [
+     "takeable",
+     "money"
+    ],
+    "value": 5
+   },
+   {
+    "name": "candle stub",
+    "nouns": [
+     "candle",
+     "stub"
+    ],
+    "adjectives": [
+     "candle"
+    ],
+    "weight": 0.1,
+    "flags": [
+     "takeable",
+     "light"
+    ],
+    "fuel": 40
+   },
+   {
+    "name": "flask of lamp oil",
+    "nouns": [
+     "flask",
+     "oil"
+    ],
+    "adjectives": [
+     "lamp"
+    ],
+    "weight": 0.5,
+    "flags": [
+     "takeable",
+     "fuel_source"
+    ],
+    "fuel": 240
+   },
+   {
+    "name": "stick of chalk",
+    "nouns": [
+     "chalk",
+     "stick"
+    ],
+    "weight": 0.05,
+    "flags": [
+     "takeable"
+    ]
+   }
+  ],
+  "weapon": [
+   {
+    "name": "notched short sword",
+    "nouns": [
+     "sword"
+    ],
+    "adjectives": [
+     "notched",
+     "short"
+    ],
+    "weight": 1.2,
+    "flags": [
+     "takeable",
+     "weapon"
+    ]
+   },
+   {
+    "name": "rusty dagger",
+    "nouns": [
+     "dagger"
+    ],
+    "adjectives": [
+     "rusty"
+    ],
+    "weight": 0.4,
+    "flags": [
+     "takeable",
+     "weapon"
+    ]
+   }
+  ],
+  "treasure": [
+   {
+    "name": "small garnet",
+    "nouns": [
+     "garnet",
+     "gem"
+    ],
+    "adjectives": [
+     "small"
+    ],
+    "weight": 0.01,
+    "flags": [
+     "takeable",
+     "treasure"
+    ],
+    "value": 20
+   },
+   {
+    "name": "gold ring",
+    "nouns": [
+     "ring"
+    ],
+    "adjectives": [
+     "gold"
+    ],
+    "weight": 0.02,
+    "flags": [
+     "takeable",
+     "treasure",
+     "wearable"
+    ],
+    "value": 30
+   },
+   {
+    "name": "map fragment",
+    "nouns": [
+     "map",
+     "fragment"
+    ],
+    "weight": 0.02,
+    "flags": [
+     "takeable",
+     "readable"
+    ],
+    "text": "@heart"
+   }
+  ]
+ }
+}

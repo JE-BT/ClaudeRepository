@@ -1,0 +1,1235 @@
+{
+ "world": "Lania",
+ "tokens": {
+  "beast": "revenant",
+  "destination": "Kaharlale",
+  "origin": "Adrer",
+  "deadline": 373,
+  "faith": "Sect of the Friendly",
+  "dest_state": "Sarprakyurt",
+  "cargo": "iron grave-chains"
+ },
+ "t": 395.1047402184765,
+ "pos": [
+  1,
+  216.59889466872792
+ ],
+ "inventory": [
+  {
+   "name": "coil of rope",
+   "nouns": [
+    "rope",
+    "coil"
+   ],
+   "adjectives": [
+    "hemp"
+   ],
+   "description": "Thirty paces of tarred hemp rope, bought in Adrer for the fen crossings.",
+   "weight": 4.0,
+   "flags": [
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "canon",
+   "id": "rope"
+  },
+  {
+   "name": "pot of tar",
+   "nouns": [
+    "tar",
+    "pot"
+   ],
+   "adjectives": [
+    "clay"
+   ],
+   "description": "A stoppered clay pot of pine tar for sealing packs.",
+   "weight": 1.5,
+   "flags": [
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "canon",
+   "id": "tar"
+  },
+  {
+   "name": "brass lantern",
+   "nouns": [
+    "lantern",
+    "lamp"
+   ],
+   "adjectives": [
+    "brass"
+   ],
+   "description": "A shuttered brass lantern with oil enough for a long night.",
+   "weight": 1.5,
+   "flags": [
+    "light",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "fuel": 28.8,
+   "id": "lantern"
+  },
+  {
+   "name": "tinderbox",
+   "nouns": [
+    "tinderbox",
+    "flint"
+   ],
+   "adjectives": [],
+   "description": "Flint, steel and dry tinder in a tin box.",
+   "weight": 0.3,
+   "flags": [
+    "firestarter",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "id": "tinderbox"
+  },
+  {
+   "name": "bundle of smoked rations",
+   "nouns": [
+    "rations",
+    "bundle",
+    "food"
+   ],
+   "adjectives": [
+    "smoked"
+   ],
+   "description": "Two weeks of hard bread and smoked fish.",
+   "weight": 3.0,
+   "flags": [
+    "food",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "uses": 7,
+   "id": "rations"
+  },
+  {
+   "name": "waterskin",
+   "nouns": [
+    "waterskin",
+    "skin",
+    "water"
+   ],
+   "adjectives": [],
+   "description": "A full leather waterskin.",
+   "weight": 1.2,
+   "flags": [
+    "drink",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "uses": 6,
+   "max_uses": 6,
+   "id": "waterskin"
+  },
+  {
+   "name": "bedroll",
+   "nouns": [
+    "bedroll",
+    "blanket"
+   ],
+   "adjectives": [],
+   "description": "A rolled wool blanket and oilcloth.",
+   "weight": 2.0,
+   "flags": [
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "id": "bedroll"
+  },
+  {
+   "name": "hunting knife",
+   "nouns": [
+    "knife"
+   ],
+   "adjectives": [
+    "hunting"
+   ],
+   "description": "A broad-bladed hunting knife.",
+   "weight": 0.4,
+   "flags": [
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "id": "knife"
+  },
+  {
+   "name": "journal",
+   "nouns": [
+    "journal",
+    "notebook",
+    "diary"
+   ],
+   "adjectives": [
+    "leather"
+   ],
+   "description": "A leather journal, mostly blank. WRITE to add to it; JOURNAL to read it.",
+   "weight": 0.4,
+   "flags": [
+    "journal",
+    "readable",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "id": "journal"
+  },
+  {
+   "name": "pencil",
+   "nouns": [
+    "pencil"
+   ],
+   "adjectives": [],
+   "description": "A stub of graphite in a wooden sleeve.",
+   "weight": 0.02,
+   "flags": [
+    "start",
+    "takeable",
+    "writer"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "id": "pencil"
+  },
+  {
+   "name": "purse",
+   "nouns": [
+    "purse",
+    "coins",
+    "money"
+   ],
+   "adjectives": [
+    "leather"
+   ],
+   "description": "A leather purse. SELL and BUY in markets; GIVE 5 COINS TO someone.",
+   "weight": 0.2,
+   "flags": [
+    "purse",
+    "start",
+    "takeable"
+   ],
+   "text": "",
+   "unlocks": [],
+   "provenance": "draft",
+   "coins": 40,
+   "id": "purse"
+  },
+  {
+   "name": "bounty writ",
+   "nouns": [
+    "writ",
+    "bounty"
+   ],
+   "adjectives": [],
+   "description": "Your bounty writ.",
+   "weight": 0.05,
+   "flags": [
+    "readable",
+    "story",
+    "takeable"
+   ],
+   "text": "Writ of bounty upon the revenant of Kaharlale. Payable on proof, if presented before day 373.",
+   "unlocks": [],
+   "provenance": "new",
+   "id": "story:main:token"
+  }
+ ],
+ "visited": [
+  "overworld",
+  "town:5",
+  "town:93"
+ ],
+ "speed": {},
+ "policy": "ask",
+ "generated": [],
+ "story": {
+  "seed": "story",
+  "storylines": [
+   {
+    "id": "main",
+    "title": "The revenant of Kaharlale",
+    "kind": "main",
+    "summary": "A returning dead thing walks in Kaharlale, seat of the Sect of the Friendly, and no one there may say so aloud. The bounties come from abroad, from Krusetlev and Thalasha, where it can be named. You took the commission in Adrer.",
+    "phases": [
+     {
+      "id": "commission",
+      "title": "The commission",
+      "objective": "Lay the revenant of Kaharlale to rest before day 373.",
+      "text": "A returning dead thing walks in Kaharlale, seat of the Sect of the Friendly, and no one there may say so aloud. The bounties come from abroad, from Krusetlev and Thalasha, where it can be named. You took the commission in Adrer. The bounty closes on day 373. Worse, the revenant grows stronger each night it walks; hunters who come later find less to kill and more to fear.",
+      "triggers": [
+       {
+        "kind": "start"
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       0,
+       0
+      ],
+      "required": true,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {
+       "give": [
+        "token"
+       ]
+      },
+      "status": "done",
+      "satisfied": [
+       0
+      ]
+     },
+     {
+      "id": "zone4",
+      "title": "Fearnyard Proselytism",
+      "objective": "Pass through the country of the Fearnyard Proselytism.",
+      "text": "Missionaries of the Fearnyard Proselytism work the road here, and they remember faces.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         1,
+         267.81996237500243
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       1,
+       267.81996237500243
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "border1-320",
+      "title": "Into Wolfrontia",
+      "objective": "Get across the border into Wolfrontia.",
+      "text": "Wolfrontia counts Adrer as rival; the border posts will not pass a party out of Adrer. You keep to the wild ground and cross where no one watches.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         1,
+         320.6444853568256
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 5,
+      "pos": [
+       1,
+       320.6444853568256
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "meeting",
+      "title": "The meeting at Bayfshear",
+      "objective": "Find your contact in Bayfshear.",
+      "text": "Faldyard tells you what lies ahead. Whatever you do, get the iron grave-chains before the last of the road: Only bound in cold iron will the revenant stay down.",
+      "triggers": [
+       {
+        "kind": "talk",
+        "thing": "contact"
+       },
+       {
+        "kind": "ask",
+        "thing": "contact"
+       }
+      ],
+      "mode": "any",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       1,
+       466.4124621836106
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You never met your contact in Bayfshear.",
+      "effects": {
+       "flags": {
+        "met_contact": true
+       }
+      },
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "zone7",
+      "title": "Ayvar Drought",
+      "objective": "Pass through the country of the Ayvar Drought.",
+      "text": "The Ayvar Drought has left the country thin; food and water cost dearly.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         1,
+         1200.187767896075
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       1,
+       1200.187767896075
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "zone6",
+      "title": "Crimson Cough",
+      "objective": "Pass through the country of the Crimson Cough.",
+      "text": "The Crimson Cough is abroad here; villages bar their gates.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         1,
+         2587.0929503015586
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       1,
+       2587.0929503015586
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "stop2",
+      "title": "Camp at Okh-Khog",
+      "objective": "Watch the dark near Okh-Khog.",
+      "text": "Watch the dark near Okh-Khog.",
+      "triggers": [
+       {
+        "kind": "at",
+        "burg": 121
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       2,
+       0
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You pass Okh-Khog by without stopping.",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "border3-1658",
+      "title": "Into Ilthiteach",
+      "objective": "Get across the border into Ilthiteach.",
+      "text": "Ilthiteach counts Adrer as suspicion; the border posts will not pass a party out of Adrer. You keep to the wild ground and cross where no one watches.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         3,
+         1658.7460224846736
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 5,
+      "pos": [
+       3,
+       1658.7460224846736
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "zone3",
+      "title": "Qisargath Proselytism",
+      "objective": "Pass through the country of the Qisargath Proselytism.",
+      "text": "Missionaries of the Qisargath Proselytism work the road here, and they remember faces.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         3,
+         1778.809648602029
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       3,
+       1778.809648602029
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "stop4",
+      "title": "Bounty posted in Krusetlev",
+      "objective": "Present the writ in Krusetlev and hear what the bounty-keepers know.",
+      "text": "Present the writ in Krusetlev and hear what the bounty-keepers know.",
+      "triggers": [
+       {
+        "kind": "at",
+        "burg": 4
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       4,
+       0
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You pass Krusetlev by without stopping.",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "stop6",
+      "title": "A night at anchor near Nuccukh",
+      "objective": "Find a boat at Nuccukh.",
+      "text": "Find a boat at Nuccukh.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         6,
+         0
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       6,
+       0
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You pass Nuccukh by without stopping.",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "zone5",
+      "title": "Hlyhonim Crusade",
+      "objective": "Pass through the country of the Hlyhonim Crusade.",
+      "text": "The Hlyhonim Crusade has made the road a march; soldiers question everyone.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         7,
+         711.6720988166467
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       7,
+       711.6720988166467
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "stop8",
+      "title": "A night at The Hungry Tankard",
+      "objective": "Listen for word of the revenant at Aethyr.",
+      "text": "Listen for word of the revenant at Aethyr.",
+      "triggers": [
+       {
+        "kind": "at",
+        "burg": 2
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       8,
+       0
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You pass Aethyr by without stopping.",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "stop10",
+      "title": "Bounty posted in Thalasha",
+      "objective": "Present the writ in Thalasha and hear what the bounty-keepers know.",
+      "text": "Present the writ in Thalasha and hear what the bounty-keepers know.",
+      "triggers": [
+       {
+        "kind": "at",
+        "burg": 3
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       10,
+       0
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "You pass Thalasha by without stopping.",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "cargo",
+      "title": "The burden",
+      "objective": "Collect the iron grave-chains in Thalasha.",
+      "text": "Only bound in cold iron will the revenant stay down.",
+      "triggers": [
+       {
+        "kind": "have",
+        "item": "cargo"
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 10,
+      "pos": [
+       11,
+       -1
+      ],
+      "required": true,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "zone8",
+      "title": "Nar Flood",
+      "objective": "Pass through the country of the Nar Flood.",
+      "text": "The Nar Flood has torn up the low roads.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         11,
+         605.3103182724899
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       11,
+       605.3103182724899
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "climax",
+      "title": "Kaharlale",
+      "objective": "Lay the revenant of Kaharlale to rest before day 373.",
+      "text": "In Kaharlale you find the revenant, and you lay it down for good.",
+      "triggers": [
+       {
+        "kind": "at",
+        "burg": 34
+       }
+      ],
+      "mode": "all",
+      "requires": [
+       [
+        "story:main:cargo",
+        "clue"
+       ]
+      ],
+      "points": 50,
+      "pos": [
+       12,
+       551.6765009038082
+      ],
+      "required": true,
+      "deadline_t": 8940,
+      "on_miss": "The revenant of Kaharlale is beyond any hunter now. The writ is worthless paper.",
+      "effects": {
+       "end": "success",
+       "end_text": "In Kaharlale you find the revenant, and you lay it down for good."
+      },
+      "status": "open",
+      "satisfied": []
+     }
+    ],
+    "elements": {
+     "token": {
+      "role": "token",
+      "kind": "item",
+      "spec": {
+       "name": "bounty writ",
+       "nouns": [
+        "writ",
+        "bounty"
+       ],
+       "weight": 0.05,
+       "flags": [
+        "takeable",
+        "readable",
+        "story"
+       ],
+       "text": "Writ of bounty upon the revenant of Kaharlale. Payable on proof, if presented before day 373.",
+       "description": "Your bounty writ.",
+       "provenance": "new"
+      },
+      "anchor": {
+       "carried": true
+      },
+      "placed": true
+     },
+     "contact": {
+      "role": "contact",
+      "kind": "person",
+      "spec": {
+       "name": "Faldyard",
+       "nouns": [
+        "faldyard",
+        "contact",
+        "stranger",
+        "traveller"
+       ],
+       "flags": [
+        "person",
+        "proper"
+       ],
+       "description": "A thin traveller with fen mud on her boots, lodging in the Fatewell guest room.",
+       "here": "Faldyard is here, waiting for someone. You, it seems.",
+       "talk": "Faldyard looks you over. \"You're the ones out of Adrer. I was told to wait.\"",
+       "topics": {
+        "beast|revenant": "I've seen what the revenant leaves. Whatever you do, get the iron grave-chains before the last of the road: Only bound in cold iron will the revenant stay down.",
+        "road|route|way": "The road ahead is longer than your plan admits. Don't dawdle where you needn't.",
+        "deadline|time|day": "Day 373. After that you might as well go home."
+       },
+       "provenance": "new"
+      },
+      "anchor": {
+       "burg": 172,
+       "prefer": [
+        "guest room",
+        "hall",
+        "living room",
+        "kitchen",
+        "parlour"
+       ]
+      },
+      "placed": false
+     },
+     "cargo": {
+      "role": "cargo",
+      "kind": "item",
+      "spec": {
+       "name": "iron grave-chains",
+       "nouns": [
+        "chains",
+        "grave-chains"
+       ],
+       "weight": 12.0,
+       "flags": [
+        "takeable",
+        "story",
+        "cargo"
+       ],
+       "description": "The iron grave-chains. Only bound in cold iron will the revenant stay down.",
+       "initial": "The iron grave-chains wait here, ready for you.",
+       "hint": "Heavy. It will slow you; that is the price.",
+       "provenance": "new"
+      },
+      "anchor": {
+       "burg": 3,
+       "prefer": [
+        "storeroom",
+        "storage",
+        "store room",
+        "cellar",
+        "hall"
+       ]
+      },
+      "placed": false
+     }
+    },
+    "status": "active"
+   },
+   {
+    "id": "lead5",
+    "title": "A lead near Dawnfose",
+    "kind": "lead",
+    "summary": "Something in the old place near Dawnfose may matter to the hunt.",
+    "phases": [
+     {
+      "id": "rumour",
+      "title": "A rumour",
+      "objective": "Look into the old place near Dawnfose.",
+      "text": "Word on the road: the old place near Dawnfose holds something that bears on the revenant.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         1,
+         693.3234202828243
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       1,
+       693.3234202828243
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "enter",
+      "title": "Into the dark",
+      "objective": "Find what lies deepest in the old place near Dawnfose.",
+      "text": "You have found the old place.",
+      "triggers": [
+       {
+        "kind": "at",
+        "marker": 5
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 5,
+      "pos": [
+       1,
+       733.3234202828243
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "heart",
+      "title": "What lies deepest",
+      "objective": "Take what you came for, and get out.",
+      "text": "You have it: a way to bind the quarry that does not depend on what you carry.",
+      "triggers": [
+       {
+        "kind": "take",
+        "item": "clue"
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 15,
+      "pos": [
+       1,
+       733.3234202828243
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {
+       "flags": {
+        "clue": true
+       }
+      },
+      "status": "open",
+      "satisfied": []
+     }
+    ],
+    "elements": {
+     "clue": {
+      "role": "clue",
+      "kind": "clue",
+      "spec": {
+       "name": "inscribed tablet",
+       "nouns": [
+        "tablet",
+        "inscription"
+       ],
+       "adjectives": [
+        "inscribed",
+        "stone"
+       ],
+       "weight": 2.0,
+       "flags": [
+        "takeable",
+        "readable",
+        "story"
+       ],
+       "text": "Old letters, cut deep: what walks in Kaharlale answers to its name, and what answers can be bound.",
+       "initial": "An inscribed stone tablet leans against the wall.",
+       "provenance": "new"
+      },
+      "anchor": {
+       "marker": 5,
+       "heart": true
+      },
+      "placed": false
+     }
+    },
+    "status": "active"
+   },
+   {
+    "id": "lead6",
+    "title": "A lead near Traggan",
+    "kind": "lead",
+    "summary": "Something in the old place near Traggan may matter to the hunt.",
+    "phases": [
+     {
+      "id": "rumour",
+      "title": "A rumour",
+      "objective": "Look into the old place near Traggan.",
+      "text": "Word on the road: the old place near Traggan holds something that bears on the revenant.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         3,
+         743.701201875715
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       3,
+       743.701201875715
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "enter",
+      "title": "Into the dark",
+      "objective": "Find what lies deepest in the old place near Traggan.",
+      "text": "You have found the old place.",
+      "triggers": [
+       {
+        "kind": "at",
+        "marker": 6
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 5,
+      "pos": [
+       3,
+       783.701201875715
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "heart",
+      "title": "What lies deepest",
+      "objective": "Take what you came for, and get out.",
+      "text": "You have it: a way to bind the quarry that does not depend on what you carry.",
+      "triggers": [
+       {
+        "kind": "take",
+        "item": "clue"
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 15,
+      "pos": [
+       3,
+       783.701201875715
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {
+       "flags": {
+        "clue": true
+       }
+      },
+      "status": "open",
+      "satisfied": []
+     }
+    ],
+    "elements": {
+     "clue": {
+      "role": "clue",
+      "kind": "clue",
+      "spec": {
+       "name": "inscribed tablet",
+       "nouns": [
+        "tablet",
+        "inscription"
+       ],
+       "adjectives": [
+        "inscribed",
+        "stone"
+       ],
+       "weight": 2.0,
+       "flags": [
+        "takeable",
+        "readable",
+        "story"
+       ],
+       "text": "Old letters, cut deep: what walks in Kaharlale answers to its name, and what answers can be bound.",
+       "initial": "An inscribed stone tablet leans against the wall.",
+       "provenance": "new"
+      },
+      "anchor": {
+       "marker": 6,
+       "heart": true
+      },
+      "placed": false
+     }
+    },
+    "status": "active"
+   },
+   {
+    "id": "lead7",
+    "title": "A lead near Prolhob",
+    "kind": "lead",
+    "summary": "Something in the old place near Prolhob may matter to the hunt.",
+    "phases": [
+     {
+      "id": "rumour",
+      "title": "A rumour",
+      "objective": "Look into the old place near Prolhob.",
+      "text": "Word on the road: the old place near Prolhob holds something that bears on the revenant.",
+      "triggers": [
+       {
+        "kind": "pass",
+        "pos": [
+         3,
+         878.8832397410855
+        ]
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 0,
+      "pos": [
+       3,
+       878.8832397410855
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "enter",
+      "title": "Into the dark",
+      "objective": "Find what lies deepest in the old place near Prolhob.",
+      "text": "You have found the old place.",
+      "triggers": [
+       {
+        "kind": "at",
+        "marker": 7
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 5,
+      "pos": [
+       3,
+       918.8832397410855
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {},
+      "status": "open",
+      "satisfied": []
+     },
+     {
+      "id": "heart",
+      "title": "What lies deepest",
+      "objective": "Take what you came for, and get out.",
+      "text": "You have it: a way to bind the quarry that does not depend on what you carry.",
+      "triggers": [
+       {
+        "kind": "take",
+        "item": "clue"
+       }
+      ],
+      "mode": "all",
+      "requires": [],
+      "points": 15,
+      "pos": [
+       3,
+       918.8832397410855
+      ],
+      "required": false,
+      "deadline_t": null,
+      "on_miss": "",
+      "effects": {
+       "flags": {
+        "clue": true
+       }
+      },
+      "status": "open",
+      "satisfied": []
+     }
+    ],
+    "elements": {
+     "clue": {
+      "role": "clue",
+      "kind": "clue",
+      "spec": {
+       "name": "inscribed tablet",
+       "nouns": [
+        "tablet",
+        "inscription"
+       ],
+       "adjectives": [
+        "inscribed",
+        "stone"
+       ],
+       "weight": 2.0,
+       "flags": [
+        "takeable",
+        "readable",
+        "story"
+       ],
+       "text": "Old letters, cut deep: what walks in Kaharlale answers to its name, and what answers can be bound.",
+       "initial": "An inscribed stone tablet leans against the wall.",
+       "provenance": "new"
+      },
+      "anchor": {
+       "marker": 7,
+       "heart": true
+      },
+      "placed": false
+     }
+    },
+    "status": "active"
+   }
+  ],
+  "flags": {
+   "overlay_topics": {
+    "swangel": {
+     "lodger|guest|traveller|contact|woman": "The one in the guest room came two days before you, asking for travellers out of Adrer. She paid in advance. I don't ask more than that."
+    }
+   },
+   "story:main:commission": true
+  },
+  "score": 0,
+  "ending": null,
+  "log": [
+   "The commission"
+  ],
+  "pending_gifts": []
+ }
+}
