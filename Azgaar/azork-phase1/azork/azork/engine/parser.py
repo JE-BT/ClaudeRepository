@@ -32,10 +32,22 @@ VERBS: dict[str, list[str]] = {
     "time": ["time"], "status": ["status", "score"],
     "light": ["light", "turn on", "ignite", "kindle"],
     "extinguish": ["extinguish", "turn off", "douse", "snuff", "put out", "blow out"],
-    "search": ["search", "feel", "probe"],
+    "search": ["search", "probe", "rummage", "rummage through", "search through"],
     "raise": ["raise", "hoist", "lift"], "lower": ["lower", "drop down"],
     "weigh": ["weigh", "heft"],
-    "talk": ["talk to", "talk", "greet", "speak to"],
+    "talk": ["talk to", "talk", "greet", "speak to", "hello", "hi"],
+    "eat": ["eat", "consume", "devour", "taste"], "drink": ["drink", "sip", "quaff", "drink from"],
+    "fill": ["fill", "refill", "top up"], "use": ["use", "apply"],
+    "sleep": ["sleep", "lie down", "nap", "sleep on", "sleep in", "lie on"], "sit": ["sit on", "sit in", "sit down", "sit"],
+    "wear": ["wear", "put on", "don"], "knock": ["knock on", "knock at", "knock", "rap on"],
+    "give": ["give", "offer", "hand"], "ask": ["ask"], "tell": ["tell"], "show": ["show"],
+    "invite": ["invite", "ask along", "recruit"], "dismiss": ["dismiss", "send away"],
+    "listen": ["listen to", "listen", "hear"], "smell": ["smell", "sniff"],
+    "touch": ["touch", "feel", "pat", "stroke", "rub"], "push": ["push", "press", "shove"],
+    "pull": ["pull", "tug", "yank"], "pray": ["pray at", "pray to", "pray"], "cook": ["cook", "roast", "heat up"],
+    "lookunder": ["look under", "look beneath", "check under"], "play": ["play with", "play"],
+    "write": ["write", "note", "jot", "jot down"], "journal": ["journal", "read journal", "read my journal", "diary"],
+    "attack": ["attack", "kill", "hit", "fight", "strike", "stab", "punch"], "wake": ["wake up", "wake", "rouse", "shout", "yell"],
     "help": ["help", "?", "commands"],
 }
 PREPOSITIONS = ["with", "into", "in", "inside", "onto", "on", "from", "to", "at", "about", "under", "using"]
@@ -59,7 +71,10 @@ class Command:
 
 
 def split_commands(line: str) -> list[str]:
-    parts = re.split(r"\.|;|\bthen\b", line.lower())
+    """Split on '.', ';' and 'then', keeping case; a WRITE/NOTE line is kept whole."""
+    if re.match(r"\s*(write|note|jot)\b", line, re.I):
+        return [line.strip()]
+    parts = re.split(r"\.|;|\bthen\b", line, flags=re.I)
     return [p.strip(" ,") for p in parts if p.strip(" ,")]
 
 

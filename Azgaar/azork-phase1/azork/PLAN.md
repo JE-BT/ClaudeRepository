@@ -52,6 +52,21 @@ truth for code, worlds, ledgers and content packs.
     the mission, or a fatal encounter. The player is never told for certain what will be needed;
     hints come through people, notes and EXAMINE.
 
+## Decisions (2026-10-04, after play-testing)
+
+15. **Type 9 steps** are an open passage with a change of level; types 3 and 8 enter and leave.
+16. **Start at the journey's beginning** with a short generated hook (phase 5). The Party marker is
+    one of Azgaar's default markers (one per map, at a random burg, note "Current location of the
+    adventuring party") and is not tied to journeys; how to use it is an open question.
+17. **Hints are diverse:** people (topics drawn from map data and content packs), letters and
+    books found by searching, map fragments, sounds (LISTEN), and the player's own JOURNAL
+    (WRITE <text>, JOURNAL), which needs a journal and something to write with.
+18. **Zork-style death:** instant, with UNDO and RESTORE.
+19. **Every scene is a container for purpose, weighed against the timetable** (design for
+    phases 3 and 5): each place holds story elements, sub-stories, hooks and catalysts. Time
+    spent inside is plan time; stopping must be worth it. The deepest part of a dungeon (or an
+    important dwelling) holds what its story names and should repay the time invested.
+
 ## Status
 
 | Phase | State | Notes |
@@ -60,7 +75,8 @@ truth for code, worlds, ledgers and content packs.
 | 1 Loaders | done | .map (1.153), cells GeoJSON, City/Village/Dwellings/One Page Dungeon JSON, ledger, namebases |
 | 2 Engine core | done | parser, world model, verbs, doors and keys, light and fuel, hazards, itemized inventory, undo, save/restore, transcripts, ledger export on exit |
 | 3 Overworld | started (next) | plan clock, crossings, nearby places, faster options, corridor tiers; travel between places and expansion pauses still to build |
-| 4 Settlements and interiors | started | dwellings and dungeons playable as scenes; towns from City/Village files next; procedural dwellings |
+| 4 Settlements and interiors | started | dwellings and dungeons playable, with room purposes, furnishings, note things, depth and a story heart; towns from City/Village files next |
+| 2b Interactions | done | eat, drink, fill, use, sleep, sit, wear, knock, listen, smell, touch, push, pull, pray, cook, look under, play, attack, wake; people: talk, ask, tell, give, show, invite, dismiss; journal; hunger and thirst; placement of dwellings by outline |
 | 5 Canon and people | — | content packs, ledger overrides, hooks, encounters, ledger export |
 | 6 Slice and polish | — | Lania, Bayfshear slice first |
 
@@ -90,10 +106,26 @@ Each scene has an outside room described from map data, the starting kit from
 where the journey passes nearest. A dungeon whose notes name no key gets one placed in a
 dead-end chamber (seeded, provenance new).
 
+## How interiors get purpose (phase 2b)
+
+- Dwelling rooms keep Watabou's names (kitchen, library...); generic rooms get a purpose for
+  their floor, seeded; overlays rename by Watabou room id (`house:<floor>:<room>`), which is stable.
+- Dungeon chambers take purposes from a theme read from the title and story (palace, temple,
+  tomb, default), their size, water and shape. The deepest chamber (locked doors count 3 steps,
+  secret doors 2) is the heart: vault for a hidden treasure, lair for a creature.
+- Notes become things with initial descriptions that disappear once the thing is moved
+  ("A key lies at the bottom of a small pool"); supports and containers stay as scenery.
+- Furnishings come from `azork/data/furnishings.json` by purpose, about one room in eight has
+  a joke where something is missing; searchable furniture gives loot, better deeper down.
+- People know topics built from map data (their town, ruler, faith, nearby burgs and sites,
+  hearsay about the journey's stops), plus topics from content packs, which take priority.
+- Dwellings: `python -m azork place <World> <file> --burg <name>` ranks buildings by outline;
+  `--best` or `--building N` records the placement and keeps the file's own name as the label.
+
 ## Open items
 
-- Type 9 (steps) is read literally as "the same as type 1" (a door); if steps should be an open
-  passage, it is a one-line change in interiors.py.
+- The Party marker: how it fits a journey that starts at day 1 (see the latest gaps).
+- Presia's Balmastarc dwelling has no exact outline match in balmastarc.json (best 0.81).
 - Watabou links: a cell's haven and island status are approximated from the cells GeoJSON, which
   only affects coastal City (`sea`) and Village (`estuary`, `island`) parameters.
 - The plan clock's journey day 13 for Bayfshear and walking day 9 for Birad match the ledger;

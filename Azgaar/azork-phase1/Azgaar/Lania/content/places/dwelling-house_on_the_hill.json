@@ -1,6 +1,9 @@
 {
-  "_about": "Fatewell house overlay. Facts from the Lania ledger (canon or draft as marked); invented details marked new.",
+  "_about": "Fatewell house overlay. Facts from the Lania ledger (canon or draft as marked); invented details marked new. Rooms are referenced by Watabou room id (house:<floor>:<room>), which does not change.",
   "rooms": {
+    "house:0:2": {"rename": "Guest room", "purpose": "guest room", "provenance": "draft", "_basis": "ledger: travellers are lodged in the ground-floor room for coin"},
+    "house:-1:2": {"rename": "Trapper's room", "purpose": "servants' room", "provenance": "draft", "_basis": "ledger: a hired trapper in the cellar room"},
+    "house:1:0": {"rename": "Children's room", "purpose": "children's room", "provenance": "draft", "_basis": "ledger: Cryspell, his wife and three children"},
     "Library": {"add": "Account books for the fen catch share the shelves with Fearnyard scripture.", "provenance": "draft"},
     "Trophy room": {"add": "Turtle shells and stuffed marsh fowl crowd the walls.", "provenance": "new"}
   },
@@ -8,15 +11,29 @@
     {"id": "accounts", "name": "account book", "nouns": ["book", "accounts", "ledger"], "adjectives": ["account"],
      "in": "Library", "weight": 1.5, "flags": ["takeable", "readable"],
      "description": "A heavy book of the household's dealings in smoked eel, turtle and fowl.",
-     "text": "Columns of catches bought from the fen trappers, and carts sent to Wolfront market. The last pages are in a different hand.",
+     "text": "Columns of catches bought from the fen trappers, and carts sent to Wolfront market. The last pages are in a different hand, and one entry reads only: 'Strangers at the Khara ford. Watch the road.'",
      "provenance": "draft"},
-    {"id": "swangel", "name": "Swangel Fatewell", "nouns": ["swangel", "fatewell", "woman", "widow"], "adjectives": [],
+    {"id": "swangel", "name": "Swangel Fatewell", "nouns": ["swangel", "fatewell", "woman", "widow"],
      "in": "Library", "flags": ["person", "proper"], "here": "Swangel Fatewell sits at the library table.",
      "description": "The widow who heads the household and the smokehouses, hunt-master of Bayfshear.",
      "talk": "Swangel looks up from her accounts. \"You came through the fen, not past the posts. I haven't decided what to do about that.\"",
+     "barge": "Swangel puts down her pen. \"In this house, travellers knock. Even the ones who cross borders at night.\"",
+     "topics": {
+       "border|crossing|posts|khara|birad|fen": "Nobody honest crosses the Kinargzig in the dark. I know who you paid, too. I haven't decided yet whether that matters to me.",
+       "tax|taxes|captaincy|poll": "The Captaincy takes near a quarter of every head in this house. Turning in strangers pays a bounty. You see my difficulty.",
+       "cryspell|son|cart|carts": "My son carts the smoked catch to Wolfront. He'll be back before you're rested, and he talks to everyone.",
+       "follower|followed|stranger|watching|road": "Someone was asking along the Molten road. Thin, quiet, paid in good coin. Not one of ours.",
+       "smokehouse|smokehouses|eel|eels|catch|turtle": "Eel, turtle, fowl. The fen gives, we smoke, Wolfront eats. It has kept this house standing for three generations.",
+       "room|bed|stay|lodging": "The ground-floor room is let to travellers. For coin, and for quiet."},
+     "accepts": {"coins|copper|money": {"text": "Swangel weighs the coins in her palm. \"That's the room paid. Quiet is extra; consider this the start of it.\"", "flags": {"room_paid": true}}},
+     "invite": {"accept": false, "text": "Swangel almost laughs. \"I have a household and a smokehouse. You have a border behind you. No.\""},
      "provenance": "canon"},
     {"id": "trapper", "name": "hired trapper", "nouns": ["trapper", "man"], "adjectives": ["hired"],
-     "in": "Cellar room", "flags": ["person"], "here": "A hired trapper is mending snares on a cot.",
-     "description": "A wiry trapper the household hires for the fen lines.", "provenance": "draft"}
+     "in": "house:-1:2", "flags": ["person"], "here": "A hired trapper is mending snares on a cot.",
+     "description": "A wiry trapper the household hires for the fen lines.",
+     "greet": "The trapper nods without looking up from his snares.",
+     "topics": {"fen|marsh|snares|traps|eels": "The fen will drown a horse and feed a village. Stay on the dry necks and it'll do neither to you.",
+                "swangel|mistress|widow": "She pays fair and she remembers everything. Don't owe her."},
+     "provenance": "draft"}
   ]
 }

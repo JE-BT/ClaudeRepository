@@ -6,6 +6,7 @@
   python -m azork setup Lania            files the story needs (required) and can add later (--all)
   python -m azork validate Lania         load every file of the world and report
   python -m azork play Lania --scene dungeon:5   play a scene (--list shows the scenes)
+  python -m azork place Lania house.json --burg Bayfshear [--best | --building N] [--label "Name"]
 Options: --root PATH (default: the Azgaar folder beside this project), --date YYYY-MM-DD
 """
 from __future__ import annotations
@@ -159,6 +160,43 @@ def cmd_play(args) -> int:
     return 0
 
 
+def cmd_place(args) -> int:
+    """Rank a town's buildings for a Dwellings export; with --building, record the placement."""
+    import json as _json
+    from . import placement
+    w = _world(args)
+    path = w.map_path.parent / args.file
+    if not path.exists():
+        raise FileNotFoundError(f"{args.file} is not in {w.map_path.parent}")
+    burg_name = args.burg or (path.stem.split("--")[0] if "--" in path.stem else None)
+    burg = w.map.burg_by_name(burg_name) if burg_name else None
+    if not burg:
+        raise ValueError("Say which burg the house is in: --burg <name>")
+    town = w.towns().get(burg["i"])
+    if not town:
+        raise FileNotFoundError(f"No town plan for {burg['name']}; add {burg['name'].lower()}.json first")
+    ranked = placement.rank(watabou.load(town.path), path, args.top)
+    print(f"Best matches for {path.name} in {burg['name']} (shape 1.00 = identical outline):")
+    for r in ranked:
+        print(f"  building {r['building']:>5}: {r['area']:6.0f} m2, {r['long']:.1f} x {r['short']:.1f} m, "
+              f"shape {r['shape'] if r['shape'] is not None else 0:.2f}")
+    if ranked and (ranked[0]["shape"] or 0) < 0.95:
+        print("  No exact outline match: the house may come from another town or an older plan.")
+    if args.building is None and not args.best:
+        print("Record one with --building N (or --best), and optionally --label \"Name\".")
+        return 0
+    building = ranked[0]["building"] if args.best else args.building
+    label = args.label or (path.stem.split("--", 1)[1] if "--" in path.stem else path.stem).replace("_", " ")
+    manifest = w.content_dir / "manifest.json"
+    data = _json.loads(manifest.read_text(encoding="utf-8")) if manifest.exists() else {"files": {}}
+    data.setdefault("files", {})[path.name] = {"burg": burg["i"], "building": building, "label": label,
+                                               "source": "azork place"}
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(_json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Placed {path.name} as '{label}' in {burg['name']}, building {building} ({manifest.name}).")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="azork", description="Azgaar worlds as text adventures")
     ap.add_argument("--root", default=str(DEFAULT_ROOT), help="folder holding the world files")
@@ -166,12 +204,19 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("worlds").set_defaults(fn=cmd_worlds)
     for name, fn in (("inspect", cmd_inspect), ("plan", cmd_plan), ("setup", cmd_setup), ("validate", cmd_validate),
-                     ("play", cmd_play)):
+                     ("play", cmd_play), ("place", cmd_place)):
         p = sub.add_parser(name)
         p.add_argument("world")
         p.add_argument("--journey", type=int, default=0)
         if name == "setup":
             p.add_argument("--all", action="store_true")
+        if name == "place":
+            p.add_argument("file")
+            p.add_argument("--burg")
+            p.add_argument("--building", type=int)
+            p.add_argument("--best", action="store_true")
+            p.add_argument("--label")
+            p.add_argument("--top", type=int, default=5)
         if name == "play":
             p.add_argument("--scene")
             p.add_argument("--list", action="store_true")

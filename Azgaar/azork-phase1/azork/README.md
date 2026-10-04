@@ -27,6 +27,7 @@ python -m azork validate Lania    # load every file
 python -m azork play Lania --list # scenes that can be played
 python -m azork play Lania --scene dwelling:house_on_the_hill
 python -m azork play Lania --scene dungeon:5
+python -m azork place Lania house_on_the_hill.json --burg Bayfshear --best   # place a dwelling
 python -m unittest -v             # checks against Lania data, ledger canon and the engine
 ```
 

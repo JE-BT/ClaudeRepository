@@ -5,13 +5,15 @@ import json
 import textwrap
 from pathlib import Path
 
+from .interact import Interactions
 from .model import DIRECTIONS, Thing, World
 from .parser import Command, parse, split_commands
 
 MINUTES = {"go": 1, "wait": 10, "search": 5, "raise": 10, "lower": 2, "take": 0.5, "drop": 0.5, "put": 0.5,
            "takeout": 0.5, "open": 0.5, "close": 0.5, "unlock": 1, "lock": 1, "light": 1, "extinguish": 0.2,
            "read": 2, "examine": 0.5, "lookin": 0.5, "talk": 2}
-META = {"undo", "save", "restore", "quit", "again", "help", "time", "status", "inventory", "look", "weigh"}
+META = {"undo", "save", "restore", "quit", "again", "help", "time", "status", "inventory", "look", "weigh", "journal"}
+HUNGER_H, THIRST_H = 10, 6
 DEATH = "\n    *** You have died ***\nType UNDO to take back the last move, RESTORE to load a saved game, or QUIT."
 
 
@@ -19,9 +21,12 @@ def wrap(text: str) -> str:
     return "\n".join(textwrap.fill(p, 78) if p.strip() else "" for p in text.split("\n"))
 
 
-class Game:
+class Game(Interactions):
     def __init__(self, world: World, save_dir: str | Path | None = None):
         self.w = world
+        self.extra_minutes = 0.0
+        self.w.flags.setdefault("last_meal", self.w.plan_t)
+        self.w.flags.setdefault("last_drink", self.w.plan_t)
         self.save_dir = Path(save_dir) if save_dir else None
         self.undo_stack: list[dict] = []
         self.last_line: str | None = None
@@ -70,11 +75,15 @@ class Game:
         handler = getattr(self, f"do_{cmd.verb}", None)
         if handler is None:
             return "I don't know that verb." if cmd.verb == "unknown" else f"You can't {cmd.verb} here."
+        self.extra_minutes = 0.0
         out = handler(cmd)
         if cmd.verb not in META and not self.w.dead:
             self.w.moves += 1
-            out = "\n".join(x for x in (out, self.tick(MINUTES.get(cmd.verb, 1))) if x)
+            out = "\n".join(x for x in (out, self.tick(MINUTES.get(cmd.verb, 1) + self.extra_minutes)) if x)
         return out
+
+    def wrap_text(self, text: str) -> str:
+        return wrap(text)
 
     def tick(self, minutes: float) -> str:
         self.w.minutes += minutes
@@ -91,6 +100,14 @@ class Game:
                     for warn in (30, 10):
                         if before > warn >= t.props["fuel"]:
                             notes.append(f"The {t.name} is burning low.")
+        f = self.w.flags
+        for key, limit, text in (("last_meal", HUNGER_H, "Your stomach reminds you that you haven't eaten."),
+                                 ("last_drink", THIRST_H, "Your mouth is dry; you should drink something.")):
+            due = f.get(key, self.w.plan_t) + limit
+            warned = f.get(f"warned:{key}", 0)
+            if self.w.plan_t >= due and self.w.plan_t - warned >= 3:
+                f[f"warned:{key}"] = self.w.plan_t
+                notes.append(text)
         return " ".join(notes)
 
     # ------------------------------------------------------------- perception
@@ -136,17 +153,25 @@ class Game:
                         state = ("barred " if "barred" in door.flags else
                                  "lowered " if "portcullis" in door.flags and "raised" not in door.flags else
                                  "open " if "open" in door.flags else "closed ")
-                        label += f" ({state}{door.name})"
+                        label += f" ({'' if state.strip() in door.name else state}{door.name})"
                     elif e.note:
                         label += f" ({e.note})"
                     exits.append(label)
             if exits:
                 lines.append("Exits: " + ", ".join(exits) + ".")
         room.visited = True
-        items = [t for t in self.w.contents(self.w.player)
-                 if "hidden" not in t.flags and "scenery" not in t.flags]
-        for t in items:
-            lines.append(t.props.get("here") or f"There is {t.article_name} here.")
+        for t in self.w.contents(self.w.player):
+            if "hidden" in t.flags:
+                continue
+            if "moved" not in t.flags and t.props.get("initial"):
+                lines.append(t.props["initial"])
+            elif t.props.get("here") and ("moved" not in t.flags or {"scenery", "person", "creature"} & t.flags):
+                lines.append(t.props["here"])
+            elif not ({"scenery"} & t.flags):
+                lines.append(f"There is {t.article_name} here.")
+            if "person" in t.flags and self.w.flags.get("barged") and t.props.get("barge") and not t.props.get("barge_said"):
+                t.props["barge_said"] = True
+                lines.append(t.props["barge"])
         return wrap("\n".join(lines))
 
     # --------------------------------------------------------------- matching
@@ -196,7 +221,10 @@ class Game:
             return t
         if (h := self._hazard(t, "examine")) is not None:
             return h
-        parts = [t.description or f"You see nothing special about the {t.name}."]
+        spec = self.act(t, "examine")
+        if spec:
+            return spec
+        parts = [t.description or t.props.get("here") or f"You see nothing special about the {t.name}."]
         if "door" in t.flags:
             parts.append(self._door_state(t))
         if "container" in t.flags and ("open" in t.flags or "openable" not in t.flags):
@@ -215,6 +243,9 @@ class Game:
             return t
         if (h := self._hazard(t, "lookin")) is not None:
             return h
+        spec = self.act(t, "lookin")
+        if spec:
+            return spec
         if "container" in t.flags:
             return self.do_examine(cmd)
         return f"You see nothing unusual in the {t.name}."
@@ -264,6 +295,7 @@ class Game:
                     f"over your limit of {self.w.load['max_kg']:g} kg. Drop something first.")
         before = self.w.load_status()
         t.location = "player"
+        t.flags.add("moved")
         return "Taken." + self._load_change(before)
 
     def do_drop(self, cmd):
@@ -278,7 +310,7 @@ class Game:
     def _drop(self, t: Thing) -> str:
         before = self.w.load_status()
         t.location = self.w.player
-        t.flags.add("dropped")
+        t.flags |= {"dropped", "moved"}
         return "Dropped." + self._load_change(before)
 
     def _load_change(self, before: str) -> str:
@@ -390,6 +422,12 @@ class Game:
                 prefix = f"(first opening the {door.name})\n"
         if e.to == "__exit__":
             return prefix + (self.w.flags.get("exit_text") or "That way leads out of this place; it's not ready yet.")
+        if e.door and "household" in self.w.things[e.door].flags and self.w.player == "outside" \
+                and not self.w.flags.get("knocked"):
+            self.w.flags["barged"] = True
+        for t in self.w.things.values():
+            if "following" in t.flags and t.location == self.w.player:
+                t.location = e.to
         self.w.player = e.to
         return prefix + self.describe()
 
@@ -439,6 +477,22 @@ class Game:
 
     def do_search(self, cmd):
         room = self.w.rooms[self.w.player]
+        if cmd.words:
+            t = self.resolve(cmd, cmd.words)
+            if isinstance(t, str):
+                return t
+            out = self.act(t, "search")
+            hidden = [c for c in self.w.contents(t.id) if "hidden" in c.flags]
+            for c in hidden:
+                c.flags.discard("hidden")
+                c.location = self.w.player
+            found = f"You find {_list(hidden)}." if hidden else ""
+            if out or found:
+                return " ".join(x for x in (out, found) if x)
+            inside = self.w.contents(t.id)
+            if inside and ("open" in t.flags or "openable" not in t.flags):
+                return f"In the {t.name} you find {_list(inside)}."
+            return f"You search the {t.name} but find nothing."
         found = []
         for d, e in room.exits.items():
             if e.hidden:
@@ -483,15 +537,17 @@ class Game:
         if isinstance(t, str):
             return t
         if "person" not in t.flags:
-            return "There is no reply."
-        return wrap(t.props.get("talk") or f"The {t.name} regards you but says nothing.")
+            return self.act(t, "talk") or "There is no reply."
+        return wrap(t.props.get("talk") or t.props.get("greet") or f"The {t.name} regards you but says nothing.")
 
     def do_help(self, cmd):
-        return wrap("Commands: LOOK, EXAMINE X, LOOK IN X, READ X, TAKE X / TAKE ALL, DROP X / DROP ALL, "
-                    "PUT X IN Y, OPEN/CLOSE X, UNLOCK X (WITH Y), LIGHT/EXTINGUISH X, SEARCH, RAISE/LOWER X, "
-                    "WEIGH X, INVENTORY (I), directions (N, NE, E, SE, S, SW, W, NW, UP, DOWN, IN, OUT), "
-                    "WAIT (Z), TIME, STATUS, AGAIN (G), UNDO, SAVE [name], RESTORE [name], QUIT. "
-                    "Chain commands with periods or THEN.")
+        return wrap("Looking: LOOK, EXAMINE X, LOOK IN/UNDER X, READ X, SEARCH (X), LISTEN, SMELL, TOUCH X. "
+                    "Things: TAKE/DROP X (or ALL), PUT X IN Y, OPEN/CLOSE X, UNLOCK X (WITH Y), LIGHT/EXTINGUISH X, "
+                    "FILL X, USE X (ON Y), EAT, DRINK, WEAR X, PUSH/PULL X, RAISE/LOWER X, WEIGH X, INVENTORY (I). "
+                    "Rest: SIT, SLEEP, PRAY, COOK. People: TALK TO X, ASK X ABOUT Y, TELL X ABOUT Y, GIVE X TO Y, "
+                    "SHOW X TO Y, INVITE X, DISMISS X, KNOCK. Journal: WRITE <text>, JOURNAL. "
+                    "Moving: N, NE, E, SE, S, SW, W, NW, UP, DOWN, IN, OUT. Game: WAIT (Z), TIME, STATUS, AGAIN (G), "
+                    "UNDO, SAVE [name], RESTORE [name], QUIT. Chain commands with periods or THEN.")
 
     # ------------------------------------------------------------------ meta
     def do_undo(self, cmd):

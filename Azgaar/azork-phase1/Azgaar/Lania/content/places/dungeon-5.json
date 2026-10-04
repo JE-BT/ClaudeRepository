@@ -1,16 +1,76 @@
 {
-  "_about": "Halls of the Diamond King overlay. Items and hazards follow the dungeon's own notes (data); wording marked new.",
-  "modify": {
-    "note:1-1": {"add_flags": ["person"], "remove_flags": ["scenery"], "here": "A handsome druid rests on the ground, eyes half closed.",
-      "talk": "The druid opens one eye. \"Whatever you do in the mirror room, don't look into the glass.\"", "provenance": "new"},
-    "note:3-1": {"add_flags": ["takeable", "treasure"], "remove_flags": ["scenery"], "weight": 0.2, "value": 10,
-      "description": "A silver chess piece, a king, heavier than it looks.", "provenance": "data"},
-    "note:4": {"description": "A tall mirror in a tarnished frame. You keep your eyes on the frame.",
-      "hazard": {"on": ["lookin"], "fatal": true, "text": "You look into the glass. The cold climbs from your feet to your heart, and you become a statue of yourself."},
-      "provenance": "data"},
-    "note:5": {"add_flags": ["takeable", "treasure"], "remove_flags": ["scenery"], "weight": 1.0, "value": 25,
-      "description": "A small relic of crystal and gold, faintly warm.", "provenance": "data"},
-    "note:6": {"add_flags": ["takeable"], "remove_flags": ["scenery"], "weight": 2.0,
-      "description": "A rusty iron-shod staff.", "provenance": "data"}
+ "_about": "Halls of the Diamond King overlay. Items and hazards follow the dungeon's own notes (data); wording marked new.",
+ "modify": {
+  "note:1-1": {
+   "add_flags": [
+    "person"
+   ],
+   "remove_flags": [
+    "scenery"
+   ],
+   "here": "A handsome druid rests on the ground, eyes half closed.",
+   "talk": "The druid opens one eye. \"Lost, or looking? Ask me about the place, if you like.\"",
+   "provenance": "new",
+   "topics": {
+    "mirror|glass": "Whatever you do in the mirror room, don't look into the glass. I've seen what it leaves behind.",
+    "wyrm|dragon|beast": "It sleeps where the king once held court, deep in, past the scorched gate. Don't wake it; don't even knock.",
+    "key|gate": "There's a key at the bottom of a pool somewhere in the north halls. The water is colder than it looks.",
+    "king|diamond": "A king of diamonds and dust. The fresco by the south passage shows him; the throne is all that's left."
+   },
+   "accepts": {
+    "bread|rations|food": {
+     "text": "The druid eats slowly. \"Kindness, down here. Listen: count the doors you pass. The one that isn't drawn on any wall is the one you want.\"",
+     "keep": false
+    }
+   }
+  },
+  "note:3-1": {
+   "add_flags": [
+    "takeable",
+    "treasure"
+   ],
+   "remove_flags": [
+    "scenery"
+   ],
+   "weight": 0.2,
+   "value": 10,
+   "description": "A silver chess piece, a king, heavier than it looks.",
+   "provenance": "data"
+  },
+  "note:4": {
+   "description": "A tall mirror in a tarnished frame. You keep your eyes on the frame.",
+   "hazard": {
+    "on": [
+     "lookin"
+    ],
+    "fatal": true,
+    "text": "You look into the glass. The cold climbs from your feet to your heart, and you become a statue of yourself."
+   },
+   "provenance": "data"
+  },
+  "note:5": {
+   "add_flags": [
+    "takeable",
+    "treasure"
+   ],
+   "remove_flags": [
+    "scenery"
+   ],
+   "weight": 1.0,
+   "value": 25,
+   "description": "A small relic of crystal and gold, faintly warm.",
+   "provenance": "data"
+  },
+  "note:6": {
+   "add_flags": [
+    "takeable"
+   ],
+   "remove_flags": [
+    "scenery"
+   ],
+   "weight": 2.0,
+   "description": "A rusty iron-shod staff.",
+   "provenance": "data"
   }
+ }
 }

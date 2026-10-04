@@ -165,6 +165,13 @@ def load_dwelling(path: str | Path, doc: dict | None = None) -> Dwelling:
                 b = where.get((lv + 1, st["cell"]["i"], st["cell"]["j"]))
                 if a and b:
                     dw.links.append((a, b, "stairs"))
+    sp = doc.get("spiral")  # one spiral stair through every floor at this cell (Dwellings top-level key)
+    if sp:
+        levels = sorted(fl["level"] for fl in doc["floors"])
+        stack = [where.get((lv, sp["cell"]["i"], sp["cell"]["j"])) for lv in levels]
+        stack = [k for k in stack if k]
+        for a, b in zip(stack, stack[1:]):
+            dw.links.append((a, b, "spiral"))
     ex = doc.get("exit")
     if ex:
         dw.entrance = where.get((0, ex["cell"]["i"], ex["cell"]["j"]))

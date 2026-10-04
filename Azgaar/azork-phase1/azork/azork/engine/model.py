@@ -31,6 +31,8 @@ class Room:
     area: str = ""               # building or dungeon name
     provenance: str = "data"
     visited: bool = False
+    purpose: str = ""            # kitchen, guard room, lair... drives furnishings
+    depth: int = 0               # steps from the way in (dungeons: locked and secret doors count extra)
 
 
 @dataclass
@@ -71,6 +73,9 @@ class World:
         self.load = {"light_kg": 15.0, "max_kg": 35.0}
         self.clock = None            # journey PlanClock, set by the scene builder
         self.lat = 0.0
+        self.seed = name
+        self.loot: dict[str, list[dict]] = {}
+        self._spawned = 0
 
     # ------------------------------------------------------------------ helpers
     def add_room(self, room: Room) -> Room:
@@ -80,6 +85,23 @@ class World:
     def add_thing(self, thing: Thing) -> Thing:
         self.things[thing.id] = thing
         return thing
+
+    def spawn(self, spec: dict, location: str | None, tid: str | None = None) -> Thing:
+        """Create a thing from a content spec (items.json, furnishings, overlays, loot)."""
+        if tid is None:
+            self._spawned += 1
+            base = spec.get("id") or spec["name"].split()[-1]
+            tid = base if base not in self.things else f"{base}~{self._spawned}"
+        props = {k: v for k, v in spec.items() if k in (
+            "fuel", "hazard", "hint", "talk", "here", "initial", "value", "search", "actions", "uses", "topics",
+            "accepts", "show", "invite", "barge", "greet", "tell", "ask_default", "lore", "max_uses")}
+        t = Thing(tid, spec["name"], spec.get("nouns") or [spec["name"].split()[-1]], spec.get("adjectives", []),
+                  spec.get("description", ""), location, float(spec.get("weight", 0)), set(spec.get("flags", [])),
+                  spec.get("text", ""), spec.get("unlocks", []), props, spec.get("provenance", "new"))
+        self.add_thing(t)
+        for k, inner in enumerate(spec.get("contents", [])):
+            self.spawn(inner, t.id)
+        return t
 
     def connect(self, a: str, direction: str, b: str, door: str | None = None, hidden: bool = False,
                 note: str = "", back: str | None = None) -> None:
@@ -128,7 +150,8 @@ class World:
     def state(self) -> dict:
         return {
             "player": self.player, "minutes": self.minutes, "moves": self.moves, "dead": self.dead,
-            "flags": copy.deepcopy(self.flags),
+            "flags": copy.deepcopy(self.flags), "spawned": self._spawned,
+            "new_things": {k: _spec(t) for k, t in self.things.items() if t.props.get("_spawned_in_play")},
             "things": {k: {"location": t.location, "flags": sorted(t.flags), "props": copy.deepcopy(t.props)}
                        for k, t in self.things.items()},
             "rooms": {k: {"visited": r.visited, "hidden": {d: e.hidden for d, e in r.exits.items()}}
@@ -138,6 +161,12 @@ class World:
     def set_state(self, s: dict) -> None:
         self.player, self.minutes, self.moves, self.dead = s["player"], s["minutes"], s["moves"], s["dead"]
         self.flags = copy.deepcopy(s["flags"])
+        self._spawned = s.get("spawned", self._spawned)
+        for k in [k for k, t in self.things.items() if t.props.get("_spawned_in_play") and k not in s["things"]]:
+            del self.things[k]
+        for k, spec in s.get("new_things", {}).items():
+            if k not in self.things:
+                self.spawn(spec, None, k)
         for k, v in s["things"].items():
             if k in self.things:
                 t = self.things[k]
@@ -148,3 +177,9 @@ class World:
                 for d, hidden in v["hidden"].items():
                     if d in self.rooms[k].exits:
                         self.rooms[k].exits[d].hidden = hidden
+
+
+def _spec(t: Thing) -> dict:
+    return {"name": t.name, "nouns": t.nouns, "adjectives": t.adjectives, "description": t.description,
+            "weight": t.weight, "flags": sorted(t.flags), "text": t.text, "unlocks": t.unlocks,
+            "provenance": t.provenance, **{k: v for k, v in t.props.items()}}
