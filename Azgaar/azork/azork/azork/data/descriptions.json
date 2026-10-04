@@ -1,0 +1,55 @@
+{
+  "_about": "Phrase banks for places, people and encounters. Picked by data (biome, height, culture type, namebase, zone type) and seeded per place. Invention, provenance new.",
+  "biomes": {
+    "Marine": {"phrases": ["Open water heaves under a wide sky.", "Grey swell, and gulls following.", "The sea runs in long ridges toward the horizon."], "food": 0.2, "hunt": 0.1},
+    "Hot desert": {"phrases": ["Sand ribs the ground, hot underfoot.", "Heat shivers over bare stone.", "Thorn scrub clings in the hollows."], "food": 0.1, "hunt": 0.15},
+    "Cold desert": {"phrases": ["Wind scours bare gravel flats.", "Frost-cracked stone, and nothing growing.", "Thin snow lies in the lee of every rock."], "food": 0.05, "hunt": 0.1},
+    "Savanna": {"phrases": ["Tall grass, gold and rustling, with lone trees.", "Herds have trodden paths through the grass.", "Flat-topped trees throw small shadows."], "food": 0.4, "hunt": 0.5},
+    "Grassland": {"phrases": ["Grass rolls away in every direction.", "Larks rise from the grass ahead of you.", "The wind combs long grass into waves."], "food": 0.4, "hunt": 0.4},
+    "Tropical seasonal forest": {"phrases": ["Dry leaves crackle under a broken canopy.", "Monkeys argue in the high branches.", "Sunlight comes down in shafts between trunks."], "food": 0.5, "hunt": 0.4},
+    "Temperate deciduous forest": {"phrases": ["Oak and beech close over the way.", "Leaf litter muffles every step.", "A woodpecker hammers somewhere ahead."], "food": 0.5, "hunt": 0.45},
+    "Tropical rainforest": {"phrases": ["Wet green walls press in on both sides.", "Vines hang in curtains; everything drips.", "The canopy shuts out the sky; the air is thick and warm.", "Frogs shout from every leaf."], "food": 0.6, "hunt": 0.35},
+    "Temperate rainforest": {"phrases": ["Moss furs every trunk and stone.", "Ferns stand waist-high under dripping cedars.", "Fog hangs between the trees."], "food": 0.5, "hunt": 0.35},
+    "Taiga": {"phrases": ["Dark spruce stands close and silent.", "Needles carpet the ground.", "A cold wind moves in the pines."], "food": 0.3, "hunt": 0.4},
+    "Tundra": {"phrases": ["Low scrub and lichen to the edge of sight.", "The ground is soft and cold.", "Nothing stands taller than your knee."], "food": 0.15, "hunt": 0.3},
+    "Glacier": {"phrases": ["Blue ice groans underfoot.", "Glare off the ice hurts your eyes.", "Crevasses open like mouths."], "food": 0.0, "hunt": 0.05},
+    "Wetland": {"phrases": ["Reeds stand higher than your head; the ground gives underfoot.", "Black water between tussocks of sedge.", "Herons lift from the channels as you pass.", "The smell of mud and rot hangs low."], "food": 0.5, "hunt": 0.5}
+  },
+  "height": [[0, "low ground"], [300, "rolling country"], [1200, "hills"], [3000, "highlands"], [6000, "mountains"]],
+  "time": {"dawn": "Grey light comes up.", "day": "", "dusk": "The light is going.", "night": "It is dark; you move by feel and starlight."},
+  "kin": {
+    "dwarven": {"kin": "dwarf", "build": ["broad", "stocky", "barrel-chested"], "feature": ["a braided beard", "scarred, capable hands", "a nose broken more than once"]},
+    "orc": {"kin": "orc", "build": ["heavy-shouldered", "rangy", "thick-necked"], "feature": ["tusks capped with copper", "a shaven scalp", "ritual scars on the cheeks"]},
+    "elven": {"kin": "elf", "build": ["slender", "tall", "light-boned"], "feature": ["long braided hair", "unreadable grey eyes", "a fine silver earring"]},
+    "goblin": {"kin": "goblin", "build": ["small", "wiry", "quick"], "feature": ["huge ears", "sharp yellow teeth", "a twitching nose"]},
+    "giant": {"kin": "giant", "build": ["enormous", "towering", "slow-moving"], "feature": ["hands like shovels", "a booming voice", "a beard like a hedge"]},
+    "drak": {"kin": "drakeborn", "build": ["lean", "scaled", "long-limbed"], "feature": ["copper scales at the throat", "slit pupils", "a hissing laugh"]},
+    "human": {"kin": "human", "build": ["lean", "sturdy", "stooped", "tall", "short"], "feature": ["a weathered face", "quick dark eyes", "a missing tooth", "freckles", "grey at the temples"]}
+  },
+  "clothes": {"hot": ["light linen", "a palm-fibre hat", "bare feet"], "mild": ["a wool tunic", "a leather jerkin", "a patched coat"], "cold": ["furs", "a heavy cloak", "felt boots"]},
+  "traditions": {
+    "Generic": "keeps the old customs of the {culture}", "River": "lives by the river, as the {culture} always have",
+    "Lake": "comes from {culture} lake-folk, who trust still water more than roads", "Naval": "comes of seafaring {culture} stock",
+    "Nomadic": "comes of the wandering {culture}, who never sleep twice in one place", "Hunting": "was raised among {culture} hunters",
+    "Highland": "comes from the {culture} hill-folk, stubborn and proud"},
+  "professions": ["carter", "fishwife", "cooper", "smith", "tanner", "net-mender", "water-seller", "street sweeper", "porter", "baker", "chandler", "beggar", "priest's servant", "watchman"],
+  "encounters": {
+    "wild": [
+      {"text": "A pig-sized lizard crosses your path, considers you, and leaves."},
+      {"text": "You lose the way for a while among game trails.", "delay": [1, 3]},
+      {"text": "A traveller going the other way shares the news from the road ahead.", "rumour": true},
+      {"text": "You find a spring of clean water.", "water": true}],
+    "road": [
+      {"text": "A carter pulls up beside you. \"Going my way? It'll cost you.\"", "carrier": "Carriage"},
+      {"text": "A patrol looks you over and lets you pass.", "patrol": true},
+      {"text": "Pilgrims share bread with you at the roadside.", "food": 1}],
+    "Disease": [{"text": "A village by the way has chalked its door with warnings. You go round.", "delay": [2, 6]}],
+    "Crusade": [{"text": "Soldiers of the crusade stop and question you.", "delay": [1, 4], "patrol": true}],
+    "Proselytism": [{"text": "A missionary walks beside you for an hour, explaining the truth. You learn a great deal about faith and a little about the road.", "rumour": true, "delay": [1, 1]}],
+    "Disaster": [{"text": "Hungry people at the roadside ask for food.", "beg": true}],
+    "Flood": [{"text": "The way is under water; you wade a long detour.", "delay": [2, 8]}],
+    "Rebels": [{"text": "Armed figures watch you from a ridge and decide you are not worth the trouble."}],
+    "Invasion": [{"text": "Foreign soldiers demand papers.", "patrol": true, "delay": [1, 3]}],
+    "marker": [{"text": "Signs of something big have been through here: broken branches, a smell.", "delay": [0, 1]}]
+  }
+}
