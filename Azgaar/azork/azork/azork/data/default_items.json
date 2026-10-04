@@ -1,0 +1,15 @@
+{
+  "_about": "Starting kit used when a world's content pack has no items.json. Invention, provenance new.",
+  "load": {"light_kg": 15, "max_kg": 35},
+  "start_inventory": [
+    {"id": "lantern", "name": "brass lantern", "nouns": ["lantern", "lamp"], "adjectives": ["brass"], "weight": 1.5, "flags": ["takeable", "light", "start"], "fuel": 480, "description": "A shuttered brass lantern."},
+    {"id": "tinderbox", "name": "tinderbox", "nouns": ["tinderbox", "flint"], "weight": 0.3, "flags": ["takeable", "firestarter", "start"], "description": "Flint, steel and dry tinder."},
+    {"id": "rations", "name": "bundle of rations", "nouns": ["rations", "bundle", "food"], "weight": 1.8, "flags": ["takeable", "food", "start"], "uses": 6, "description": "Hard bread, cheese and dried meat for a few days."},
+    {"id": "waterskin", "name": "waterskin", "nouns": ["waterskin", "skin", "water"], "weight": 1.2, "flags": ["takeable", "drink", "start"], "uses": 6, "max_uses": 6, "description": "A leather waterskin."},
+    {"id": "bedroll", "name": "bedroll", "nouns": ["bedroll", "blanket"], "weight": 2.0, "flags": ["takeable", "start"], "description": "A rolled wool blanket."},
+    {"id": "rope", "name": "coil of rope", "nouns": ["rope", "coil"], "weight": 4.0, "flags": ["takeable", "start"], "description": "Thirty paces of hemp rope."},
+    {"id": "knife", "name": "knife", "nouns": ["knife"], "weight": 0.3, "flags": ["takeable", "weapon", "start"], "description": "A plain knife."},
+    {"id": "journal", "name": "journal", "nouns": ["journal", "notebook", "diary"], "adjectives": ["leather"], "weight": 0.4, "flags": ["takeable", "journal", "readable", "start"], "description": "A leather journal, mostly blank. WRITE to add to it; JOURNAL to read it."},
+    {"id": "pencil", "name": "pencil", "nouns": ["pencil"], "weight": 0.02, "flags": ["takeable", "writer", "start"], "description": "A stub of graphite in a wooden sleeve."}
+  ]
+}

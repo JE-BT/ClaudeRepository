@@ -1,0 +1,81 @@
+{
+  "_about": "Story frames by Azgaar journey type (data/journey-lore.ts). Tokens: {beast} {destination} {origin} {deadline} {faith} {dest_state} {place} {cargo}. Invention, provenance new.",
+  "default": {
+    "premise": "You have business in {destination}, a long road from {origin}, and it will not wait.",
+    "why_time": "Whoever sent you needs you in {destination} by day {deadline}; after that the business is someone else's.",
+    "goal": "Reach {destination} before day {deadline}.",
+    "token": {"name": "letter of passage", "nouns": ["letter", "passage"], "text": "Bearer travels on our business to {destination}. Assist them. Expires day {deadline}."},
+    "contact": "a courier who knows the road ahead",
+    "cargo": {"name": "sealed parcel", "nouns": ["parcel"], "why": "It must be in {destination} when you are."},
+    "climax": "You reach {destination} with what you were sent to bring.",
+    "failure": "You reach {destination} too late. The business was settled without you.",
+    "stops": {"stay": "Rest and resupply in {place}.", "bounty": "Report at {place}.", "tavern": "Ask for news at {place}.",
+              "camp": "Make camp near {place}.", "port": "Find passage at {place}."}
+  },
+  "Monster hunt": {
+    "premise": "The {beast} of {destination} has a price on its head, posted far from home. You took the commission in {origin}.",
+    "why_time": "The bounty closes on day {deadline}. Worse, the {beast} grows stronger each night it walks; hunters who come later find less to kill and more to fear.",
+    "goal": "Lay the {beast} of {destination} to rest before day {deadline}.",
+    "token": {"name": "bounty writ", "nouns": ["writ", "bounty"], "text": "Writ of bounty upon the {beast} of {destination}. Payable on proof, if presented before day {deadline}."},
+    "contact": "a hunter who has seen the {beast}'s work",
+    "cargo": {"name": "iron grave-chains", "nouns": ["chains", "grave-chains"], "why": "Only bound in cold iron will the {beast} stay down."},
+    "climax": "In {destination} you find the {beast}, and you lay it down for good.",
+    "failure": "The {beast} of {destination} is beyond any hunter now. The writ is worthless paper.",
+    "stops": {"stay": "Gather what you need in {place}.", "bounty": "Present the writ in {place} and hear what the bounty-keepers know.",
+              "tavern": "Listen for word of the {beast} at {place}.", "camp": "Watch the dark near {place}.", "port": "Find a boat at {place}."}
+  },
+  "Airship voyage": {
+    "premise": "Your ship sails the high air from {origin} to {destination}, and you are bound to her.",
+    "why_time": "The lift-gas is rationed to the day; past day {deadline} the ship comes down wherever she is.",
+    "goal": "Bring the ship to {destination} before day {deadline}.",
+    "token": {"name": "ship's articles", "nouns": ["articles"], "text": "Signed aboard for the voyage to {destination}. Gas reserve: to day {deadline}."},
+    "contact": "a gas-merchant with spare cylinders", "cargo": {"name": "lift-gas cylinder", "nouns": ["cylinder"], "why": "The last leg needs more lift than the ship carries."},
+    "climax": "The ship settles over {destination} on her last breath of gas.", "failure": "The ship comes down short of {destination}.",
+    "stops": {"stay": "Take on stores at {place}.", "bounty": "Clear papers at {place}.", "tavern": "Find the crew ashore at {place}.", "camp": "Moor for the night near {place}.", "port": "Refuel at {place}."}
+  },
+  "Caravan": {
+    "premise": "You ride with a caravan out of {origin}, its goods promised to buyers in {destination}.",
+    "why_time": "The buyers in {destination} hold their price until the fair ends on day {deadline}.",
+    "goal": "Bring the caravan's goods to {destination} before day {deadline}.",
+    "token": {"name": "bill of lading", "nouns": ["bill", "lading"], "text": "Goods consigned to {destination}. Price holds to day {deadline}."},
+    "contact": "a factor with word of the markets", "cargo": {"name": "sealed sample case", "nouns": ["case"], "why": "The buyers will not pay without the samples."},
+    "climax": "The goods reach {destination} and the price holds.", "failure": "The fair at {destination} is over; the goods sell for nothing.",
+    "stops": {"stay": "Water and trade at {place}.", "bounty": "Pay the tolls at {place}.", "tavern": "Hear the market news at {place}.", "camp": "Circle the wagons near {place}.", "port": "Load the goods at {place}."}
+  },
+  "Quest": {
+    "premise": "A vow sends you from {origin} to {destination}.", "why_time": "The vow binds until day {deadline}; after that it is broken, and so are you.",
+    "goal": "Fulfil your vow in {destination} before day {deadline}.",
+    "token": {"name": "vow token", "nouns": ["token"], "text": "A plain token. You know what it means."},
+    "contact": "a hermit who knew the last person to try", "cargo": {"name": "offering", "nouns": ["offering"], "why": "The vow is not kept empty-handed."},
+    "climax": "In {destination} the vow is kept.", "failure": "Day {deadline} passes. The vow breaks.",
+    "stops": {"stay": "Prepare at {place}.", "bounty": "Seek guidance at {place}.", "tavern": "Ask the way at {place}.", "camp": "Keep vigil near {place}.", "port": "Take ship at {place}."}
+  },
+  "Pilgrimage": {
+    "premise": "You walk the pilgrim road from {origin} to the holy places of {destination}.", "why_time": "The rite in {destination} is held on day {deadline}, and only once.",
+    "goal": "Reach {destination} for the rite on day {deadline}.",
+    "token": {"name": "pilgrim's badge", "nouns": ["badge"], "text": "A pilgrim's badge for the road to {destination}."},
+    "contact": "an old pilgrim who has made the road before", "cargo": {"name": "votive offering", "nouns": ["offering"], "why": "The rite asks an offering of every pilgrim."},
+    "climax": "You stand in {destination} as the rite begins.", "failure": "The rite is over when you arrive.",
+    "stops": {"stay": "Pray and rest at {place}.", "bounty": "Have your badge marked at {place}.", "tavern": "Share bread with pilgrims at {place}.", "camp": "Sleep under the sky near {place}.", "port": "Take the pilgrim boat at {place}."}
+  },
+  "Courier ride": {
+    "premise": "You carry a sealed message from {origin} to {destination}.", "why_time": "The message is worthless after day {deadline}.",
+    "goal": "Deliver the message in {destination} before day {deadline}.",
+    "token": {"name": "sealed dispatch", "nouns": ["dispatch", "message"], "text": "Sealed. Do not open."},
+    "contact": "a relay rider", "cargo": {"name": "second dispatch", "nouns": ["dispatch"], "why": "It must travel with the first."},
+    "climax": "The dispatch is in the right hands in {destination}.", "failure": "You arrive with old news.",
+    "stops": {"stay": "Change horses at {place}.", "bounty": "Sign the relay book at {place}.", "tavern": "Snatch a meal at {place}.", "camp": "Sleep in the saddle near {place}.", "port": "Take the fast boat at {place}."}
+  },
+  "Expedition": {"premise": "You lead an expedition from {origin} into the far country of {destination}.", "why_time": "The season turns on day {deadline}; after that the way closes.", "goal": "Reach {destination} before day {deadline}.", "token": {"name": "expedition charter", "nouns": ["charter"], "text": "Charter for an expedition to {destination}."}, "contact": "a guide who knows the far country", "cargo": {"name": "survey instruments", "nouns": ["instruments"], "why": "Without them the expedition proves nothing."}, "climax": "You reach {destination} and survey it.", "failure": "The season closes the way.", "stops": {"stay": "Resupply at {place}.", "bounty": "Register at {place}.", "tavern": "Hire porters at {place}.", "camp": "Make camp near {place}.", "port": "Hire a boat at {place}."}},
+  "Treasure hunt": {"premise": "A map bought in {origin} promises treasure at {destination}.", "why_time": "Others have copies of the map; whoever reaches {destination} first by day {deadline} takes it.", "goal": "Claim the treasure in {destination} before day {deadline}.", "token": {"name": "treasure map", "nouns": ["map"], "text": "A map with a mark near {destination}."}, "contact": "a fence who knows who else is looking", "cargo": {"name": "digging tools", "nouns": ["tools"], "why": "The treasure is buried."}, "climax": "The treasure is yours.", "failure": "Someone else got there first.", "stops": {"stay": "Outfit at {place}.", "bounty": "Check the archives at {place}.", "tavern": "Listen for rivals at {place}.", "camp": "Camp near {place}.", "port": "Find a boat at {place}."}},
+  "Embassy": {"premise": "You carry the voice of {origin} to the court at {destination}.", "why_time": "The court sits until day {deadline}.", "goal": "Present your embassy in {destination} before day {deadline}.", "token": {"name": "letters of credence", "nouns": ["letters", "credence"], "text": "Letters of credence to the court at {destination}."}, "contact": "an agent of the court", "cargo": {"name": "diplomatic gift", "nouns": ["gift"], "why": "No embassy is heard without a gift."}, "climax": "The court hears you.", "failure": "The court has risen.", "stops": {"stay": "Rest at {place}.", "bounty": "Present credentials at {place}.", "tavern": "Gather gossip at {place}.", "camp": "Camp near {place}.", "port": "Take ship at {place}."}},
+  "Mercenary contract": {"premise": "You signed for a fight in {destination}, paid in advance in {origin}.", "why_time": "The contract names day {deadline}; late is the same as deserted.", "goal": "Report to your paymaster in {destination} before day {deadline}.", "token": {"name": "signed contract", "nouns": ["contract"], "text": "Contract of service in {destination}, from day {deadline}."}, "contact": "a recruiter", "cargo": {"name": "company banner", "nouns": ["banner"], "why": "The paymaster pays the banner, not the swords."}, "climax": "You report for the fight in {destination}.", "failure": "The fight happened without you; so did the pay.", "stops": {"stay": "Drill and rest at {place}.", "bounty": "Muster at {place}.", "tavern": "Drink with the company at {place}.", "camp": "Camp near {place}.", "port": "Take ship at {place}."}},
+  "Military campaign": {"premise": "Your column marches from {origin} on {destination}.", "why_time": "The siege must be broken by day {deadline}.", "goal": "Reach {destination} before day {deadline}.", "token": {"name": "marching orders", "nouns": ["orders"], "text": "March on {destination}. Arrive by day {deadline}."}, "contact": "a scout", "cargo": {"name": "siege powder", "nouns": ["powder"], "why": "The walls will not fall without it."}, "climax": "The column arrives in time.", "failure": "The column arrives to ruins.", "stops": {"stay": "Forage at {place}.", "bounty": "Report at {place}.", "tavern": "Requisition at {place}.", "camp": "Bivouac near {place}.", "port": "Embark at {place}."}},
+  "Wandering": {"premise": "You left {origin} with no plan but {destination}.", "why_time": "Your money runs out on day {deadline}.", "goal": "Reach {destination} before day {deadline}.", "token": {"name": "worn purse", "nouns": ["purse"], "text": ""}, "contact": "a fellow wanderer", "cargo": {"name": "keepsake", "nouns": ["keepsake"], "why": "You promised to bring it."}, "climax": "You arrive in {destination}.", "failure": "You run out of road and money.", "stops": {"stay": "Linger at {place}.", "bounty": "Look for work at {place}.", "tavern": "Drink at {place}.", "camp": "Sleep rough near {place}.", "port": "Work a passage at {place}."}},
+  "Refugee flight": {"premise": "You flee {origin} toward safety in {destination}.", "why_time": "The pursuit will close the roads by day {deadline}.", "goal": "Reach {destination} before day {deadline}.", "token": {"name": "forged papers", "nouns": ["papers"], "text": "Papers. Not yours."}, "contact": "a smuggler of people", "cargo": {"name": "family heirloom", "nouns": ["heirloom"], "why": "It is all that is left."}, "climax": "{destination} takes you in.", "failure": "The roads close.", "stops": {"stay": "Hide at {place}.", "bounty": "Pass the checkpoint at {place}.", "tavern": "Find friends at {place}.", "camp": "Hide near {place}.", "port": "Find a boat at {place}."}},
+  "Exile's flight": {"premise": "Exiled from {origin}, you are bound for {destination}.", "why_time": "The writ of exile gives you until day {deadline} to cross the last border.", "goal": "Reach {destination} before day {deadline}.", "token": {"name": "writ of exile", "nouns": ["writ"], "text": "Exiled. Leave by day {deadline}."}, "contact": "a sympathiser", "cargo": {"name": "proof of innocence", "nouns": ["proof"], "why": "You mean to come back one day."}, "climax": "You reach {destination}, free.", "failure": "The writ runs out.", "stops": {"stay": "Rest at {place}.", "bounty": "Avoid the officials at {place}.", "tavern": "Listen at {place}.", "camp": "Camp near {place}.", "port": "Take ship at {place}."}},
+  "Smuggling run": {"premise": "You run goods from {origin} to buyers in {destination}.", "why_time": "The buyers wait until day {deadline}.", "goal": "Deliver to {destination} before day {deadline}.", "token": {"name": "coded ledger", "nouns": ["ledger"], "text": "Numbers that mean something to someone."}, "contact": "a fixer", "cargo": {"name": "contraband bundle", "nouns": ["bundle", "contraband"], "why": "It is the job."}, "climax": "The goods change hands in {destination}.", "failure": "The buyers are gone.", "stops": {"stay": "Lie low at {place}.", "bounty": "Bribe the post at {place}.", "tavern": "Meet contacts at {place}.", "camp": "Hide near {place}.", "port": "Find a quiet boat at {place}."}},
+  "Raid": {"premise": "Your band rides from {origin} to strike {destination}.", "why_time": "The garrison returns on day {deadline}.", "goal": "Strike {destination} before day {deadline}.", "token": {"name": "chieftain's token", "nouns": ["token"], "text": ""}, "contact": "an informer", "cargo": {"name": "fire pots", "nouns": ["pots"], "why": "For the gates."}, "climax": "You strike {destination}.", "failure": "The garrison is home.", "stops": {"stay": "Gather at {place}.", "bounty": "Scout {place}.", "tavern": "Pay informers at {place}.", "camp": "Cold camp near {place}.", "port": "Steal boats at {place}."}},
+  "Royal progress": {"premise": "You travel in the royal train from {origin} to {destination}.", "why_time": "The court must be in {destination} by day {deadline}.", "goal": "Arrive in {destination} before day {deadline}.", "token": {"name": "royal warrant", "nouns": ["warrant"], "text": "By royal warrant."}, "contact": "a herald", "cargo": {"name": "regalia case", "nouns": ["case", "regalia"], "why": "There is no ceremony without it."}, "climax": "The court arrives in state.", "failure": "The ceremony goes on without the court.", "stops": {"stay": "Hold court at {place}.", "bounty": "Receive petitions at {place}.", "tavern": "Feast at {place}.", "camp": "Pitch pavilions near {place}.", "port": "Embark at {place}."}},
+  "Arcane errand": {"premise": "A mage in {origin} sends you to {destination} on an errand they will not explain.", "why_time": "The working must be done by the conjunction on day {deadline}.", "goal": "Complete the errand in {destination} before day {deadline}.", "token": {"name": "warded scroll", "nouns": ["scroll"], "text": "Signs that hurt to look at."}, "contact": "a hedge-witch", "cargo": {"name": "bound phial", "nouns": ["phial"], "why": "The working needs it."}, "climax": "The working is done.", "failure": "The conjunction passes.", "stops": {"stay": "Prepare at {place}.", "bounty": "Consult at {place}.", "tavern": "Ask quietly at {place}.", "camp": "Ward the camp near {place}.", "port": "Take ship at {place}."}}
+}
