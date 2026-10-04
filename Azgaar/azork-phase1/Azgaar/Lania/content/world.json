@@ -1,7 +1,0 @@
-{
-  "_about": "Lania content pack settings for azork. Status: draft until play-tested.",
-  "start_day_of_year": 80,
-  "strict_mi": 2.0,
-  "corridor_mi": 40.0,
-  "transports_allowed": ["On foot (light)", "On foot (laden)", "Rowboat", "Sailing boat", "Sailing Ship"]
-}
