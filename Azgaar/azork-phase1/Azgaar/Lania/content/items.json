@@ -1,0 +1,22 @@
+{
+  "_about": "Starting kit and load limits for Lania. Rope and tar come from the ledger (draft: bought in Adrer); the rest is new and draft.",
+  "load": {"light_kg": 15, "max_kg": 35},
+  "start_inventory": [
+    {"id": "rope", "name": "coil of rope", "nouns": ["rope", "coil"], "adjectives": ["hemp"], "weight": 5.0,
+     "flags": ["takeable", "start"], "description": "Thirty paces of tarred hemp rope, bought in Adrer for the fen crossings.", "provenance": "canon"},
+    {"id": "tar", "name": "pot of tar", "nouns": ["tar", "pot"], "adjectives": ["clay"], "weight": 2.0,
+     "flags": ["takeable", "start"], "description": "A stoppered clay pot of pine tar for sealing packs.", "provenance": "canon"},
+    {"id": "lantern", "name": "brass lantern", "nouns": ["lantern", "lamp"], "adjectives": ["brass"], "weight": 1.5,
+     "flags": ["takeable", "light", "start"], "fuel": 480, "description": "A shuttered brass lantern with oil enough for a long night.", "provenance": "draft"},
+    {"id": "tinderbox", "name": "tinderbox", "nouns": ["tinderbox", "flint"], "weight": 0.3,
+     "flags": ["takeable", "firestarter", "start"], "description": "Flint, steel and dry tinder in a tin box.", "provenance": "draft"},
+    {"id": "rations", "name": "bundle of smoked rations", "nouns": ["rations", "bundle", "food"], "adjectives": ["smoked"], "weight": 1.8,
+     "flags": ["takeable", "start"], "description": "Three days of hard bread and smoked fish.", "provenance": "draft"},
+    {"id": "waterskin", "name": "waterskin", "nouns": ["waterskin", "skin", "water"], "weight": 1.2,
+     "flags": ["takeable", "start"], "description": "A full leather waterskin.", "provenance": "draft"},
+    {"id": "bedroll", "name": "bedroll", "nouns": ["bedroll", "blanket"], "weight": 2.0,
+     "flags": ["takeable", "start"], "description": "A rolled wool blanket and oilcloth.", "provenance": "draft"},
+    {"id": "knife", "name": "hunting knife", "nouns": ["knife"], "adjectives": ["hunting"], "weight": 0.4,
+     "flags": ["takeable", "start"], "description": "A broad-bladed hunting knife.", "provenance": "draft"}
+  ]
+}

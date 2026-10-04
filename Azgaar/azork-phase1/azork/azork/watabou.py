@@ -118,6 +118,7 @@ class Dwelling:
     rooms: dict[str, Room]
     links: list[tuple[str, str, str]] = field(default_factory=list)  # (room, room|"outside", kind)
     entrance: str | None = None
+    exit_dir: str | None = None   # wall of the entrance room the front door is on (n, s, e, w)
     windows: dict[str, int] = field(default_factory=dict)
 
     def neighbours(self, key: str) -> list[tuple[str, str]]:
@@ -167,6 +168,7 @@ def load_dwelling(path: str | Path, doc: dict | None = None) -> Dwelling:
     ex = doc.get("exit")
     if ex:
         dw.entrance = where.get((0, ex["cell"]["i"], ex["cell"]["j"]))
+        dw.exit_dir = ex.get("dir")
         if dw.entrance:
             dw.links.append((dw.entrance, "outside", "front door"))
     return dw
@@ -174,9 +176,7 @@ def load_dwelling(path: str | Path, doc: dict | None = None) -> Dwelling:
 
 # ------------------------------------------------------------------- dungeons
 # Each door also appears as a 1x1 rect at the door's own position; those are dropped
-# as chambers. Door type codes seen in the sample: 0,1,2,3,5,6,7,9. Only type 3 is
-# established (both doors to the outside, one at the noted "rear entrance"); the rest
-# stay as raw codes until confirmed.
+# as chambers. Door types 0-9 are interpreted in interiors.py.
 @dataclass
 class Chamber:
     index: int
@@ -204,8 +204,9 @@ class Dungeon:
     title: str
     story: str
     chambers: list[Chamber]
-    links: list[tuple[int, int | str, int]]  # (chamber, chamber or "outside", raw door type)
+    links: list[tuple[int, int | str, int]]  # (chamber, chamber or "outside", door type)
     entrances: list[int]
+    link_dirs: list[tuple[int, int]] = field(default_factory=list)  # step from first to second chamber
 
     def neighbours(self, index: int) -> list[tuple[int | str, int]]:
         out = []
@@ -237,18 +238,20 @@ def load_dungeon(path: str | Path, doc: dict | None = None) -> Dungeon:
             k = at(c["x"], c["y"])
             if k is not None:
                 setattr(chambers[k], key, getattr(chambers[k], key) + 1)
-    links, entrances = [], []
+    links, entrances, dirs = [], [], []
     for d in doc["doors"]:
         x, y, dx, dy = d["x"], d["y"], d["dir"]["x"], d["dir"]["y"]
         ahead, behind = at(x + dx, y + dy), at(x - dx, y - dy)
         if ahead is not None and behind is not None and ahead != behind:
             links.append((behind, ahead, d["type"]))
+            dirs.append((dx, dy))
         elif (ahead is None) != (behind is None):
             inside = ahead if ahead is not None else behind
             links.append((inside, "outside", d["type"]))
+            dirs.append((-dx, -dy) if ahead is not None else (dx, dy))
             entrances.append(inside)
     return Dungeon(path, doc.get("version", ""), doc.get("title", ""), doc.get("story", ""),
-                   chambers, links, entrances)
+                   chambers, links, entrances, dirs)
 
 
 # ------------------------------------------------------------------- dispatch

@@ -5,6 +5,7 @@
   python -m azork plan Lania             the journey plan as a travel table
   python -m azork setup Lania            files the story needs (required) and can add later (--all)
   python -m azork validate Lania         load every file of the world and report
+  python -m azork play Lania --scene dungeon:5   play a scene (--list shows the scenes)
 Options: --root PATH (default: the Azgaar folder beside this project), --date YYYY-MM-DD
 """
 from __future__ import annotations
@@ -50,6 +51,8 @@ def cmd_inspect(args) -> int:
         print(f"  other    {p.name}")
     for problem in w.problems:
         print(f"  ! {problem}")
+    for note in w.notices:
+        print(f"  note: {note}")
     return 0
 
 
@@ -118,7 +121,42 @@ def cmd_validate(args) -> int:
     for problem in w.problems:
         errors += 1
         print(f"! {problem}")
+    for note in w.notices:
+        print(f"note: {note}")
     return 1 if errors else 0
+
+
+def cmd_play(args) -> int:
+    from . import ledger_export, scenes
+    from .engine.game import Game
+    w = _world(args)
+    if args.list or not args.scene:
+        print("Scenes: " + ", ".join(scenes.list_scenes(w)))
+        return 0
+    project = Path(__file__).resolve().parents[1]
+    game = Game(scenes.build(w, args.scene), project / "saves")
+    print(game.intro())
+    while not game.quit_requested:
+        try:
+            line = input("\n> ")
+        except EOFError:
+            break
+        print(game.step(line))
+    transcript = project / "saves" / "transcripts" / f"{w.name}-{args.scene.replace(':', '-')}.txt"
+    transcript.parent.mkdir(parents=True, exist_ok=True)
+    transcript.write_text("\n\n".join(f"> {c}\n{o}" for c, o in game.log), encoding="utf-8")
+    print(f"Transcript saved to {transcript}.")
+    if w.main_ledger and not args.no_export:
+        choice = ""
+        while choice not in ("keep", "discard", "fork"):
+            try:
+                choice = input("Export this session to the ledger? keep / discard / fork: ").strip().lower()
+            except EOFError:
+                choice = "discard"
+        branch = input("Branch name: ").strip() if choice == "fork" else None
+        target = ledger_export.export(w.main_ledger, game, choice, branch)
+        print(f"Session written to {target.name}." if target else "Nothing written to the ledger.")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -127,12 +165,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--date", default=None, help="use saves from this date (YYYY-MM-DD)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("worlds").set_defaults(fn=cmd_worlds)
-    for name, fn in (("inspect", cmd_inspect), ("plan", cmd_plan), ("setup", cmd_setup), ("validate", cmd_validate)):
+    for name, fn in (("inspect", cmd_inspect), ("plan", cmd_plan), ("setup", cmd_setup), ("validate", cmd_validate),
+                     ("play", cmd_play)):
         p = sub.add_parser(name)
         p.add_argument("world")
         p.add_argument("--journey", type=int, default=0)
         if name == "setup":
             p.add_argument("--all", action="store_true")
+        if name == "play":
+            p.add_argument("--scene")
+            p.add_argument("--list", action="store_true")
+            p.add_argument("--no-export", action="store_true")
         p.set_defaults(fn=fn)
     args = ap.parse_args(argv)
     try:

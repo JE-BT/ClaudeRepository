@@ -54,6 +54,7 @@ class World:
     watabou: list[WatabouFile]
     other: list[Path]
     problems: list[str] = field(default_factory=list)
+    notices: list[str] = field(default_factory=list)
     _map: AzgaarMap | None = None
 
     @property
@@ -160,6 +161,9 @@ def _assign_from_ledger(w: World, led: ledger_mod.Ledger, by_name: dict[str, int
     """A ledger entry anchored to 'building N in town.json' and 'house.json' places the dwelling."""
     files = {f.path.name.casefold(): f for f in w.watabou}
     for e in led.entries:
+        for a in e.anchors:
+            if a.kind == "file" and a.file.casefold() not in files:
+                w.notices.append(f"ledger entry '{e.name}' names {a.file}, which is not in {w.map_path.parent.name}/")
         b = next((a for a in e.anchors if a.kind == "building" and a.file), None)
         if not b:
             continue

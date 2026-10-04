@@ -1,0 +1,16 @@
+{
+  "_about": "Halls of the Diamond King overlay. Items and hazards follow the dungeon's own notes (data); wording marked new.",
+  "modify": {
+    "note:1-1": {"add_flags": ["person"], "remove_flags": ["scenery"], "here": "A handsome druid rests on the ground, eyes half closed.",
+      "talk": "The druid opens one eye. \"Whatever you do in the mirror room, don't look into the glass.\"", "provenance": "new"},
+    "note:3-1": {"add_flags": ["takeable", "treasure"], "remove_flags": ["scenery"], "weight": 0.2, "value": 10,
+      "description": "A silver chess piece, a king, heavier than it looks.", "provenance": "data"},
+    "note:4": {"description": "A tall mirror in a tarnished frame. You keep your eyes on the frame.",
+      "hazard": {"on": ["lookin"], "fatal": true, "text": "You look into the glass. The cold climbs from your feet to your heart, and you become a statue of yourself."},
+      "provenance": "data"},
+    "note:5": {"add_flags": ["takeable", "treasure"], "remove_flags": ["scenery"], "weight": 1.0, "value": 25,
+      "description": "A small relic of crystal and gold, faintly warm.", "provenance": "data"},
+    "note:6": {"add_flags": ["takeable"], "remove_flags": ["scenery"], "weight": 2.0,
+      "description": "A rusty iron-shod staff.", "provenance": "data"}
+  }
+}

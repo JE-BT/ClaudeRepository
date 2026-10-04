@@ -1,0 +1,175 @@
+> knock on the door
+I don't know that verb.
+
+> n
+(first opening the front door)
+Hall
+A room on the ground floor of Fatewell house, about 63 square metres. Three
+windows let in the light.
+Exits: south (open front door), northwest (doorway), up (stairs).
+
+> up
+Living room
+A room upstairs of Fatewell house, about 47 square metres. Five windows let in
+the light.
+Exits: southwest (doorway), down (stairs).
+
+> sw
+Landing
+A room upstairs of Fatewell house, about 16 square metres. Two windows let in
+the light.
+Exits: north (doorway), northeast (doorway), west (closed door).
+
+> w
+(first opening the door)
+Upper southwest room
+A room upstairs of Fatewell house, about 71 square metres. Nine windows let in
+the light.
+Exits: east (open door).
+
+> e
+Landing
+
+> n
+Upper southeast room
+A room upstairs of Fatewell house, about 31 square metres, with no windows.
+Exits: northeast (closed door), south (doorway).
+
+> ne
+(first opening the door)
+Bedroom
+A room upstairs of Fatewell house, about 63 square metres. Four windows let in
+the light.
+Exits: southwest (open door).
+
+> examine the bed
+You can't see any bed here.
+
+> sw
+Upper southeast room
+
+> s
+Landing
+
+> ne
+Living room
+
+> d
+Hall
+
+> look around
+Hall
+A room on the ground floor of Fatewell house, about 63 square metres. Three
+windows let in the light.
+Exits: south (open front door), northwest (doorway), up (stairs).
+
+> nw
+Library
+A room on the ground floor of Fatewell house, about 31 square metres, with no
+windows. Account books for the fen catch share the shelves with Fearnyard
+scripture.
+Exits: northeast (doorway), southeast (doorway), west (closed door).
+There is an account book here.
+Swangel Fatewell sits at the library table.
+
+> talke to swangel
+I don't know that verb.
+
+> speak to swangel
+Swangel looks up from her accounts. "You came through the fen, not past the
+posts. I haven't decided what to do about that."
+
+> i
+You are carrying:
+  coil of rope                       5.0 kg
+  pot of tar                         2.0 kg
+  brass lantern                      1.5 kg
+  tinderbox                          0.3 kg
+  bundle of smoked rations           1.8 kg
+  waterskin                          1.2 kg
+  bedroll                            2.0 kg
+  hunting knife                      0.4 kg
+Total 14.2 kg: travelling light (light up to 15 kg, limit 35 kg).
+
+> give swangel the rope
+I don't know that verb.
+
+> look around
+Library
+A room on the ground floor of Fatewell house, about 31 square metres, with no
+windows. Account books for the fen catch share the shelves with Fearnyard
+scripture.
+Exits: northeast (doorway), southeast (doorway), west (closed door).
+There is an account book here.
+Swangel Fatewell sits at the library table.
+
+> w
+(first opening the door)
+Southwest room
+A room on the ground floor of Fatewell house, about 71 square metres. Six
+windows let in the light.
+Exits: east (open door).
+
+> e
+Library
+There is an account book here.
+Swangel Fatewell sits at the library table.
+
+> examine the table
+You can't see any table here.
+
+> look around
+Library
+A room on the ground floor of Fatewell house, about 31 square metres, with no
+windows. Account books for the fen catch share the shelves with Fearnyard
+scripture.
+Exits: northeast (doorway), southeast (doorway), west (open door).
+There is an account book here.
+Swangel Fatewell sits at the library table.
+
+> ne
+Trophy room
+A room on the ground floor of Fatewell house, about 63 square metres. Four
+windows let in the light. Turtle shells and stuffed marsh fowl crowd the
+walls.
+Exits: southwest (doorway), west (closed door).
+
+> w
+(first opening the door)
+Kitchen
+A room on the ground floor of Fatewell house, about 47 square metres. Five
+windows let in the light.
+Exits: east (open door), down (stairs).
+
+> d
+Cellar
+It is pitch dark. You can't see a thing.
+
+> u
+Kitchen
+
+> light the lantern
+The brass lantern is now lit.
+Kitchen
+
+> d
+Cellar
+A room in the cellar of Fatewell house, about 55 square metres, with no
+windows.
+Exits: south (doorway), northwest (closed door), up (stairs).
+
+> s
+Cellar room
+A room in the cellar of Fatewell house, about 47 square metres, with no
+windows.
+Exits: north (doorway).
+A hired trapper is mending snares on a cot.
+
+> talk to the trapper
+The hired trapper regards you but says nothing.
+
+> ask the trapper to come with you
+I don't know that verb.
+
+> quit
+Leaving the game.

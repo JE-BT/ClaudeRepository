@@ -24,7 +24,10 @@ python -m azork plan Lania        # the journey plan as a travel table, plus fas
 python -m azork setup Lania       # files required before the story is generated (exit 1 if any missing)
 python -m azork setup Lania --all # also the places that can be generated on demand
 python -m azork validate Lania    # load every file
-python -m unittest -v             # checks against Lania data and ledger canon
+python -m azork play Lania --list # scenes that can be played
+python -m azork play Lania --scene dwelling:house_on_the_hill
+python -m azork play Lania --scene dungeon:5
+python -m unittest -v             # checks against Lania data, ledger canon and the engine
 ```
 
 ## Credits
