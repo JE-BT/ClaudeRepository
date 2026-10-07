@@ -24,7 +24,22 @@ function stubUI() {
   return {
     said, el: {}, busy: () => false,
     say: async (pages) => { said.push(...(Array.isArray(pages) ? pages : [pages])); },
-    choose: async (prompt, options) => { said.push("CHOOSE " + prompt + " :: " + options.map(o => o.label).join(" | ")); const k = options.findIndex(o => o.act === "stage"); return k >= 0 ? k : options.length - 1; },
+    script: [],
+    choose: async function (prompt, options) {
+      said.push("CHOOSE " + prompt + " :: " + options.map(o => o.label).join(" | "));
+      while (this.script.length) {
+        const want = this.script[0];
+        const k0 = options.findIndex(o => !o.disabled && want.test(o.label.replace(/<[^>]+>/g, "")));
+        if (k0 >= 0) { this.script.shift(); return k0; }
+        if (/^CHOOSE <b>[^<]*<\/b> · Day/.test("CHOOSE " + prompt) || /harbour|market|notice board/i.test(prompt)) { this.script.shift(); continue; }
+        break;
+      }
+      let k = options.findIndex(o => o.act === "stage");
+      if (k < 0) k = options.findIndex(o => o.act === "thread");
+      if (k < 0 && /Leave|Never mind|Stay aboard|Back/.test(options[options.length - 1].label)) k = options.length - 1;
+      if (k < 0) k = options.findIndex(o => !o.disabled);
+      return k;
+    },
     toast: h => said.push("TOAST " + h), banner: (t, s) => said.push("BANNER " + t + " / " + s), modal() {}, closeModal() {},
   };
 }

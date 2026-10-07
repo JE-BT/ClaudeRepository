@@ -336,11 +336,28 @@ AZ.Renderer = class {
       }
       ctx.globalAlpha = 1;
     }
+    // the plan's nights at anchor (small gold rings) and the autopilot's path (teal)
+    if (v.nights) { ctx.strokeStyle = "rgba(245,197,66,0.9)"; ctx.lineWidth = 1; for (const [c, r] of v.nights) { if (c < left - 1 || c > left + W / S + 1 || r < top - 1 || r > top + H / S + 1) continue; ctx.beginPath(); ctx.arc(toX(c + 0.5), toY(r + 0.5), S * 0.35, 0, 7); ctx.stroke(); } }
+    if (v.path) { ctx.fillStyle = "rgba(79,209,197,0.8)"; const sz = Math.max(2, this.zoom * 1.5); for (const [c, r] of v.path) { if (c < left - 1 || c > left + W / S + 1 || r < top - 1 || r > top + H / S + 1) continue; ctx.fillRect(toX(c + 0.5) - sz / 2, toY(r + 0.5) - sz / 2, sz, sz); } }
     if (v.light && v.light.a > 0) {
       ctx.globalCompositeOperation = "multiply";
       ctx.fillStyle = `rgba(${v.light.rgb.join(",")},${v.light.a})`;
       ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = "source-over";
+    }
+    // weather from the map's precipitation, the season and the latitude
+    const wk = v.weather, ts = (v.time || 0) / 1000;
+    if (wk === "fog") { ctx.fillStyle = "rgba(220,226,232,0.35)"; ctx.fillRect(0, 0, W, H); }
+    if (wk === "storm") { ctx.fillStyle = "rgba(20,24,40,0.28)"; ctx.fillRect(0, 0, W, H); }
+    if (wk === "rain" || wk === "storm" || wk === "snow") {
+      const n = wk === "storm" ? 260 : 140, snow = wk === "snow";
+      ctx.strokeStyle = snow ? "rgba(255,255,255,0.85)" : "rgba(190,210,240,0.55)"; ctx.fillStyle = "rgba(255,255,255,0.85)"; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const sp = snow ? 40 : 600, x = (AZ.U.rnd2(i, 1, 7) * W + ts * (snow ? 15 : 160)) % W, y = (AZ.U.rnd2(i, 2, 7) * H + ts * sp) % H;
+        if (snow) ctx.rect(x, y, 2, 2); else { ctx.moveTo(x, y); ctx.lineTo(x - 3, y + 10); }
+      }
+      if (snow) ctx.fill(); else ctx.stroke();
     }
   }
 };

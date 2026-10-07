@@ -46,6 +46,48 @@ sea · I: inspector · L/Shift+L: lens · M: world map (click for a waypoint) ·
 Text is tagged in play: **data** (read from the files), **mixed** (a stated rule applied to data),
 **new** (invented for the playthrough, such as the traveller, people's names and an inn's keeper).
 
+## Seasons and light
+
+The plan clock carries a day of the year, chosen on the title screen as the departure season at the
+journey's origin (the four quarter days). Every tile then has its own season by latitude (southern
+seasons run opposite; the tropics have wet and dry seasons), its own day length (from latitude and
+the sun's declination; this drives the day–night tint and the boats' sailing hours) and a temperature
+for today: the map's annual mean plus a seasonal swing that grows with latitude (0.3 °C per degree,
+up to 18 °C, about half that at sea). The swing is a mixed rule; the mean is data.
+
+## Travellers
+
+Kinds are found in the map, not hard-coded: a native of the destination going home; a convert from
+the origin; a stranger from each stop; a soldier of each state on the route that is at war; an envoy
+between the origin and destination states (with their diplomatic stance); a trading factor carrying
+a good the origin sells and the destination buys; a scholar of a library marker; someone who fled a
+zone near the origin. Pick one or let chance decide; name, age, trade and home are generated. Each
+kind brings a purse and a personal side story.
+
+## Events and side stories
+
+Markers and zones have scenes with choices. Choices cost hours (against the plan) and coin (🟡, the
+symbol Azgaar uses for prices), change standing with faiths and states (which priests and the watch
+remember), leave conditions (fever, hurt, a damaged vessel: each slows you until treated at a temple,
+a healing spring, a port or by two days' rest) and open side stories in teal with goals at towns,
+markers or units. Hazards (pirates, sea monsters, brigands, monsters, the walking dead) meet you when
+you come within a few tiles; other sites wait for Space. Portals carry you to the other portals
+(without your ship). Sighted places become leads in the journal; click one to set a waypoint.
+
+## The plan is par (phase 3)
+
+The map's journey is a line of checkpoints with par times and the plan's tasks (gold): book
+passage, give alms, rest a night, anchor. You do them yourself, or not; you may skip a checkpoint by
+going into a later town. A **booked ship** has a captain, an itinerary (the plan's direct ship, a
+slower one calling on the way, others bound where this town's goods are bought) and a sailing time
+that does not wait; as a passenger you cannot steer, the captain decides on hazards, and now and
+then something happens aboard (the cook, dice, fellow passengers, fever, the captain's view of your
+people). A **hired boat** is yours to steer, with a crew who draw wages each dawn, eat your stores,
+call for anchor at sunset and shelter in storms, and mutiny if overruled too often. Courses run on
+navigable water only (rivers by discharge: boats 40 m³/s, ships 400). Prices come from each town's
+market; supplies run down daily; fishing and foraging (R) stretch them. The journal explains each
+leg from the data and lists errands, leads and the record against par.
+
 ## The journey
 
 The map's journey is the plan and is never changed. The plan clock starts on Day 1 at 06:00 (spring
