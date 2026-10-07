@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c18; --win-a: rgba(34, 50, 116, 0.94); --win-b: rgba(14, 20, 60, 0.95); --edge: #e8ecff; --ink: #f4f6ff;
+  --dim: #a9b2d8; --gold: #f5c542; --teal: #4fd1c5; --late: #ff8a7a; --early: #9be59b;
+  --font: "DotGothic16", "MS Gothic", "Courier New", monospace;
+  box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0a0c18; } }
+:root[data-theme="dark"] { --bg: #0a0c18; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--font); }
+*, *::before, *::after { box-sizing: border-box; }
+#view { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; display: block; }
+.win { background: linear-gradient(180deg, var(--win-a), var(--win-b)); border: 2px solid var(--edge); border-radius: 6px;
+  box-shadow: 0 0 0 2px #121633, 0 6px 18px rgba(0,0,0,.55); color: var(--ink); }
+#hud-loc { position: fixed; left: 10px; top: calc(10px + env(safe-area-inset-top, 0px)); padding: 6px 10px; font-size: 14px; max-width: 46vw; }
+#hud-trip { position: fixed; right: 10px; top: calc(10px + env(safe-area-inset-top, 0px)); padding: 6px 10px; font-size: 14px; max-width: 40vw; text-align: right; }
+#hud-loc .big { font-size: 18px; }
+.hook { color: var(--gold); } .side { color: var(--teal); } .dim { color: var(--dim); } .late { color: var(--late); } .early { color: var(--early); }
+.arrow { color: var(--gold); font-size: 18px; }
+#legend { position: fixed; left: 10px; bottom: calc(150px + env(safe-area-inset-bottom, 0px)); padding: 6px 10px; font-size: 13px; display: none; max-width: 40vw; }
+#miniwrap { position: fixed; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 3px; line-height: 0; }
+#mini { width: 220px; height: 110px; image-rendering: pixelated; }
+#banner { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); text-align: center; opacity: 0; transition: opacity .6s; pointer-events: none;
+  text-shadow: 0 2px 0 #000, 0 0 8px #000; }
+#banner.on { opacity: 1; }
+#banner .t { font-size: 26px; } #banner .s { font-size: 14px; color: var(--dim); }
+#toasts { position: fixed; left: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column-reverse; gap: 6px; max-width: min(460px, 60vw); pointer-events: none; }
+.toast { padding: 5px 9px; font-size: 13px; transition: opacity 1s; }
+.toast.fade { opacity: 0; } .toast.gold { border-color: var(--gold); } .toast.teal { border-color: var(--teal); }
+#msg { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(820px, calc(100vw - 20px));
+  max-height: 46vh; overflow-y: auto; padding: 12px 16px 18px; font-size: 16px; line-height: 1.5; display: none; z-index: 20; }
+#msg.on { display: block; }
+#msg .who { color: var(--gold); margin-bottom: 4px; }
+#msg .more { position: absolute; right: 12px; bottom: 4px; color: var(--edge); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.choices { list-style: none; margin: 8px 0 0; padding: 0; }
+.choices li { padding: 3px 4px; cursor: pointer; border-radius: 3px; }
+.choices li.sel { background: rgba(255,255,255,.12); }
+.choices li.dis { color: #6b7399; }
+.choices li.hook { color: var(--gold); }
+#panel { position: fixed; right: 10px; top: 120px; bottom: 140px; width: min(380px, 44vw); overflow-y: auto; padding: 8px 10px; font-size: 12.5px; display: none; z-index: 10; }
+#panel.on { display: block; }
+#panel h4 { margin: 8px 0 2px; color: var(--gold); font-weight: normal; border-bottom: 1px solid rgba(255,255,255,.2); }
+#panel table { width: 100%; border-collapse: collapse; }
+#panel th { text-align: left; vertical-align: top; color: var(--dim); font-weight: normal; width: 34%; padding: 1px 6px 1px 0; }
+#panel td { padding: 1px 0; }
+.insp-head { font-size: 17px; }
+.tag { font-size: 9.5px; padding: 0 3px; border-radius: 3px; vertical-align: 1px; opacity: .85; white-space: nowrap; }
+.t-data { background: #2d5b8a; } .t-mixed { background: #8a6a1f; } .t-new { background: #8a2d6a; }
+#modal { position: fixed; inset: 0; background: rgba(4,6,16,.82); display: none; z-index: 30; overflow: auto; }
+#modal.on { display: flex; align-items: flex-start; justify-content: center; }
+.sheet { margin: 30px auto; width: min(980px, calc(100vw - 24px)); padding: 16px 20px; background: linear-gradient(180deg, var(--win-a), var(--win-b)); border: 2px solid var(--edge); border-radius: 6px; }
+.sheet h2 { margin: 0 0 6px; color: var(--gold); font-weight: normal; } .sheet h3 { margin: 14px 0 4px; font-weight: normal; color: var(--teal); }
+.sheet table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.plan th, .plan td { border-bottom: 1px solid rgba(255,255,255,.12); padding: 3px 6px; text-align: left; }
+.plan tr.cur td { color: var(--gold); }
+.keys th { text-align: left; width: 28%; color: var(--gold); font-weight: normal; padding: 3px 8px 3px 0; vertical-align: top; }
+.log { max-height: 40vh; overflow-y: auto; font-size: 13px; }
+.mapwrap { margin: 16px auto; text-align: center; }
+.maphead { margin-bottom: 6px; } #wmap { image-rendering: pixelated; border: 2px solid var(--edge); cursor: crosshair; max-width: calc(100vw - 30px); }
+.title { margin: 8vh auto; width: min(640px, calc(100vw - 24px)); text-align: center; }
+.title .logo { font-size: 34px; color: var(--gold); text-shadow: 0 3px 0 #000; }
+.title .sub { color: var(--dim); margin: 6px 0 18px; }
+.title .card { text-align: left; padding: 10px 14px; margin-bottom: 12px; line-height: 1.5; }
+.title .card .who { color: var(--gold); }
+.choices.big li { font-size: 18px; text-align: left; padding: 6px 10px; }
+#status { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--dim); }
+#touch { display: none; }
+@media (pointer: coarse) {
+  #touch { display: block; }
+  #pad { position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); width: 132px; height: 132px; z-index: 15; }
+  #pad button, #btns button { position: absolute; width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--edge); background: rgba(20,28,80,.7); color: #fff; font-family: var(--font); font-size: 15px; touch-action: none; }
+  #pad [data-pad=up] { left: 44px; top: 0; } #pad [data-pad=down] { left: 44px; top: 88px; } #pad [data-pad=left] { left: 0; top: 44px; } #pad [data-pad=right] { left: 88px; top: 44px; }
+  #btns { position: fixed; right: 14px; bottom: calc(130px + env(safe-area-inset-bottom, 0px)); width: 150px; height: 100px; z-index: 15; }
+  #btns [data-key=" "] { right: 0; top: 0; width: 56px; height: 56px; } #btns [data-key=Escape] { right: 64px; top: 12px; }
+  #btns [data-key=f] { right: 0; top: 62px; } #btns [data-key=i] { right: 50px; top: 62px; } #btns [data-key=m] { right: 100px; top: 62px; }
+  #toasts { bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+  #hud-loc, #hud-trip { font-size: 12px; } #hud-loc .big { font-size: 15px; }
+  #miniwrap { display: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="status">Unfolding the map…</div>
+<div id="hud-loc" class="win"></div>
+<div id="hud-trip" class="win"></div>
+<div id="legend" class="win"></div>
+<div id="miniwrap" class="win"><canvas id="mini" width="220" height="110"></canvas></div>
+<div id="banner"></div>
+<div id="toasts"></div>
+<div id="panel" class="win"></div>
+<div id="msg" class="win"></div>
+<div id="modal"></div>
+<div id="touch">
+  <div id="pad"><button data-pad="up">▲</button><button data-pad="left">◀</button><button data-pad="right">▶</button><button data-pad="down">▼</button></div>
+  <div id="btns"><button data-key=" ">A</button><button data-key="Escape">☰</button><button data-key="f">F</button><button data-key="i">I</button><button data-key="m">M</button></div>
+</div>
+<script id="pack" type="application/octet-stream">__PACK__</script>
+<script>
+__ENGINE__
+AZ.CONTENT = __CONTENT__;
+AZ.boot(document.getElementById("pack").textContent);
+</script>
+</body>
+</html>
