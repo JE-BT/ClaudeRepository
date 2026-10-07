@@ -86,10 +86,38 @@ AZ.Journey = class {
       return seg;
     });
     this.planEnd = t;
+    this.replan();
     this.totalMiles = this.segs.reduce((a, s) => a + (s.moving ? s.miles : 0), 0);
     this.origin = this.segs[0].place;
     this.dest = this.segs[this.segs.length - 1].place;
     void U;
+  }
+  // the plan's times for the current departure day: Day 1 starts at dawn at the origin, and modes
+  // with fewer than 24 hours a day sail from dawn for their hours each day
+  replan() {
+    const w = this.w, lat0 = w.latlon(...this.segs[0].startTile)[0];
+    let t = AZ.Clock.sun(0, lat0).rise;
+    if (!isFinite(t) || t < 0 || t > 12) t = 6;
+    this.t0 = t;
+    for (const seg of this.segs) {
+      seg.planStart = t;
+      if (!seg.moving) t += seg.duration || 0;
+      else if (seg.hoursPerDay >= 24) t += seg.travelHours;
+      else {
+        const lat = w.latlon(...seg.startTile)[0];
+        let rem = seg.travelHours, guard = 0;
+        while (rem > 1e-6 && guard++ < 5000) {
+          const sun = AZ.Clock.sun(t, lat), dawn = sun.day * 24 + Math.max(0, sun.rise);
+          if (t < dawn) t = dawn;
+          const avail = dawn + seg.hoursPerDay - t;
+          if (avail <= 1e-6) { t = (sun.day + 1) * 24 + Math.max(0, AZ.Clock.sun((sun.day + 1) * 24, lat).rise); continue; }
+          const use = Math.min(avail, rem);
+          t += use; rem -= use;
+        }
+      }
+      seg.planEnd = t;
+    }
+    this.planEnd = t;
   }
   chain(pts) {
     const w = this.w, out = [];
@@ -149,53 +177,6 @@ AZ.Journey = class {
 };
 
 // ---------------------------------------------------------------------------------------------
-// The traveller: generated for each playthrough from the journey's own places and faiths.
-// ---------------------------------------------------------------------------------------------
-AZ.makeTraveller = function (w, jr, seed) {
-  const U = AZ.U, rnd = U.rng(seed), P = w.P, C = w.C;
-  const first = jr.segs[0], last = jr.segs[jr.segs.length - 1];
-  const oCell = first.from, dCell = last.to;
-  const oBurg = jr.origin.burg, dBurg = jr.dest.burg;
-  const oCul = C.culture[oCell], dCul = C.culture[dCell], oRel = C.religion[oCell], dRel = C.religion[dCell];
-  const dState = C.state[dCell];
-  const mids = jr.segs.filter(s => s.place.burg && s.place.at && s.place.burg !== oBurg && s.place.burg !== dBurg)
-    .map(s => s.place.burg).filter((b, i, a) => a.indexOf(b) === i);
-  const kinds = [];
-  const homeIn = (state, cul) => P.burgs.filter(b => b && b.state === state && b.culture === cul);
-  kinds.push({ id: "returning", wt: 4, culture: dCul, faith: dRel,
-    home: rnd.pick(homeIn(dState, dCul).length ? homeIn(dState, dCul) : [dBurg]) });
-  if (dRel !== oRel) kinds.push({ id: "convert", wt: 3.5, culture: oCul, faith: dRel, home: oBurg, family: oRel });
-  for (const b of mids) {
-    const rel = C.religion[b.cell];
-    if (rel !== dRel || C.culture[b.cell] !== dCul) kinds.push({ id: "other", wt: 2.5 / mids.length, culture: C.culture[b.cell], faith: rel, home: b });
-  }
-  let roll = rnd() * kinds.reduce((a, k) => a + k.wt, 0), K = kinds[0];
-  for (const k of kinds) if ((roll -= k.wt) <= 0) { K = k; break; }
-  const cul = P.cultures[K.culture], rel = P.religions[K.faith], destRel = P.religions[dRel];
-  const name = w.names.get(cul.base, rnd);
-  const age = 18 + Math.floor(rnd() * 44);
-  const deity = ((rel && rel.deity) || destRel?.deity || "").split(",")[0];
-  const trades = {
-    returning: ["deckhand", "clerk of a trading house", "released hostage of an old treaty", "journeyman scribe", "widowed net-mender"],
-    convert: ["chandler", "harbour clerk", "schoolmaster", "cooper", "temple sweeper"],
-    other: ["envoy's secretary", "travelling physician", "apprentice cartographer", "former soldier", "copyist"],
-  };
-  const why = {
-    returning: `born to the ${destRel?.name} among the ${cul.name} of ${P.states[K.home.state]?.name || "the south"}, you are going home to make the pilgrimage you were promised as a child`,
-    convert: `raised in the ${P.religions[K.family || oRel]?.name} of ${oBurg?.name}, you took the ${destRel?.name} as an adult; your family has not forgiven it`,
-    other: `you keep the ${rel?.name || "old ways"} of ${K.home?.name}, and you have been sent to Chelhazpo for reasons of your own`,
-  };
-  if (K.id === "other") why.other = `you keep the ${rel?.name || "old ways"} of ${K.home?.name}, and you travel to ${jr.dest.name} on an errand you have told no one`;
-  const skin = rnd.pick(["rgb(240,204,170)", "rgb(214,170,130)", "rgb(176,124,88)", "rgb(124,84,58)"]);
-  const cloak = U.shade(U.hex2rgb(cul.color || "#806040"), -0.35);
-  return {
-    seed, kind: K.id, name, age, culture: K.culture, faith: K.faith, home: K.home?.i, homeState: K.home?.state ?? C.state[oCell],
-    trade: rnd.pick(trades[K.id]), why: why[K.id], token: deity ? `a small icon of ${deity}` : "a pilgrim's token",
-    pal: { cloak: U.css(cloak), cloakDark: U.css(U.shade(cloak, -0.35)), skin, belt: "rgb(150,110,60)" },
-  };
-};
-
-// ---------------------------------------------------------------------------------------------
 // Knowledge: the text layer
 // ---------------------------------------------------------------------------------------------
 AZ.Know = class {
@@ -244,8 +225,10 @@ AZ.Know = class {
       const lat = w.latlon(c, r)[0], wd = w.wind(lat);
       if (wd != null) out.push(`The prevailing wind of this latitude blows towards the ${U.compass(Math.sin(wd * Math.PI / 180), -Math.cos(wd * Math.PI / 180))} ${T("mixed")}.`);
     }
-    const tc = w.tempC(c, r);
+    const tc = w.tempC(c, r), g = AZ.game, lat = w.latlon(c, r)[0], tt = g && g.s ? g.s.clock : 6;
     out.push(`The year here runs ${this.feel(tc)} (mean ${w.temp(tc)})${w.isLand(c, r) ? ` and ${this.wet(w.precMM(c, r))} (${U.num(w.precMM(c, r))} mm a year)` : ""} ${T("data")}.`);
+    const today = AZ.Clock.today(tc, lat, tt, !w.isLand(c, r)), dl = AZ.Clock.dayLength(lat, AZ.Clock.doyAt(tt));
+    out.push(`It is ${AZ.Clock.season(lat, tt)}: about ${w.temp(today)} today, with ${Math.round(dl)} hours of daylight${today < 0 && w.isLand(c, r) ? "; snow lies on the ground" : ""} ${T("mixed")}.`);
     const rv = w.river(c, r);
     if (rv) out.push(`The ${rv.name} ${rv.type || "River"} runs through here ${T("data")}.`);
     const rt = w.route(c, r);
@@ -290,6 +273,8 @@ AZ.Know = class {
       if (wd != null) land1.push(row("Wind band", `towards ${U.compass(Math.sin(wd * Math.PI / 180), -Math.cos(wd * Math.PI / 180))} (${wd}°)`));
     }
     land1.push(row("Temperature", `${w.temp(w.tempC(c, r))} mean`));
+    const tt = g && g.s ? g.s.clock : 6;
+    land1.push(row("Season", `${AZ.Clock.season(lat, tt)} · about ${w.temp(AZ.Clock.today(w.tempC(c, r), lat, tt, !land))} today · ${Math.round(AZ.Clock.dayLength(lat, AZ.Clock.doyAt(tt)))} h daylight`, "mixed"));
     const rv = w.river(c, r);
     if (rv) land1.push(row("River", `${rv.name} ${rv.type} · ${U.num(rv.length)} km · discharge ${U.num(rv.discharge)} m³/s`));
     const rt = w.route(c, r);
@@ -337,14 +322,19 @@ AZ.Know = class {
       else if (n.kind === "burg") lore.push(row(this.dirDist(c, r, n.o.t).txt, `${n.o.name} (${n.o.group})`));
     }
     const jr = [];
-    if (g) {
-      const seg = g.seg();
-      if (seg) {
-        jr.push(row("Stage", `<b class="hook">${seg.k}. ${U.esc(seg.name)}</b> · ${seg.transport}`));
-        const pr = this.jr.progress(seg, c, r);
-        if (pr) jr.push(row("Course", `${Math.round(pr.frac * 100)}% of the stage${pr.off ? `, ${U.num(pr.off * w.miles)} mi off the plan's track` : ", on the plan's track"}`, "mixed"));
-        jr.push(row("Plan vs record", g.deltaText()));
+    if (g && g.cpNext) {
+      const cp = g.cpNext();
+      if (cp) {
+        jr.push(row("Next checkpoint", `<b class="hook">${cp.i}. ${U.esc(cp.place.name)}</b> · par ${AZ.Clock.fmt(cp.parArrive)}${cp.legIn ? " · plan: " + U.esc(cp.legIn.transport) : ""}`, "mixed"));
+        const pr = cp.legIn ? this.jr.progress(cp.legIn, c, r) : null;
+        if (pr) jr.push(row("Plan's course", `${Math.round(pr.frac * 100)}% of the leg${pr.off ? `, ${U.num(pr.off * w.miles)} mi off it` : ", on it"}`, "mixed"));
       }
+      if (g.fishYield) {
+        const fy = g.fishYield(c, r), fo = g.forageYield(c, r);
+        jr.push(row("Provisions", `fishing: ${fy.why || `about ${fy.n} rations in 6 h (${fy.where})`}; foraging: ${fo.why || `about ${fo.n} in 6 h (${fo.where})`}`, "mixed"));
+      }
+      const wx = g.weather();
+      jr.push(row("Weather", `${wx.label} (from ${U.num(w.precMM(c, r))} mm a year, ${AZ.Clock.season(lat, g.s.clock)})`, "mixed"));
     }
     return `<div class="insp-head">${U.esc(b ? b.name : land ? (w.C.province[cell] ? P.provinces[w.C.province[cell]].name : "Wilds") : w.waterName(c, r))}</div>` +
       sec("Here", here) + sec(land ? "Land" : "Water", land1) + sec("Realm", realm) + sec("Settlement", burg) + sec("Economy", eco) + sec("Nearby (4 tiles)", lore) + sec("Journey", jr);
@@ -373,7 +363,7 @@ AZ.Know = class {
     return out;
   }
   regionName(cell) { const s = this.w.C.state[cell], pv = this.w.C.province[cell]; return pv ? this.P.provinces[pv].name : s ? this.P.states[s].name : "the wild lands"; }
-  rumour(c, r, rnd) {
+  rumour(c, r, rnd, g) {
     const U = AZ.U, T = AZ.T, w = this.w;
     if (!this.facts.length) return null;
     const scored = this.facts.map(f => ({ f, d: Math.hypot(f.t[0] - c, f.t[1] - r) * w.miles })).map(o => ({ ...o, wt: 1 / (1 + o.d / 400) }));
@@ -391,6 +381,7 @@ AZ.Know = class {
       const thing = f.type.replace(/s$/, "").replace(/-/g, " ");
       s = near ? `${f.name}: ${where}. Ask about it if you go that way.` : mid ? `People speak of ${U.article(thing)} ${where}, in ${f.region}.` : `There are stories of ${U.article(thing)} ${where}. Bigger with every telling.`;
     }
+    if (g && this.rumourLead) this.rumourLead(g, f, d);
     return `${s} ${T("mixed")}`;
   }
 
@@ -399,7 +390,10 @@ AZ.Know = class {
     const w = this.w, P = this.P, U = AZ.U, T = AZ.T, tv = this.tv;
     const cell = b.cell, s = this.st(b.state), cu = P.cultures[b.culture], re = P.religions[w.C.religion[cell]];
     const kin = b.culture === tv.culture, faith = w.C.religion[cell] === tv.faith;
-    const rel = b.state ? this.rel(tv.homeState, b.state) : "Unknown";
+    let rel = b.state ? this.rel(tv.homeState, b.state) : "Unknown";
+    const sst = (g.s?.stand?.s || {})[b.state] || 0;
+    if (sst <= -2 && rel !== "Enemy") rel = "Suspicion";
+    if (sst >= 2 && (rel === "Suspicion" || rel === "Rival")) rel = "Neutral";
     const people = [];
     const nm = role => this.person(`${b.i}:${role}`, b.culture);
     const greet = kin ? `speaks to you in your own ${cu.name} tongue` : `takes you in: a ${P.cultures[tv.culture].name} stranger`;
@@ -426,7 +420,7 @@ AZ.Know = class {
       const food = Object.keys(b.production || {}).map(g => P.goods.find(x => x.i === +g)).filter(g => g && (g.tags || []).some(t => /food|drink/.test(t)));
       if (food.length) L.push(`On the table: ${food.slice(0, 3).map(g => g.name.toLowerCase()).join(", ")}, all made here ${T("data")}.`);
       const rnd = U.rng(`${b.i}:${Math.floor(g.clock / 24)}`);
-      const rm = this.rumour(b.t[0], b.t[1], rnd);
+      const rm = this.rumour(b.t[0], b.t[1], rnd, g);
       if (rm) L.push(`“${rm}`.replace(/ <span/, "” <span"));
       return L;
     } });
@@ -449,6 +443,9 @@ AZ.Know = class {
       const L = [`${nm("temple")} keeps the ${b.temple ? "temple" : "shrine"} of the ${re.name}: ${re.type}${re.form ? ", " + re.form : ""}${re.deity ? `; they pray to ${re.deity}` : ""} ${T("data")}.`];
       if (re.center === cell) L.push(`<b class="hook">This is the seat of the ${re.name}.</b> ${T("data")}`);
       const destRel = w.C.religion[this.jr.segs[this.jr.segs.length - 1].to];
+      const st = (g.s?.stand?.f || {})[w.C.religion[cell]] || 0;
+      if (st <= -2) L.push(`${nm("temple")} knows your name, and not kindly. The door stays shut ${T("mixed")}.`);
+      else if (st >= 2 && !faith) L.push(`Word of your kindness to the faith has come ahead of you. You are welcome here ${T("mixed")}.`);
       if (faith) L.push(`You share the faith. ${nm("temple")} blesses ${tv.token} and asks you to carry a prayer to ${this.jr.dest.name} ${T("new")}.`);
       else if (w.C.religion[cell] === destRel) L.push(`You are not of this faith, but your road ends in ${this.jr.dest.name}, and that is enough to be welcome ${T("mixed")}.`);
       else L.push(`You are not of this faith. You are given water and courtesy, no more ${T("mixed")}.`);
@@ -479,7 +476,7 @@ AZ.Know = class {
       const L = [`${b.name}: ${U.article(b.group.replace("_", " "))} of ${U.num(b.population * (w.W.units.population?.scale || 1000))} ${cu.name} people (${b.type}) ${T("data")}${feats.length ? `, with ${feats.join(", ")}` : ""}.`];
       for (const z of w.zonesOfCell(cell)) L.push(`<b class="hook">${z.name}</b> is here: a ${z.type.toLowerCase()} ${T("data")}.`);
       const rnd = U.rng(`${b.i}:folk:${Math.floor(g.clock / 24)}`);
-      const rm = this.rumour(b.t[0], b.t[1], rnd);
+      const rm = this.rumour(b.t[0], b.t[1], rnd, g);
       if (rm) L.push(`Someone says: ${rm}`);
       return L;
     } });
@@ -500,7 +497,7 @@ AZ.Know = class {
     L.push(`<b class="hook">${U.esc(jr.J.name)}</b> ${T("data")}`);
     L.push(`You are ${tv.name}, ${tv.age}, a ${tv.trade} ${T("new")}. ${U.cap(tv.why)} ${T("mixed")}.`);
     if (o) L.push(`You stand in ${o.name}, capital of ${this.st(o.state).fullName}: a ${o.type.toLowerCase()} port of ${U.si(o.population * 1000)} ${P.cultures[o.culture].name} people who keep the ${P.religions[w.C.religion[o.cell]].name} ${T("data")}.`);
-    if (d) L.push(`Your goal is ${d.name}, a small capital of ${this.st(d.state).fullName}, ${U.num(jr.totalMiles)} miles away by sea ${T("data")}. The plan gives the voyage ${Math.round((jr.planEnd - 6) / 24)} days ${T("mixed")}.`);
+    if (d) L.push(`Your goal is ${d.name}, a small capital of ${this.st(d.state).fullName}, ${U.num(jr.totalMiles)} miles away by sea ${T("data")}. The plan gives the voyage ${Math.round((jr.planEnd - jr.t0) / 24)} days ${T("mixed")}.`);
     const destRel = w.C.religion[jr.segs[jr.segs.length - 1].to];
     const seat = P.burgs.find(b => b && b.cell === P.religions[destRel].center);
     if (seat && seat !== d) L.push(`The first port of call is ${seat.name}: the seat of the ${P.religions[destRel].name} itself ${T("data")}.`);
