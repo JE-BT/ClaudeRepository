@@ -27,7 +27,7 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 from .cells import CellGeo
-from .mapfile import AzgaarMap
+from .mapfile import AzgaarMap, split_fields
 from .svgpaths import feature_paths, flatten
 from .tilegrid import TileGrid
 
@@ -133,7 +133,7 @@ class Raster:
     def m_fields(self) -> list[str]:
         if not hasattr(self, "_fields"):
             with open(self.m.path, encoding="utf-8", newline="") as fh:
-                self._fields = fh.read().split("\r\n")
+                self._fields = split_fields(fh.read())
         return self._fields
 
     def _reconcile(self) -> None:
@@ -273,10 +273,11 @@ class Raster:
                     y += rnd.uniform(-j, j)
                 pts.append((x, y))
             chain = self._chain(self._chaikin(self._meander(pts, rnd)))
-            # stop where the river reaches open water
+            # stop where the river reaches the sea; a river runs on through a lake and out the
+            # other side (Azgaar keeps one river id across lakes, e.g. Nouileland's Whitfall)
             cut = len(chain)
             for k, (c, r) in enumerate(chain):
-                if k > 0 and not self.land[r, c]:
+                if k > 0 and not self.land[r, c] and self.geo.props[int(self.cell[r, c])].get("type") == "ocean":
                     cut = k + 1
                     break
             chain = chain[:cut]

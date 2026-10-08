@@ -220,7 +220,7 @@ AZ.Events = class {
     if (first) this.s.done_m.push(m.i);
     this.s.leads = this.s.leads.filter(i => i !== m.i);
     if (T.auto && !auto && !first) return g.ui.say(head + "<br>" + U.esc(m.note).replace(/\n/g, "<br>"));
-    if (T.auto && T.sea && this.s.voyage && this.s.aboard) return this.captainDecides(m, head);
+    if (T.auto && T.sea && this.g.riding()) return this.captainDecides(m, head);
     await T.run(this, m, head);
   }
   async captainDecides(m, head) {

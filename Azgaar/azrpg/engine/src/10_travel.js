@@ -15,8 +15,8 @@ Object.assign(AZ.COND, {
 });
 
 Object.assign(AZ.Game.prototype, {
-  eaters() { const v = this.s.vessel; return 1 + (v && v.crew && (v.mode === "hired" || v.mode === "owned") && !this.s.voyage ? v.crew : 0); },
-  capacity() { const s = this.s; return { food: s.vessel && !s.voyage ? 220 : s.voyage ? 60 : 20, goods: s.vessel && !s.voyage ? 30 : s.voyage ? 10 : 6 }; },
+  eaters() { const v = this.s.vessel; return 1 + (v && v.crew && (v.mode === "hired" || v.mode === "owned") && !this.riding() ? v.crew : 0); },
+  capacity() { const s = this.s, ride = this.riding(); return { food: s.vessel && !ride ? 220 : ride || s.voyage ? 60 : 20, goods: s.vessel && !ride ? 30 : ride || s.voyage ? 10 : 6 }; },
   refill() { /* water is not tracked for now */ },
   tick() {
     const s = this.s, w = this.w, U = AZ.U;
@@ -25,7 +25,7 @@ Object.assign(AZ.Game.prototype, {
     if (day > s.lastDay) {
       const n = Math.min(day - s.lastDay, 60); s.lastDay = day;
       for (let i = 0; i < n; i++) if (this.newDay()) return;
-      if (s.voyage && s.aboard && s.voyage.state === "sea" && this.shipEvent && U.rnd2(day, s.seed % 100003, 41) < AZ.SHIP_EVENTS.rate) return this.shipEvent();
+      if (this.riding() && s.voyage.state === "sea" && this.shipEvent && U.rnd2(day, s.seed % 100003, 41) < AZ.SHIP_EVENTS.rate) return this.shipEvent();
     }
     if (s.voyage && s.voyage.state === "port" && s.clock >= s.voyage.departAt) return this.depart();
     const wx = this.weather();
@@ -36,7 +36,7 @@ Object.assign(AZ.Game.prototype, {
       s.wxKind = wx.kind;
     }
     const v = s.vessel;
-    if (v && s.aboard && !s.voyage && v.crew && !this.harbourAt.has(w.idx(s.c, s.r)) && !w.isLand(s.c, s.r)) {
+    if (v && s.aboard && !this.riding() && v.crew && !this.harbourAt.has(w.idx(s.c, s.r)) && w.navigable(s.c, s.r, v.cls)) {
       const sun = AZ.Clock.sun(s.clock, this.lat()), key = Math.floor((s.clock + 12) / 24);
       if (sun.dl < 24 && (sun.hour >= sun.set + 0.75 || sun.hour < sun.rise) && v.nightKey !== key) { v.nightKey = key; return this.crewCall(); }
     }
@@ -46,7 +46,7 @@ Object.assign(AZ.Game.prototype, {
     const s = this.s, U = AZ.U, v = s.vessel;
     const eat = this.eaters();
     s.sup.food -= eat;
-    if (s.voyage && s.aboard) { if (s.voyage.role === "crew") s.sup.food += eat; this.slept(); } // the ship feeds its crew; passengers sleep aboard
+    if (this.riding()) { if (s.voyage.role === "crew") s.sup.food += eat; this.slept(); } // the ship feeds its crew; passengers sleep aboard
     if (s.sup.food < 0) { s.sup.food = 0; s.hunger++; if (v && v.crew) v.morale -= 15; } else s.hunger = 0;
     delete s.cond.hungry; delete s.cond.starving; delete s.cond.thirsty;
     if (s.hunger >= 3) s.cond.starving = true; else if (s.hunger >= 1) s.cond.hungry = true;
@@ -289,12 +289,12 @@ Object.assign(AZ.Game.prototype, {
     const s = this.s, U = AZ.U, opts = [];
     const v = s.voyage;
     if (v && v.state === "port" && v.portBurg === b.i) {
-      if (!s.aboard) opts.push({ label: `Board ${U.esc(v.ship)} (sails ${AZ.Clock.fmt(v.departAt)}, in ${AZ.Clock.span(v.departAt - s.clock)})`, cls: "hook", act: { go: async () => { s.aboard = true; s.c = v.at[0]; s.r = v.at[1]; this.ui.toast(`Aboard ${U.esc(v.ship)}.`); this.afterStep(); } } });
-      opts.push({ label: `Wait aboard until ${U.esc(v.ship)} sails (${AZ.Clock.span(v.departAt - s.clock)})`, act: { go: async () => { s.aboard = true; s.c = v.at[0]; s.r = v.at[1]; s.clock = v.departAt; this.afterStep(); } } });
-      if (s.aboard) opts.push({ label: "Go ashore and walk (mind the sailing time)", act: { go: async () => { s.aboard = false; s.c = b.t[0]; s.r = b.t[1]; this.afterStep(); } } });
+      if (!this.riding()) opts.push({ label: `Board ${U.esc(v.ship)} (sails ${AZ.Clock.fmt(v.departAt)}, in ${AZ.Clock.span(v.departAt - s.clock)})`, cls: "hook", act: { go: async () => { s.aboard = true; v.boarded = true; s.c = v.at[0]; s.r = v.at[1]; this.ui.toast(`Aboard ${U.esc(v.ship)}.`); this.afterStep(); } } });
+      opts.push({ label: `Wait aboard until ${U.esc(v.ship)} sails (${AZ.Clock.span(v.departAt - s.clock)})`, act: { go: async () => { s.aboard = true; v.boarded = true; s.c = v.at[0]; s.r = v.at[1]; s.clock = v.departAt; this.afterStep(); } } });
+      if (this.riding()) opts.push({ label: "Go ashore and walk (mind the sailing time)", act: { go: async () => { s.aboard = false; v.boarded = false; s.c = b.t[0]; s.r = b.t[1]; this.afterStep(); } } });
     }
-    if (s.vessel && !s.voyage && this.vesselHere(b)) {
-      if (!s.aboard) opts.push({ label: `Board your ${U.esc(s.vessel.kind.toLowerCase())}${s.vessel.crew ? "" : " (no crew!)"}`, act: { go: async () => { s.aboard = true; s.c = s.vessel.c; s.r = s.vessel.r; this.afterStep(); } } });
+    if (s.vessel && this.vesselHere(b)) {
+      if (!s.aboard || this.riding()) opts.push({ label: `Board your ${U.esc(s.vessel.kind.toLowerCase())}${s.vessel.crew ? "" : " (no crew!)"}`, act: { go: async () => { if (s.voyage) s.voyage.boarded = false; s.aboard = true; s.c = s.vessel.c; s.r = s.vessel.r; this.afterStep(); } } });
       else opts.push({ label: `Go ashore and walk (the ${U.esc(s.vessel.kind.toLowerCase())} waits in harbour)`, act: { go: async () => { s.aboard = false; s.c = b.t[0]; s.r = b.t[1]; this.afterStep(); } } });
     }
     return opts;
@@ -304,7 +304,7 @@ Object.assign(AZ.Game.prototype, {
   // ------------------------------------------------------------------ voyages
   depart() {
     const s = this.s, v = s.voyage, U = AZ.U, w = this.w;
-    if (!s.aboard) {
+    if (!this.riding()) {
       this.log(`Missed ${U.esc(v.ship)}: she sailed ${AZ.Clock.fmt(v.departAt)} without you.`, "hook");
       s.voyage = null; this.dirty = true;
       return this.ui.say(`<b class="hook">${U.esc(v.ship)} has sailed without you.</b> The fare is gone. Book another ship at the harbour.`);

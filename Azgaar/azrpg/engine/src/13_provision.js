@@ -36,7 +36,7 @@ Object.assign(AZ.Game.prototype, {
     const fishCell = !land ? cell : adjWater ? w.cell(...[[0, 1], [1, 0], [0, -1], [-1, 0]].map(([a, b]) => [c + a, r + b]).find(t => w.inb(...t) && !w.isLand(...t))) : cell;
     const shallow = land || w.h(c, r) >= 15 || [[0, 2], [2, 0], [0, -2], [-2, 0]].some(([a, b]) => w.isLand(c + a, r + b));
     const aq = this.aquaticNear(fishCell);
-    const fishers = 1 + (s.aboard && s.vessel && !s.voyage ? s.vessel.crew || 0 : 0);
+    const fishers = 1 + (s.aboard && s.vessel && !this.riding() ? s.vessel.crew || 0 : 0) + (this.tv.trait === "sea legs" ? 1 : 0);
     let per = (shallow ? 0.6 : 0.3) * (aq === 2 ? 2.5 : aq === 1 ? 1.6 : 1) * (land && w.bits(c, r).river ? 0.8 : 1) * (wx.kind === "rain" ? 0.8 : wx.kind === "snow" ? 0.6 : 1);
     const luck = 0.5 + U.rnd2(c, r, Math.floor(s.clock / 6));
     const n = Math.round(per * fishers * luck);
@@ -116,7 +116,7 @@ Object.assign(AZ.Game.prototype, {
 // R: rest, wait, fish or forage
 AZ.Game.prototype.rest = async function () {
   const s = this.s, U = AZ.U, w = this.w;
-  if (s.voyage && s.aboard) return this.shipTalk();
+  if (this.riding()) return this.shipTalk();
   const sick = s.cond.fever || s.cond.gravely || s.cond.hurt;
   const atSea = s.aboard && !w.isLand(s.c, s.r);
   const fy = this.fishYield(s.c, s.r), fo = !s.aboard ? this.forageYield(s.c, s.r) : { why: "aboard" };
@@ -132,6 +132,7 @@ AZ.Game.prototype.rest = async function () {
   if (o.id === "fish" || o.id === "forage") return this.provide(o.id);
   const t0 = s.clock;
   if (o.id === "two") { this.events.fx({ time: 48, cure: ["fever", "gravely", "hurt"] }, "Rested two days."); this.slept(); this.ui.toast("Two days' rest. You feel yourself again."); return; }
+  if (o.id === "dawn" && !s.aboard) return this.campNight();
   if (o.id === "dawn") {
     s.clock = AZ.Clock.nextDawn(s.clock, this.lat());
     this.slept();

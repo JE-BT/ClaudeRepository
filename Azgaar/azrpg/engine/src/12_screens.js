@@ -30,6 +30,8 @@ Object.assign(AZ.Game.prototype, {
     if (v) trip += `<div>${s.aboard ? "Aboard" : "Booked on"} ${U.esc(v.ship)} (${v.role}) → ${U.esc(v.stops[v.leg]?.name || "")}${v.state === "port" ? ` · sails ${AZ.Clock.fmt(v.departAt)}` : ""}${s.voyPause ? " · ⏸ holding (P)" : this.fast ? " · ⏩ (F)" : ""}</div>`;
     else if (bo) trip += `<div>${s.aboard ? "Aboard" : "Ashore; your boat waits"}: ${U.esc(bo.kind)} (${bo.mode})${bo.crew ? ` · crew ${bo.crew}, morale ${Math.round(bo.morale)}${bo.strikes ? `, strikes ${bo.strikes}/3` : ""}` : " · no crew"}${s.auto ? ' · <b class="hook">autopilot</b>' : ""}</div>`;
     else if (s.auto) trip += `<div class="dim">walking to the waypoint · F to stop</div>`;
+    if (!this.jr) trip = `<div class="hook">Sandbox · ${this.sim ? "a moving world" : "a still world"}</div>` + trip;
+    if (s.party && s.party.length) trip += `<div class="dim">With ${s.party.map(p => U.esc(p.name)).join(", ")}</div>`;
     el.trip.innerHTML = trip + this.threadLine();
     const lens = AZ.LENSES[this.lensIdx];
     if (lens.id !== "none") { el.legend.style.display = "block"; el.legend.innerHTML = `<b>${lens.name}</b> (L)<br>${U.esc(lens.label(w, cell, s.c, s.r) ?? "")}`; }
@@ -59,7 +61,7 @@ Object.assign(AZ.Game.prototype, {
     const cnt = (k, list) => `${s.seen[k].length} of ${w.P[list].filter(x => x && !x.removed).length - (list === "states" || list === "cultures" || list === "religions" ? 1 : 0)}`;
     const v = s.vessel;
     this.ui.modal(`<div class="sheet"><h2>Journal</h2>
-      <h3>The traveller ${AZ.T("new")}</h3><p><b>${U.esc(tv.name)}</b>, ${tv.age}, ${U.esc(tv.trade)} (${U.esc(tv.kindLabel || "")}). ${U.cap(U.esc(tv.why))}. ${w.P.cultures[tv.culture].name}; faith: ${w.P.religions[tv.faith]?.name}. Carries ${U.esc(tv.token)}.</p>
+      <h3>The traveller ${AZ.T("new")}</h3><p><b>${U.esc(tv.name)}</b>, ${tv.age}, ${U.esc(tv.trade)} (${U.esc(tv.kindLabel || "")}; ${U.esc(AZ.TRAITS[tv.trait]?.label || "")}: ${U.esc(AZ.TRAITS[tv.trait]?.text || "")}).${s.party && s.party.length ? ` The company: ${s.party.map(p => `${U.esc(p.name)} (${U.esc(p.role)})`).join(", ")}.` : ""} ${U.cap(U.esc(tv.why))}. ${w.P.cultures[tv.culture].name}; faith: ${w.P.religions[tv.faith]?.name}. Carries ${U.esc(tv.token)}.</p>
       <h3>Purse, stores, condition, standing</h3><p>🟡 ${U.rn(s.purse, 2)} · food ${s.sup.food} rations · goods: ${Object.entries(s.goods || {}).filter(([, n]) => n > 0).map(([g, n]) => `${n} ${U.esc(this.know.good(g).toLowerCase())}`).join(", ") || "none"} · ${Object.keys(s.cond).map(k => AZ.COND[k]?.label || k).join(", ") || "well"}${v ? ` · ${U.esc(v.kind)} (${v.mode}), crew ${v.crew}, morale ${Math.round(v.morale)}` : ""} · ${[...Object.entries(s.stand.f).map(([i, n]) => `${U.esc(w.P.religions[i]?.name)} ${n > 0 ? "+" : ""}${n}`), ...Object.entries(s.stand.s).map(([i, n]) => `${U.esc(w.P.states[i]?.name)} ${n > 0 ? "+" : ""}${n}`)].join(" · ") || "no standing earned or lost yet"} ${AZ.T("mixed")}</p>
       ${jr ? `<h3>The route: checkpoints, par and the reasons ${AZ.T("mixed")}</h3><p class="dim">The map's journey is the plan: par times from dawn on Day 1 with each mode's speed and hours a day. It is not a rule: take another ship, hire a boat, walk, skip a checkpoint. Reaching ${U.esc(jr.dest.name)} ends the pilgrimage.</p>
       <table class="plan"><tr><th>#</th><th>Checkpoint and leg</th><th>Par</th><th>Record</th><th>Against par</th><th>The plan's tasks</th></tr>${cpRows}</table>` : ""}
@@ -110,7 +112,7 @@ Object.assign(AZ.Game.prototype, {
   worldMap() {
     const w = this.w, s = this.s, U = AZ.U, ui = this.ui;
     const maxW = Math.min(window.innerWidth - 40, 1600), sc = Math.min(maxW / w.cols, (window.innerHeight - 140) / w.rows);
-    ui.modal(`<div class="mapwrap"><div class="maphead"><b>World map</b> · ${U.esc(w.P.world.name)} · lens: <span id="mlens">${AZ.LENSES[this.lensIdx].name}</span> · click: set a teal waypoint · L: lens · M/Esc: close<br><span class="dim">Lines you know: blue by sea, tan by road, red dashed if last heard not running</span></div><canvas id="wmap" width="${Math.round(w.cols * sc)}" height="${Math.round(w.rows * sc)}"></canvas><div id="minfo" class="dim">Brighter ground is ground you have seen.</div></div>`);
+    ui.modal(`<div class="mapwrap"><div class="maphead"><b>World map</b> · ${U.esc(w.P.world.name)} · lens: <span id="mlens">${AZ.LENSES[this.lensIdx].name}</span> · click: set a teal waypoint · L: lens · M/Esc: close<br><span class="dim">Lines you know (N to show or hide): blue by sea, tan by road, red dashed if last heard not running</span></div><canvas id="wmap" width="${Math.round(w.cols * sc)}" height="${Math.round(w.rows * sc)}"></canvas><div id="minfo" class="dim">Brighter ground is ground you have seen.</div></div>`);
     const cv = document.getElementById("wmap"), ctx = cv.getContext("2d");
     const draw = () => {
       ctx.imageSmoothingEnabled = false;
@@ -130,7 +132,7 @@ Object.assign(AZ.Game.prototype, {
       }
       for (const b of w.P.burgs) if (b) { ctx.fillStyle = b.capital ? "#fff" : "rgba(255,255,255,0.6)"; const z = b.capital ? 3 : 2; ctx.fillRect(b.t[0] * sc - z / 2, b.t[1] * sc - z / 2, z, z); }
       // the passenger network as you know it: lines you have read on timetables or heard of
-      if (this.sim) for (const [id, seen] of Object.entries(s.lineSeen || {})) {
+      if (this.sim && this._showLines !== false) for (const [id, seen] of Object.entries(s.lineSeen || {})) {
         const L = this.sim.lines[+id]; if (!L) continue;
         const A = w.P.burgs[L.from], B = w.P.burgs[L.to];
         ctx.strokeStyle = !seen.ok ? "rgba(255,110,90,0.8)" : L.mode === "sea" ? "rgba(140,220,255,0.75)" : "rgba(230,190,120,0.85)";
@@ -148,11 +150,13 @@ Object.assign(AZ.Game.prototype, {
       const rect = cv.getBoundingClientRect(), c = Math.floor(((e.clientX - rect.left) / rect.width) * w.cols), r = Math.floor(((e.clientY - rect.top) / rect.height) * w.rows);
       s.waypoint = [c, r];
       const cell = w.cell(c, r), b = w.near(c, r, 3).find(n => n.kind === "burg");
-      document.getElementById("minfo").innerHTML = `Waypoint: ${w.isLand(c, r) ? U.esc(w.P.biomes[w.C.biome[cell]].name) + " in " + U.esc(this.know.regionName(cell)) : U.esc(w.waterName(c, r))}${b ? " · near " + U.esc(b.o.name) : ""} · ${this.know.dirDist(s.c, s.r, [c, r]).txt} of you`;
+      const lensNow = AZ.LENSES[this.lensIdx], lensWord = lensNow.id !== "none" ? `<b>${lensNow.name}</b>: ${U.esc(lensNow.label(w, cell, c, r) ?? "")} · ` : "";
+      document.getElementById("minfo").innerHTML = lensWord + `Waypoint: ${w.isLand(c, r) ? U.esc(w.P.biomes[w.C.biome[cell]].name) + " in " + U.esc(this.know.regionName(cell)) : U.esc(w.waterName(c, r))}${b ? " · near " + U.esc(b.o.name) : ""} · ${this.know.dirDist(s.c, s.r, [c, r]).txt} of you`;
       draw(); this.dirty = true;
     };
     ui.modalKey = e => {
       if (e.key === "l" || e.key === "L") { this.lensIdx = (this.lensIdx + (e.shiftKey ? -1 : 1) + AZ.LENSES.length) % AZ.LENSES.length; document.getElementById("mlens").textContent = AZ.LENSES[this.lensIdx].name; draw(); this.dirty = true; }
+      else if (e.key === "n" || e.key === "N") { this._showLines = this._showLines === false; draw(); }
       else if (["Escape", "m", "M", "x", "X"].includes(e.key)) ui.closeModal();
     };
   },

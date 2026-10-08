@@ -50,7 +50,7 @@
     for (const n of this.sim.news) {
       if (s.known.includes(n.id)) continue;
       const mi = Math.hypot(n.tile[0] - b.t[0], n.tile[1] - b.t[1]) * w.miles;
-      if (s.clock >= n.t + (mi / AZ.SIM.newsMilesPerDay) * 24) { s.known.push(n.id); fresh.push(n); }
+      if (s.clock >= n.t + (mi / (AZ.SIM.newsMilesPerDay * (this.tv.trait === "well-connected" ? 1.5 : 1))) * 24) { s.known.push(n.id); fresh.push(n); }
     }
     if (!fresh.length) return;
     for (const n of fresh) {
@@ -80,8 +80,9 @@
       const deps = sim.departures(b, s.clock).filter(d => d.t > s.clock).slice(0, 12);
       const opts = [];
       for (const d of deps) {
-        const L = d.L, dest = w.P.burgs[L.to], fare = this.fareFor(L, b), planned = L.mode === "sea" && planDest === dest;
-        opts.push({ label: `${planned ? "★ " : ""}${L.mode === "sea" ? "⛵" : "🐎"} ${U.esc(L.ship)} to ${U.esc(dest.name)} · ${AZ.Clock.fmt(d.t)} (in ${AZ.Clock.span(d.t - s.clock)}) · every ${L.period} days · 🟡 ${fare}${d.ok ? "" : ` · <span class="late">not running: ${U.esc(d.why)}</span>`}`, cls: planned ? "hook" : "", act: "book", d, fare, disabled: !d.ok || s.purse < fare || !!s.voyage });
+        const L = d.L, dest = w.P.burgs[L.to], stance = sim.rel(this.tv.homeState, L.flag), refuse = stance === "Enemy", dear = /Suspicion|Rival/.test(stance);
+        const fare = U.rn(this.fareFor(L, b) * (dear ? 1.5 : 1), 2), planned = L.mode === "sea" && (planDest === dest || (L.via || []).includes(planDest?.i));
+        opts.push({ label: `${planned ? "★ " : ""}${L.mode === "sea" ? "⛵" : "🐎"} ${U.esc(L.ship)} to ${U.esc(dest.name)} · ${AZ.Clock.fmt(d.t)} (in ${AZ.Clock.span(d.t - s.clock)}) · every ${L.period} days · 🟡 ${fare}${(L.via || []).length ? ` · via ${L.via.map(i => U.esc(w.P.burgs[i].name)).join(", ")}` : ""}${d.ok ? "" : ` · <span class="late">not running: ${U.esc(d.why)}</span>`}${refuse ? ` · <span class="late">will not carry people from ${U.esc(w.P.states[this.tv.homeState]?.name)} (${stance})</span>` : dear ? ` · dearer for people from ${U.esc(w.P.states[this.tv.homeState]?.name)}` : ""}`, cls: planned ? "hook" : "", act: "book", d, fare, disabled: !d.ok || refuse || s.purse < fare || !!s.voyage });
         if (L.mode === "sea" && d.ok && this.canCrew()) opts.push({ label: `   … or sign on as crew aboard ${U.esc(L.ship)} (no fare; work the passage)`, act: "crew", d, fare: 0, disabled: !!s.voyage });
       }
       if (!deps.length) opts.push({ label: "No sailings or coaches from here in the next twelve days", disabled: true });
@@ -102,7 +103,7 @@
         const at = L.mode === "sea" ? w.harbour(b, "ship").t : b.t.slice();
         const captain = this.know.person(`cap:line:${L.key}`, L.cul);
         s.voyage = { ship: L.ship, captain, flag: L.flag, role: crew ? "crew" : "passenger", fare: crew ? 0 : o.fare, cls: L.mode === "sea" ? "ship" : "land", mode: L.mode, speed: L.speed, hpd: L.hpd,
-          stops: [{ b: dest.i, name: dest.name, stay: 0 }], leg: 0, state: "port", at, portBurg: b.i, departAt: o.d.t, planned: planDest === dest && L.mode === "sea", from: b.i, why: L.why, line: L.id, course: null, pos: 0, transport: L.transport };
+          stops: [...(L.via || []).map(i => ({ b: i, name: w.P.burgs[i].name, stay: 6 + Math.round(U.rnd2(i, L.id, 3) * 10) })), { b: dest.i, name: dest.name, stay: 0 }], boarded: false, leg: 0, state: "port", at, portBurg: b.i, departAt: o.d.t, planned: planDest === dest && L.mode === "sea", from: b.i, why: L.why, line: L.id, course: null, pos: 0, transport: L.transport };
         this.doAct("book");
         this.log(`${crew ? "Signed on" : "Booked"} ${U.esc(L.ship)} to ${U.esc(dest.name)}, leaving ${AZ.Clock.fmt(o.d.t)}.`, "hook");
         await this.ui.say([`${crew ? "You sign the articles" : `🟡 ${o.fare} buys a place`} on ${U.esc(L.ship)} (${U.esc(L.transport)}), ${U.esc(captain)} ${L.mode === "sea" ? "master" : "driving"}: ${U.esc(L.why)} ${AZ.T("mixed")}.`,
@@ -129,13 +130,13 @@
       if (!st.ok) {
         const port = w.P.burgs[v.portBurg];
         s.purse = U.rn(s.purse + (v.fare || 0), 2); s.voyage = null;
-        if (s.aboard) { s.aboard = false; s.c = port.t[0]; s.r = port.t[1]; this.anim = null; }
+        if (this.riding() || s.aboard && !s.vessel) { s.aboard = false; s.c = port.t[0]; s.r = port.t[1]; this.anim = null; }
         this.log(`${U.esc(v.ship)} did not leave: ${U.esc(st.why)}.`, "hook");
         return this.ui.say(`<b>${U.esc(v.ship)} does not leave.</b> ${U.cap(U.esc(st.why))}. Your fare is returned ${AZ.T("mixed")}.`);
       }
     }
     if (!v || v.mode !== "land") return depart0.call(this);
-    if (!s.aboard) { this.log(`Missed ${U.esc(v.ship)}.`, "hook"); s.voyage = null; this.dirty = true; return this.ui.say(`<b>${U.esc(v.ship)} has left without you.</b> The fare is gone.`); }
+    if (!this.riding()) { this.log(`Missed ${U.esc(v.ship)}.`, "hook"); s.voyage = null; this.dirty = true; return this.ui.say(`<b>${U.esc(v.ship)} has left without you.</b> The fare is gone.`); }
     const tb = w.P.burgs[v.stops[v.leg].b];
     const course = w.withMiles(w.path(v.at, tb.t, (c, r) => w.isLand(c, r), { limit: 200000, cost: (c, r) => { const B = w.bits(c, r); return B.road ? 0.4 : B.trail ? 0.7 : 3; } }));
     if (!course) { s.voyage = null; s.aboard = false; s.purse = U.rn(s.purse + (v.fare || 0), 2); return this.ui.say("There is no road. The fare is returned."); }
@@ -159,7 +160,8 @@
     const p = sim.price(M, gid), tax = AZ.Prices.tax(this.w, b), stock = Math.floor(M.stock[gid] || 0);
     const makes = (b.production || {})[gid] > 0 || M.centre === b.i;
     const rec = { taken: 0, get f() { return 1; }, set f(v) { if (v > 1) M.stock[gid] = Math.max(0, (M.stock[gid] || 0) - 1); else M.stock[gid] = (M.stock[gid] || 0) + 1; } };
-    return { buy: U.rn(p * (1 + tax), 2), sell: U.rn(p * 0.85, 2), stock, canBuy: makes && stock >= 1, mk: M, rec };
+    const hg = this.tv.trait === "haggler";
+    return { buy: U.rn(p * (1 + tax) * (hg ? 0.9 : 1), 2), sell: U.rn(p * 0.85 * (hg ? 1.1 : 1), 2), stock, canBuy: makes && stock >= 1, mk: M, rec };
   };
   G.market = async function (b) {
     const s = this.s, w = this.w, sim = this.sim;
@@ -169,15 +171,15 @@
       const opts = [];
       for (const n of [1, 5, 10, 20, 40]) {
         const need = n * eat;
-        opts.push({ label: `Food for ${n} day${n > 1 ? "s" : ""}${eat > 1 ? ` for ${eat} (${need} rations)` : ""}: 🟡 ${U.rn(need * ration, 2)}`, n, kind: "food", disabled: s.purse < need * ration || s.sup.food + need > cap.food || need > f.rations });
+        opts.push({ label: `Food for ${n} day${n > 1 ? "s" : ""}${eat > 1 ? ` for ${eat} (${need} rations)` : ""}: 🟡 ${U.rn(need * ration, 2)}`, n, kind: "food", disabled: s.purse < need * ration || s.sup.food + need > cap.food || need > this.foodLeft(b, f) });
       }
       opts.push({ label: `Trade goods (you carry ${this.goodsCount()} of ${cap.goods} units)`, kind: "goods" }, { label: "Back", kind: "back" });
-      const head = `<b>${U.esc(b.name)} market</b> · 🟡 ${U.rn(s.purse, 2)} · you have ${s.sup.food} rations<br>For sale to travellers: <b>${f.rations}</b> rations at 🟡 ${ration} (${sim.season(b)}; the market's food stock, of which a town this size spares a share) ${AZ.T("mixed")}`;
+      const head = `<b>${U.esc(b.name)} market</b> · 🟡 ${U.rn(s.purse, 2)} · you have ${s.sup.food} rations<br>For sale to travellers this week: <b>${this.foodLeft(b, f)}</b> rations at 🟡 ${ration} (${sim.season(b)}; the market's food stock, of which a town this size spares a share) ${AZ.T("mixed")}`;
       const k = await this.ui.choose(head, opts, { cancel: opts.length - 1 });
       const o = opts[k];
       if (o.kind === "back") return;
       if (o.kind === "goods") { await this.tradeGoods(b); continue; }
-      if (o.kind === "food") { const need = o.n * eat; s.purse = U.rn(s.purse - need * ration, 2); s.sup.food += need; sim.takeFood(b, need); s.hunger = 0; delete s.cond.hungry; delete s.cond.starving; }
+      if (o.kind === "food") { const need = o.n * eat; s.purse = U.rn(s.purse - need * ration, 2); s.sup.food += need; sim.takeFood(b, need); this.foodTook(b, need); s.hunger = 0; delete s.cond.hungry; delete s.cond.starving; }
       this.dirty = true;
     }
   };

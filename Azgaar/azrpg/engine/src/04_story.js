@@ -443,12 +443,12 @@ AZ.Know = class {
     people.push({ role: b.temple ? "Priest" : "Shrine-keeper", name: nm("temple"), talk: () => {
       const L = [`${nm("temple")} keeps the ${b.temple ? "temple" : "shrine"} of the ${re.name}: ${re.type}${re.form ? ", " + re.form : ""}${re.deity ? `; they pray to ${re.deity}` : ""} ${T("data")}.`];
       if (re.center === cell) L.push(`<b class="hook">This is the seat of the ${re.name}.</b> ${T("data")}`);
-      const destRel = w.C.religion[this.jr.segs[this.jr.segs.length - 1].to];
+      const destRel = this.jr ? w.C.religion[this.jr.segs[this.jr.segs.length - 1].to] : -1;
       const st = (g.s?.stand?.f || {})[w.C.religion[cell]] || 0;
       if (st <= -2) L.push(`${nm("temple")} knows your name, and not kindly. The door stays shut ${T("mixed")}.`);
       else if (st >= 2 && !faith) L.push(`Word of your kindness to the faith has come ahead of you. You are welcome here ${T("mixed")}.`);
-      if (faith) L.push(`You share the faith. ${nm("temple")} blesses ${tv.token} and asks you to carry a prayer to ${this.jr.dest.name} ${T("new")}.`);
-      else if (w.C.religion[cell] === destRel) L.push(`You are not of this faith, but your road ends in ${this.jr.dest.name}, and that is enough to be welcome ${T("mixed")}.`);
+      if (faith) L.push(`You share the faith. ${nm("temple")} blesses ${tv.token} and asks you to carry a prayer ${this.jr ? `to ${this.jr.dest.name}` : "on your road"} ${T("new")}.`);
+      else if (this.jr && w.C.religion[cell] === destRel) L.push(`You are not of this faith, but your road ends in ${this.jr.dest.name}, and that is enough to be welcome ${T("mixed")}.`);
       else L.push(`You are not of this faith. You are given water and courtesy, no more ${T("mixed")}.`);
       if (w.C.religion[cell] === destRel && re.center !== cell) {
         const seat = P.burgs.find(x => x && x.cell === re.center);

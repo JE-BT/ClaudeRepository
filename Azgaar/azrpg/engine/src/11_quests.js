@@ -111,7 +111,7 @@ Object.assign(AZ.Game.prototype, {
       break;
     }
     // relief for a town in a zone
-    for (const z of P.zones) {
+    for (const z of (this.sim ? [...this.sim.zones.values()].filter(z0 => !z0.over).map(z0 => ({ ...z0, cells: [...z0.cells] })) : P.zones)) {
       if (!/Disease|Disaster|Flood|Tsunami|Eruption|Avalanche/.test(z.type)) continue;
       const tb = P.burgs.filter(x => x && z.cells.includes(x.cell) && d(x) < 220).sort((a, c) => d(a) - d(c))[0];
       if (!tb || tb === b) continue;
@@ -151,6 +151,7 @@ Object.assign(AZ.Game.prototype, {
     const rel = P.religions[w.C.religion[b.cell]], seat = rel && P.burgs.find(x => x && x.cell === rel.center);
     if (seat && seat !== b && d(seat) < 300) out.push({ title: `An offering for ${seat.name}`, pay: 0, cost: 0, why: `${b.name} keeps the ${rel.name}; its seat is ${seat.name} ${T("data")}.`,
       dist: mi(seat), deadline: null, giver: b.i, steps: [{ text: `Carry the offering to the temple in ${seat.name}`, goal: { burg: seat.i, role: "Priest" }, reward: { stand: [["f", rel.i, 2]] } }] });
+    if (this.tv.trait === "well-connected") for (const o of out) { if (o.pay) o.pay = U.rn(o.pay * 1.2, 2); for (const st of o.steps) if (st.reward && st.reward.coin > 0) st.reward.coin = U.rn(st.reward.coin * 1.2, 2); }
     return out.filter(o => !s.threads.some(t => t.title === o.title));
   },
   async noticeBoard(b) {
