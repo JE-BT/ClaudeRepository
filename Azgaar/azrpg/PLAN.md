@@ -30,6 +30,42 @@
 17. **Fishing (data grounds) and foraging (biome, food output, season)**; a little shipboard life
     for passengers, rate to be tuned in playtests (`AZ.SHIP_EVENTS.rate`, now 0.18 a day).
 
+## Decisions (2026-10-07, alpha wrap-up)
+
+18. Passenger time is the player's: F switches normal and fast days, P holds the ship; resting,
+    sleeping and talking aboard let the ship sail on by the hours spent.
+19. Water dropped for now; food only. Money rounded to 2 decimals everywhere.
+20. Goods trading between markets (stock, regional prices, sales tax, merchants buy at 85 %,
+    prices move 4 % a unit and recover).
+21. Fever runs its course (grave on day 3, collapse on day 6) unless treated; sleep matters
+    (tired at 18 h awake, exhausted at 30, asleep where you stand at 44).
+22. Mutiny is negotiable: three strikes (bonus, a promised port, or face them down).
+23. Walkable towns only if Watabou exports can be automated; otherwise not for now.
+24. Errand deadlines stay as they are.
+
+## Decisions (2026-10-08, alpha 2)
+
+25. Economy moves first, then hazards, then war; all three are in.
+26. The simulation runs live in the browser.
+27. The player knows what news has reached them; scouting armies is a source of errands.
+28. Fully seeded from the world seed.
+29. Passenger networks (packets, trade runs, coaches, carriers' wagons) with fixed timetables that
+    run or stop as the world changes.
+30. Food for sale limited by the town's market stock, its size and the season.
+
+## Alpha 2 (done)
+
+Simulation of markets, lines, hazards and wars; timetables at harbours and coach offices; wagons
+and coaches as rides; news that travels; army-scouting errands; harbours within a short walk only;
+marked places in or beside a town reachable from its menu; known lines on the world map.
+
+## Open after alpha 2
+
+- Lenses still show the true state; only news is limited by distance.
+- Visible traffic (the vehicles of the lines moving on the map).
+- New lines opening as the world changes (now: a fixed set that runs or stops).
+- Borders: towns fall and are given back at peace; provinces do not yet change hands.
+
 ## Phase 3 (done)
 
 Water-only courses and harbours; checkpoints and par; booked ships and hired boats; crew calls,
@@ -50,6 +86,8 @@ leads in the journal. Tests now walk on land, take event choices and run every t
 Converter, tile rasters, procedural pixel art, chunked renderer, lenses, inspector, world map,
 journey plan and record, autopilot, town scenes, rumours by distance, traveller generation,
 save in the browser, tests.
+
+## Next: a moving world (see the design note in chat, 2026-10-07)
 
 ## Open for later phases
 

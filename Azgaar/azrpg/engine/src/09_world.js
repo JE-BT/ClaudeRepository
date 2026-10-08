@@ -32,7 +32,7 @@ Object.assign(AZ.World.prototype, {
         if (!this.inb(a, e) || seen.has(k)) continue;
         seen.add(k);
         if (this.navigable(a, e, cls)) { found = { t: [a, e], walk: d + 1 }; break; }
-        if (d < 30 && this.isLand(a, e)) q.push([a, e, d + 1]);
+        if (d < 3 && this.isLand(a, e)) q.push([a, e, d + 1]); // a harbour is within a short walk of the town, never a distant coast
       }
     }
     this._harb.set(key, found);
@@ -69,6 +69,33 @@ Object.assign(AZ.World.prototype, {
       }
     }
     return null;
+  },
+  // are two tiles on the same connected body of navigable water? (components labelled once per class)
+  sameWater(a, b, cls = "boat") {
+    if (!a || !b) return false;
+    this._comp = this._comp || {};
+    let lab = this._comp[cls];
+    if (!lab) {
+      const N = this.cols * this.rows, cols = this.cols;
+      lab = this._comp[cls] = new Int32Array(N);
+      let next = 0;
+      const q = new Int32Array(N);
+      for (let i = 0; i < N; i++) {
+        if (lab[i] || !this.navigable(i % cols, (i / cols) | 0, cls)) continue;
+        next++; let h = 0, t = 0; q[t++] = i; lab[i] = next;
+        while (h < t) {
+          const j = q[h++], c = j % cols, r = (j / cols) | 0;
+          for (const [dc, dr] of [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+            const a2 = c + dc, b2 = r + dr;
+            if (a2 < 0 || b2 < 0 || a2 >= cols || b2 >= this.rows) continue;
+            const k = b2 * cols + a2;
+            if (!lab[k] && this.navigable(a2, b2, cls)) { lab[k] = next; q[t++] = k; }
+          }
+        }
+      }
+    }
+    const la = lab[this.idx(a[0], a[1])], lb = lab[this.idx(b[0], b[1])];
+    return la > 0 && la === lb;
   },
   waterPath(from, to, cls) { return this.withMiles(this.path(from, to, (c, r) => this.navigable(c, r, cls), { limit: 600000, greed: 1.2 })); },
   // a 4-connected path zigzags on diagonals; its true length is the chord length sampled along it

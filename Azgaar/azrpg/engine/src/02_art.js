@@ -225,6 +225,11 @@ AZ.Art = class {
     });
   }
   vessel(kind, dir, sailCol) {
+    if (kind === "wagon") return this.get(`wagon:${dir}`, 16, 16, x => {
+      const P = AZ.Art.px, flip = dir === "left", R = (X, Y, W, H, c) => P(x, flip ? 16 - X - W : X, Y, W, H, c);
+      R(3, 4, 10, 5, "rgb(236,226,196)"); R(3, 4, 10, 1, "rgb(200,190,160)"); R(2, 9, 12, 3, "rgb(120,80,46)");
+      R(3, 12, 3, 3, "rgb(50,40,30)"); R(10, 12, 3, 3, "rgb(50,40,30)"); R(13, 10, 3, 1, "rgb(90,60,36)");
+    });
     const facing = dir === "left" ? "left" : dir === "right" ? "right" : "right";
     const key = `vessel:${kind}:${facing}:${sailCol || ""}`;
     return this.get(key, 16, 16, x => {
