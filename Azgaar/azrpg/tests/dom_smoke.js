@@ -42,14 +42,15 @@ const closeAll = async g => { for (let i = 0; i < 40 && g.ui.active; i++) { key(
   const g = window.AZ.game, $ = id => window.document.getElementById(id), AZ = window.AZ;
   if (!g) { console.log("NO GAME", errors, $("status")?.textContent); process.exit(1); }
   try {
-    await until(() => /New journey/.test(txt($("modal"))), "title");
+    await until(() => /Sandbox/.test(txt($("modal"))), "title");
+    console.log("TITLE:", [...$("modal").querySelectorAll("li")].map(li => li.textContent.replace("▶ ", "").slice(0, 40)).join(" | "));
     key("Enter");
     await until(() => /Who travels/.test(txt($("modal"))), "kinds");
     console.log("KINDS:", [...$("modal").querySelectorAll("li")].map(li => li.firstChild.textContent.replace("▶ ", "")).join(" | "));
     key("Enter");
-    await until(() => /Departure:/.test(txt($("modal"))), "card");
+    await until(() => /Start:/.test(txt($("modal"))), "card");
     key("ArrowDown"); key("ArrowDown"); key("ArrowRight");
-    await until(() => /Departure: autumn/.test(txt($("modal"))), "season cycled");
+    await until(() => /Start: winter/.test(txt($("modal"))), "season cycled");
     console.log("CARD:", txt($("modal")).slice(txt($("modal")).indexOf("Era") + 3, 420));
     key("ArrowUp"); key("ArrowUp"); key("Enter");
     await until(() => g.s && g.ui.active, "intro");
@@ -73,7 +74,7 @@ const closeAll = async g => { for (let i = 0; i < 40 && g.ui.active; i++) { key(
     await closeAll(g);
     console.log("BOOKED:", g.s.voyage && g.s.voyage.ship, "sails", g.s.voyage && AZ.Clock.fmt(g.s.voyage.departAt), "purse", g.s.purse);
     if (!g.s.voyage) throw new Error("no booking");
-    g.s.sup.food = 40; g.s.aboard = true; g.s.c = g.s.voyage.at[0]; g.s.r = g.s.voyage.at[1]; g.s.clock = g.s.voyage.departAt;
+    g.s.sup.food = 40; g.s.voyage.boarded = true; g.s.aboard = true; g.s.c = g.s.voyage.at[0]; g.s.r = g.s.voyage.at[1]; g.s.clock = g.s.voyage.departAt;
     for (let i = 0; i < 300; i++) { g.anim = null; tick(1); if (g.ui.active) await closeAll(g); }
     console.log("VOYAGE:", g.s.c, g.s.r, AZ.Clock.fmt(g.s.clock), g.s.voyage && g.s.voyage.state, "HUD:", txt($("hud-trip")).slice(0, 200));
     key("r"); await until(() => g.ui.active, "ship talk"); console.log("ABOARD MENU:", txt($("msg")).slice(0, 160)); key("Escape"); await wait(3);

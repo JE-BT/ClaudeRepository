@@ -14,7 +14,7 @@ import json
 import math
 from dataclasses import dataclass
 
-from .mapfile import AzgaarMap
+from .mapfile import AzgaarMap, split_fields
 
 PATTERN_SIZE = {"square": 25.0, "squareTruncated": 25.0, "squareTetrakis": 25.0,
                 "pointyHex": 25.0, "trihexagonal": 25.0, "flatHex": 25.0}
@@ -41,7 +41,7 @@ class TileGrid:
         opts = {}
         try:
             with open(m.path, encoding="utf-8", newline="") as fh:
-                fields = fh.read().split("\r\n")
+                fields = split_fields(fh.read())
             opts = json.loads(fields[48]).get("grid", {}).get("options", {})
         except Exception:
             opts = {}

@@ -92,6 +92,33 @@ AZ.Sim = class {
       const near = ports.filter(B => B !== A && w.sameWater(w.harbour(A, "ship").t, w.harbour(B, "ship").t, "ship")).map(B => ({ B, d: Math.hypot(B.t[0] - A.t[0], B.t[1] - A.t[1]) })).filter(o => o.d < 140).sort((x, y) => x.d - y.d).slice(0, 2);
       for (const { B } of near) shipLine(A, B, 6 + Math.floor(U.rnd2(A.i, B.i, 5) * 6), `the coastal packet`, null, null);
     }
+    // long-haul lines along each named sea lane, calling at the ports that lie on it
+    const lanePorts = new Map();
+    for (const A of ports) {
+      const h = w.harbour(A, "ship").t;
+      for (let dr = -3; dr <= 3; dr++) for (let dc = -3; dc <= 3; dc++) {
+        if (!w.inb(h[0] + dc, h[1] + dr)) continue;
+        const id = w.R.route[w.idx(h[0] + dc, h[1] + dr)];
+        const rt = id && P.routes[id - 1];
+        if (!rt || rt.group !== "searoutes") continue;
+        const set = lanePorts.get(id) || new Set(); set.add(A); lanePorts.set(id, set);
+      }
+    }
+    for (const [id, set] of lanePorts) {
+      const list = [...set].filter(A => w.sameWater(w.harbour(A, "ship").t, w.harbour([...set][0], "ship").t, "ship"));
+      if (list.length < 3) continue;
+      const cx = list.reduce((a, A) => a + A.t[0], 0) / list.length, cy = list.reduce((a, A) => a + A.t[1], 0) / list.length;
+      let cur = list.sort((x, y) => Math.hypot(y.t[0] - cx, y.t[1] - cy) - Math.hypot(x.t[0] - cx, x.t[1] - cy))[0];
+      const order = [cur], left = new Set(list.filter(x => x !== cur));
+      while (left.size) { const nx = [...left].sort((x, y) => Math.hypot(x.t[0] - cur.t[0], x.t[1] - cur.t[1]) - Math.hypot(y.t[0] - cur.t[0], y.t[1] - cur.t[1]))[0]; order.push(nx); left.delete(nx); cur = nx; }
+      const name = P.routes[id - 1].name || "the lane";
+      for (const seq of [order, order.slice().reverse()]) {
+        const A = seq[0], B = seq[seq.length - 1], k = `lane${id}:${A.i}>${B.i}`, rnd = U.rng(`${this.seed}:line:${k}`);
+        if (have.has(`sea:${A.i}>${B.i}`)) continue;
+        add({ mode: "sea", from: A.i, to: B.i, via: seq.slice(1, -1).map(x => x.i), period: 10 + Math.floor(rnd() * 5), phase: Math.floor(rnd() * 240) + 6, hour: 0,
+          why: `the long run along the ${name}, calling at every port on it ${AZ.T("data")}`, cargo: null, ship: mkName(k, A.culture), captain: null, flag: A.state, transport: "Sailing Ship", speed: 10, hpd: 24, cul: A.culture });
+      }
+    }
     // coaches and carriers between towns joined by road, where the states are on good terms
     const towns = P.burgs.filter(b => b && (b.population >= 3 || b.capital));
     for (const A of towns) {

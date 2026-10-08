@@ -24,8 +24,8 @@ AZ.Game = class {
     AZ.Clock.doy0 = doy0;
     if (jr) { jr.replan(); jr.fixCourses(); }
     const t0 = jr ? jr.t0 : 6;
-    const start = jr ? jr.origin.tile : (w.P.burgs.find(b => b && b.capital) || {}).t || [0, 0];
-    this.tv = AZ.makeTraveller(w, jr, seed, kindId);
+    const start = jr ? jr.origin.tile : (this._start != null ? w.P.burgs[this._start].t : (w.P.burgs.find(b => b && b.capital) || {}).t || [0, 0]);
+    this.tv = AZ.makeTraveller(w, jr, seed, kindId, this._start);
     this.know = new AZ.Know(w, jr, this.tv);
     this.events = new AZ.Events(this);
     this.s = { seed, kind: this.tv.kind, doy0, c: start[0], r: start[1], dir: "down", aboard: false, vessel: null, voyage: null,
@@ -35,7 +35,7 @@ AZ.Game = class {
     this.s.purse = this.tv.purse;
     this.s.sup = { food: this.tv.food ?? 3 };
     this.s.goods = {}; this.s.basis = {};
-    if (this.tv.cargo != null) { this.s.flags.cargo = true; this.s.goods[this.tv.cargo] = 4; this.s.basis[this.tv.cargo] = AZ.Prices.goodPrice(w, jr.origin.burg, this.tv.cargo) || 1; }
+    if (this.tv.cargo != null) { this.s.flags.cargo = true; this.s.goods[this.tv.cargo] = 4; this.s.basis[this.tv.cargo] = AZ.Prices.goodPrice(w, jr ? jr.origin.burg : w.P.burgs[this._start], this.tv.cargo) || 1; }
     if (this.tv.boat && jr) {
       const b = jr.origin.burg, h = w.harbour(b, "boat");
       if (h) this.s.vessel = { mode: "owned", kind: "Sailing boat", cls: "boat", speed: 6, hpd: 12, crew: 3, morale: 80, c: h.t[0], r: h.t[1], wage: AZ.Prices.wage(w, b), hire: 0, home: b.i };
@@ -149,7 +149,7 @@ AZ.Game = class {
   passable(c, r) {
     const w = this.w, s = this.s;
     if (!w.inb(c, r)) return { ok: false, why: "The edge of the known world." };
-    if (s.voyage && s.aboard) return { ok: false, why: "You are aboard as a passenger: the captain has the helm. Space to talk; F to let the days pass faster." };
+    if (this.riding()) return { ok: false, why: "You are aboard as a passenger: the captain has the helm. Space to talk; F to let the days pass faster." };
     if (s.aboard && s.vessel) {
       if (w.navigable(c, r, s.vessel.cls)) return { ok: true };
       return { ok: false, why: w.isLand(c, r) ? (w.bits(c, r).river ? `Too shallow for a ${s.vessel.kind.toLowerCase()}.` : "Land ahead. Space to go ashore; the boat waits.") : "Shoal water." };
@@ -157,6 +157,8 @@ AZ.Game = class {
     const v = s.vessel;
     if (v && v.c === c && v.r === r) return { ok: true, board: true };
     if (!w.isLand(c, r)) return { ok: false, why: "Too deep to wade. You need a boat." };
+    const Bx = w.bits(c, r);
+    if (Bx.river && !Bx.road && !Bx.trail && !w.burgAt.has(w.idx(c, r))) { const rv = w.river(c, r); if ((rv?.discharge || 0) >= 1500 * (AZ.Clock.season(w.latlon(c, r)[0], s.clock) === "spring" ? 0.6 : 1)) return { ok: false, why: `The ${rv.name} is too wide and fast to ford here. Find a bridge (a road crosses it) or a boat.` }; }
     return { ok: true };
   }
   legFor(c, r) { // the plan's leg whose course this tile is on (steps along it cost the course's own miles)
@@ -166,25 +168,26 @@ AZ.Game = class {
   }
   stepHours(c, r, dc, dr) {
     const w = this.w, U = AZ.U, s = this.s, lat = w.latlon(c, r)[0], wx = AZ.Weather.at(w, c, r, s.clock);
-    if (s.aboard && (s.vessel || s.voyage)) {
-      const v = s.voyage || s.vessel, wd = v.mode === "land" ? null : w.wind(lat);
+    if (this.riding() || (s.aboard && s.vessel)) {
+      const v = this.riding() ? s.voyage : s.vessel, wd = v.mode === "land" ? null : w.wind(lat);
       let f = 1;
       if (wd != null) { const hd = Math.atan2(dc, -dr), wr = (wd * Math.PI) / 180; f = 1 + 0.1 * Math.cos(hd - wr); }
       let miles = w.miles;
       const seg = this.legFor(c, r);
       if (seg) { const a = seg.chainPos.get(w.idx(s.c, s.r)), b = seg.chainPos.get(w.idx(c, r)); if (a !== undefined && b !== undefined && Math.abs(a - b) === 1) miles = seg.miles / Math.max(1, seg.chain.length - 1); }
       else if (s.auto && s.autoPath && s.autoPath.mps) miles = s.autoPath.mps;
-      if (s.voyage) miles = s.voyage.milesPerStep || miles;
-      return (miles / v.speed / f) * wx.sail * (s.cond.damaged && !s.voyage ? AZ.COND.damaged.slow : 1);
+      if (this.riding()) miles = s.voyage.milesPerStep || miles;
+      return (miles / v.speed / f) * wx.sail * (s.cond.damaged && !this.riding() ? AZ.COND.damaged.slow : 1);
     }
     const cell = w.cell(c, r), b = w.P.biomes[w.C.biome[cell]], B = w.bits(c, r);
     let f = B.road ? 0.8 : B.trail ? 1 : U.clamp((b.cost || 50) / 50, 1, 4);
     const rel = w.reliefAt(c, r);
     if (rel && !B.road) f *= /mount/i.test(rel.icon) ? 1.6 : 1.2;
     let h = ((s.auto && s.autoPath && s.autoPath.mps ? s.autoPath.mps : w.miles) / this.walkSpeed) * f * wx.walk;
-    if (B.river && !B.road && !B.trail) h += 0.5;
+    if (B.river && !B.road && !B.trail) { const q = w.river(c, r)?.discharge || 0; h += q < 100 ? 0.5 : q < 500 ? 1.5 : 3; }
+    if (this.tv.trait === "long-legged") h /= 1.15;
     if (AZ.Clock.light(s.clock, lat).phase === "night") h *= 1.5;
-    for (const k of Object.keys(s.cond)) if (AZ.COND[k]?.slow && k !== "damaged") h *= AZ.COND[k].slow;
+    for (const k of Object.keys(s.cond)) if (AZ.COND[k]?.slow && k !== "damaged") h *= this.tv.trait === "hardy" && /hungry|starving|fever|gravely/.test(k) ? 1 + (AZ.COND[k].slow - 1) / 2 : AZ.COND[k].slow;
     return h;
   }
   tryMove(dir, forced) {
@@ -217,7 +220,7 @@ AZ.Game = class {
       const st = w.C.state[cell], pv = w.C.province[cell];
       key = `l${st}:${pv}`; title = pv ? w.P.provinces[pv].fullName : st ? w.P.states[st].fullName : "Neutral lands";
       sub = `${st ? w.P.states[st].fullName + " · " : ""}${w.P.cultures[w.C.culture[cell]].name} · ${w.P.religions[w.C.religion[cell]].name}`;
-    } else { key = "f" + w.C.feature[cell]; title = w.waterName(s.c, s.r); sub = s.voyage && s.aboard ? `aboard the ${s.voyage.ship}` : s.aboard && s.vessel ? s.vessel.kind : ""; }
+    } else { key = "f" + w.C.feature[cell]; title = w.waterName(s.c, s.r); sub = this.riding() ? `aboard ${s.voyage.ship}` : s.aboard && s.vessel ? s.vessel.kind : ""; }
     if (key !== s.region) { s.region = key; this.ui.banner(U.esc(title), U.esc(sub)); }
     const addSeen = (k, v) => { if (v != null && !s.seen[k].includes(v)) { s.seen[k].push(v); return true; } return false; };
     if (w.isLand(s.c, s.r)) { addSeen("st", w.C.state[cell]); addSeen("cu", w.C.culture[cell]); addSeen("re", w.C.religion[cell]); addSeen("bi", w.C.biome[cell]); }
@@ -260,7 +263,7 @@ AZ.Game = class {
   // ------------------------------------------------------------------ autopilot (F): follow a path
   setAuto(on) {
     const s = this.s;
-    if (on && s.voyage && s.aboard) { this.fast = !this.fast; this.ui.toast(this.fast ? "Days pass quickly." : "Days pass at the usual pace."); return; }
+    if (on && this.riding()) { this.fast = !this.fast; this.ui.toast(this.fast ? "Days pass quickly." : "Days pass at the usual pace."); return; }
     if (on) {
       const path = this.planAuto();
       if (!path || path.length < 2) { this.ui.toast(s.aboard ? "No course from here. Set a waypoint on the map (M)." : "Set a waypoint on the world map (M) to walk there."); return; }
@@ -310,17 +313,18 @@ AZ.Game = class {
     const s = this.s, w = this.w, U = AZ.U;
     const b = this.burgHere();
     if (b) return this.town(b);
-    if (s.voyage && s.aboard) return this.shipTalk();
+    if (this.riding()) return this.shipTalk();
     const [dc, dr] = AZ.DIRS[s.dir];
     const around = [[s.c, s.r], [s.c + dc, s.r + dr], ...[[0, -1], [1, 0], [0, 1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]].map(([a, b2]) => [s.c + a, s.r + b2])];
     const reg = this.sim && this.sim.regAt(s.c, s.r, 1.5).find(x => x.a > 200);
+    if (reg) await this.threadsAt({ unit: reg.id });
     if (reg) { const P2 = w.P; return this.ui.say(`<b class="side">${U.esc(reg.name)}</b> of ${U.esc(P2.states[reg.state].fullName)} ${AZ.T("data")}: about ${U.num(Math.round(reg.a / 100) * 100)} men (${U.num(reg.a0)} when the war began), ${reg.status === "march" ? `marching on ${U.esc(P2.burgs[reg.target]?.name || "?")}` : reg.status === "retreat" ? "falling back to its base" : "in camp"} ${AZ.T("mixed")}.`); }
     for (const [c, r] of around) {
       if (!w.inb(c, r)) continue;
-      const ms = w.markersAt.get(w.idx(c, r)), us = w.unitsAt.get(w.idx(c, r));
+      const ms = w.markersAt.get(w.idx(c, r)), us = (w.unitsAt.get(w.idx(c, r)) || []).filter(u => !(this.sim && this.sim.regs.some(x => x.id === `${u.state}:${u.i}`))).slice(0, 1); 
       if (ms) return this.events.marker(ms[0], false);
-      if (us) await this.threadsAt({ unit: `${us[0].state}:${us[0].i}` });
-      if (us) return this.ui.say(us.map(u => `<b class="side">${U.esc(u.name)}</b> of ${U.esc(w.P.states[u.state].fullName)} ${AZ.T("data")}<br>${U.esc(u.note).replace(/\n/g, "<br>")}`));
+      if (us.length) await this.threadsAt({ unit: `${us[0].state}:${us[0].i}` });
+      if (us.length) return this.ui.say(us.map(u => `<b class="side">${U.esc(u.name)}</b> of ${U.esc(w.P.states[u.state].fullName)} ${AZ.T("data")}<br>${U.esc(u.note).replace(/\n/g, "<br>")}`));
     }
     if (s.aboard && s.vessel) {
       const t = [s.c + dc, s.r + dr];
@@ -395,7 +399,7 @@ AZ.Game = class {
   }
   async rest() {
     const s = this.s, U = AZ.U, w = this.w;
-    if (s.voyage && s.aboard) return this.shipTalk();
+    if (this.riding()) return this.shipTalk();
     const sick = s.cond.fever || s.cond.hurt;
     const atSea = s.aboard && !w.isLand(s.c, s.r);
     const opts = [{ label: atSea ? "Anchor until dawn" : "Camp until dawn" }, { label: "Wait 1 hour" }, { label: "Wait 3 hours" }, { label: "Wait 6 hours" }, { label: "Two days, to recover", disabled: !sick }, { label: "Never mind" }];
@@ -427,7 +431,7 @@ AZ.Game = class {
     if (!this.anim && !this.ui.busy()) {
       this.tick();
       if (this.ui.busy()) { /* a crew call or a departure opened a window */ }
-      else if (s.voyage && s.aboard && s.voyage.state === "sea" && !s.voyPause) this.voyageStep();
+      else if (this.riding() && s.voyage.state === "sea" && !s.voyPause) this.voyageStep();
       else if (s.auto) { const d = this.autoDir(); if (d) this.tryMove(d); else { this.setAuto(false); s.autoPath = null; } }
       else if (this.held.length) this.tryMove(this.held[this.held.length - 1]);
     }
@@ -436,9 +440,9 @@ AZ.Game = class {
     const frame = this.anim ? 1 + (Math.floor(now / 120) % 2) : 0;
     const sprites = [];
     if (this.sim) for (const r of this.sim.regs) if (r.a > 200 && Math.abs(r.t[0] - s.c) < 45 && Math.abs(r.t[1] - s.r) < 28) sprites.push({ img: this.ren.art.unit({ state: r.state, naval: false }), c: r.t[0], r: r.t[1] });
-    if (s.vessel && !(s.aboard && !s.voyage)) sprites.push({ img: this.ren.art.vessel(s.vessel.cls === "ship" ? "ship" : "boat", "left"), c: s.vessel.c, r: s.vessel.r });
-    if (s.voyage && !s.aboard && s.voyage.state === "port" && s.voyage.at) sprites.push({ img: this.ren.art.vessel("ship", "left"), c: s.voyage.at[0], r: s.voyage.at[1] });
-    const me = s.aboard && s.voyage && s.voyage.mode === "land" ? this.ren.art.vessel("wagon", s.dir === "left" ? "left" : "right") : s.aboard ? this.ren.art.vessel(s.voyage ? "ship" : s.vessel?.cls === "ship" ? "ship" : "boat", s.dir === "left" ? "left" : "right")
+    if (s.vessel && !(s.aboard && !this.riding())) sprites.push({ img: this.ren.art.vessel(s.vessel.cls === "ship" ? "ship" : "boat", "left"), c: s.vessel.c, r: s.vessel.r });
+    if (s.voyage && !this.riding() && s.voyage.state === "port" && s.voyage.at) sprites.push({ img: this.ren.art.vessel(s.voyage.mode === "land" ? "wagon" : "ship", "left"), c: s.voyage.at[0], r: s.voyage.at[1] });
+    const me = this.riding() && s.voyage.mode === "land" ? this.ren.art.vessel("wagon", s.dir === "left" ? "left" : "right") : s.aboard ? this.ren.art.vessel(this.riding() ? "ship" : s.vessel?.cls === "ship" ? "ship" : "boat", s.dir === "left" ? "left" : "right")
       : this.ren.art.walker(s.dir, frame, this.tv.pal);
     sprites.push({ img: me, c: cx, r: cy });
     const cp = this.cpNext(), leg = cp && cp.legIn;

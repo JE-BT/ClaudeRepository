@@ -64,6 +64,20 @@ SIGNATURES: dict[str, Callable[[Any], bool]] = {
 }
 
 
+def split_fields(raw: str) -> list[str]:
+    """Fields are joined by CRLF. A file that went through git line-ending normalisation has LF
+    only, and then the SVG's own newlines look like separators too: rejoin the SVG block."""
+    if "\r\n" in raw:
+        return raw.split("\r\n")
+    lines = raw.split("\n")
+    try:
+        s = next(i for i, l in enumerate(lines) if l.startswith("<svg"))
+        e = next(i for i, l in enumerate(lines) if i >= s and l.rstrip().endswith("</svg>"))
+    except StopIteration:
+        return lines
+    return lines[:s] + ["\n".join(lines[s:e + 1])] + lines[e + 1:]
+
+
 class MapFormatError(ValueError):
     pass
 
@@ -73,7 +87,7 @@ class AzgaarMap:
         self.path = Path(path)
         with open(self.path, encoding="utf-8", newline="") as fh:  # keep CRLF intact
             raw = fh.read()
-        fields = raw.split("\r\n")
+        fields = split_fields(raw)
         if len(fields) != 53:
             raise MapFormatError(f"{self.path.name}: expected 53 CRLF fields, found {len(fields)}")
         self.version = fields[0].split("|")[0]

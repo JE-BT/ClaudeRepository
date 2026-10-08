@@ -53,6 +53,22 @@
     run or stop as the world changes.
 30. Food for sale limited by the town's market stock, its size and the season.
 
+## Alpha 2.1 (done)
+
+Bugs: regiments tracked by the simulation (interaction, quests); river crew calls; the wagon icon
+while sailing your own boat; food bought again and again; rivers lost in lakes; LF-only .map files.
+Added: Journey/Sandbox modes, archetypes, companions and advice, new stop types, traits, refusals
+by stance, last-known positions and tracks, camping by place, storms by distance from land and
+shipwreck, river fords, portal fees and misfires, long-haul lane lines, lens words on the map,
+lines toggle (N).
+
+## Design questions open (2026-10-08)
+
+- Passive income and the scale of the traveller's purse against town treasuries.
+- Land use, control and political contestation before any border change (see chat).
+- Lenses as the player's chart (what news has told them), in practice.
+- Visible traffic for all lines, hailable.
+
 ## Alpha 2 (done)
 
 Simulation of markets, lines, hazards and wars; timetables at harbours and coach offices; wagons

@@ -162,7 +162,7 @@ AZ.Journey.prototype.fixCourses = function () {
     if (cp.parArrive == null) cp.parArrive = this.t0;
     cp.parLeave = cp.legOut ? cp.legOut.planStart : cp.stays.length ? cp.stays[cp.stays.length - 1].planEnd : cp.parArrive;
     cp.tile = cp.place.burg && cp.place.at ? cp.place.burg.t : cp.place.tile;
-    cp.acts = cp.stays.flatMap(st => AZ.stayActs(st, cp));
+    cp.acts = cp.stays.flatMap(st => AZ.stayActs(st, cp, w));
   });
   // the plan's own nights at anchor on legs that sail less than a full day (par, mixed)
   for (const seg of this.segs) {
@@ -185,12 +185,17 @@ AZ.Journey.prototype.fixCourses = function () {
 };
 
 // activities that make up a stay; the plan's hours are par, the player does the work
-AZ.stayActs = function (st, cp) {
-  const n = st.name, acts = [];
-  if (/book|passage|hire/i.test(n)) acts.push({ id: "book", label: "Book passage or hire a boat at the harbour", stay: st.k });
+AZ.stayActs = function (st, cp, w) {
+  const n = st.name, acts = [], land = w ? w.isLand(...cp.tile) : true;
+  const at = (n.match(/ at (.+)$/i) || [])[1];
+  if (/gather|muster|assembl|meet/i.test(n)) acts.push({ id: "gather", label: `Meet the company in ${cp.place.name}`, stay: st.k });
+  if (/rumou?r|news|tidings|ask/i.test(n)) acts.push({ id: "rumours", label: "Listen for rumours", stay: st.k });
+  if (/book|passage|hire|waiting for a (ship|boat)/i.test(n)) acts.push({ id: "book", label: "Book passage or hire a boat at the harbour", stay: st.k });
+  if (/resupply|provision|supplies|market/i.test(n)) acts.push({ id: "resupply", label: "Buy supplies at the market", stay: st.k });
   if (/alms/i.test(n)) acts.push({ id: "alms", label: "Give alms at the temple", stay: st.k });
-  if (/rest|shelter|inn|lodg/i.test(n)) acts.push({ id: "rest", label: `Rest a night${/ at (.+)$/i.test(n) ? " at " + n.match(/ at (.+)$/i)[1] : " ashore"}`, stay: st.k });
-  if (/anchor|stopp|night/i.test(n)) acts.push({ id: "anchor", label: `Spend the night at anchor ${cp.place.name}`, stay: st.k });
+  if (/\brest\b|shelter|\binn\b|lodg/i.test(n)) acts.push({ id: "rest", label: `Rest a night${at ? " at " + at : " ashore"}`, stay: st.k });
+  if (/camp/i.test(n)) acts.push({ id: "camp", label: `Camp ${(n.match(/camp (in|by|near|at) (.+)$/i) || [])[0]?.replace(/^camp/i, "") || "here"} (R)`.replace("  ", " "), stay: st.k });
+  else if (/anchor|stopp|night/i.test(n)) acts.push(land ? { id: "camp", label: `Spend the night ${cp.place.name} (R)`, stay: st.k } : { id: "anchor", label: `Spend the night at anchor ${cp.place.name}`, stay: st.k });
   if (!acts.length) acts.push({ id: "wait", label: n, stay: st.k });
   return acts;
 };

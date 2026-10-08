@@ -111,6 +111,24 @@ One simulation, seeded from the world seed and advanced day by day with the game
   (60 miles a day). The journal keeps news, timetables and prices with the date you learned them;
   the world map draws the lines you know. Errands ask you to scout armies and report to the watch.
 
+## Alpha 2.1
+
+- **Modes**: Journey (if the map has one) or Sandbox (the same world, no journey; moving or still).
+- **Journeys by archetype**: the map's journey type (Quest, Caravan, Pilgrimage, Military campaign,
+  Embassy ...) frames the trip and the travellers. A leader named in the journey's title ("Culzan
+  and the road through the forest") leads it. Stops are things to do: Gathering (meet the
+  company), Rumours (listen; leads and the reasons for the next leg), Waiting for a ship (book),
+  Resupply (market), Camp (camp there). The company crews a hired boat and gives advice (Space).
+- **Travellers**: purses vary; each has a trait (long-legged, haggler, sea legs, hardy,
+  well-connected). Lines from states hostile to your home refuse you or charge more.
+- **Moving targets** are found by their last known position, then by tracks and news.
+- **Camping** depends on the place (forest, water, cold, marsh, desert, weather, nearby danger).
+- **Storms** grow more dangerous with distance from land; boats can be beached near shore, or sink.
+- **Rivers**: crews call for a stop on rivers too (tie up at the bank); fords cost time by the
+  river's size, and the largest need a bridge or a boat; rivers run on through lakes.
+- **Portals** charge a fee and sometimes misfire (nothing, lost days, or somewhere remote).
+- **Lines**: long-haul sailings along each named sea lane, calling at every port on it.
+
 ## The journey
 
 The map's journey is the plan and is never changed. The plan clock starts on Day 1 at 06:00 (spring
