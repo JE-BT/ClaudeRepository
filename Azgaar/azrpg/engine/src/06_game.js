@@ -33,8 +33,9 @@ AZ.Game = class {
                seen: { m: [], u: [], b: [], z: [], st: [], cu: [], re: [], bi: [] }, waypoint: null, auto: false, autoPath: null, region: "", done: false };
     this.backfill();
     this.s.purse = this.tv.purse;
-    this.s.sup = { food: this.tv.food ?? 3, water: 3 };
-    if (this.tv.cargo != null) this.s.flags.cargo = true;
+    this.s.sup = { food: this.tv.food ?? 3 };
+    this.s.goods = {}; this.s.basis = {};
+    if (this.tv.cargo != null) { this.s.flags.cargo = true; this.s.goods[this.tv.cargo] = 4; this.s.basis[this.tv.cargo] = AZ.Prices.goodPrice(w, jr.origin.burg, this.tv.cargo) || 1; }
     if (this.tv.boat && jr) {
       const b = jr.origin.burg, h = w.harbour(b, "boat");
       if (h) this.s.vessel = { mode: "owned", kind: "Sailing boat", cls: "boat", speed: 6, hpd: 12, crew: 3, morale: 80, c: h.t[0], r: h.t[1], wage: AZ.Prices.wage(w, b), hire: 0, home: b.i };
@@ -45,7 +46,7 @@ AZ.Game = class {
   }
   backfill() {
     const s = this.s;
-    const def = { purse: 10, stand: { f: {}, s: {} }, cond: {}, flags: {}, threads: [], leads: [], done_m: [], done_z: [], doy0: 80, sup: { food: 3, water: 3 }, hunger: 0, thirst: 0, taken: [] };
+    const def = { purse: 10, stand: { f: {}, s: {} }, cond: {}, flags: {}, threads: [], leads: [], done_m: [], done_z: [], doy0: 80, sup: { food: 3 }, hunger: 0, taken: [], goods: {}, basis: {}, awake: 0 };
     for (const [k, v] of Object.entries(def)) if (s[k] === undefined) s[k] = JSON.parse(JSON.stringify(v));
     s.tvFaith = this.tv.faith;
   }
@@ -166,7 +167,7 @@ AZ.Game = class {
   stepHours(c, r, dc, dr) {
     const w = this.w, U = AZ.U, s = this.s, lat = w.latlon(c, r)[0], wx = AZ.Weather.at(w, c, r, s.clock);
     if (s.aboard && (s.vessel || s.voyage)) {
-      const v = s.voyage || s.vessel, wd = w.wind(lat);
+      const v = s.voyage || s.vessel, wd = v.mode === "land" ? null : w.wind(lat);
       let f = 1;
       if (wd != null) { const hd = Math.atan2(dc, -dr), wr = (wd * Math.PI) / 180; f = 1 + 0.1 * Math.cos(hd - wr); }
       let miles = w.miles;
@@ -199,6 +200,7 @@ AZ.Game = class {
     const hours = this.stepHours(c, r, dc, dr);
     this.anim = { from: [s.c, s.r], to: [c, r], t0: performance.now(), dur: s.auto || forced ? (this.fast ? 24 : 70) : s.aboard ? 110 : 140 };
     s.c = c; s.r = r; s.clock += hours;
+    this.awakeTick(hours);
     if (s.aboard && s.vessel && !s.voyage) { s.vessel.c = c; s.vessel.r = r; s.vessel.anchored = false; }
     if (p.board) { s.aboard = true; this.ui.toast(`Aboard the ${s.vessel.kind.toLowerCase()}.`); }
     this.afterStep();
@@ -310,7 +312,10 @@ AZ.Game = class {
     if (b) return this.town(b);
     if (s.voyage && s.aboard) return this.shipTalk();
     const [dc, dr] = AZ.DIRS[s.dir];
-    for (const [c, r] of [[s.c, s.r], [s.c + dc, s.r + dr]]) {
+    const around = [[s.c, s.r], [s.c + dc, s.r + dr], ...[[0, -1], [1, 0], [0, 1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]].map(([a, b2]) => [s.c + a, s.r + b2])];
+    const reg = this.sim && this.sim.regAt(s.c, s.r, 1.5).find(x => x.a > 200);
+    if (reg) { const P2 = w.P; return this.ui.say(`<b class="side">${U.esc(reg.name)}</b> of ${U.esc(P2.states[reg.state].fullName)} ${AZ.T("data")}: about ${U.num(Math.round(reg.a / 100) * 100)} men (${U.num(reg.a0)} when the war began), ${reg.status === "march" ? `marching on ${U.esc(P2.burgs[reg.target]?.name || "?")}` : reg.status === "retreat" ? "falling back to its base" : "in camp"} ${AZ.T("mixed")}.`); }
+    for (const [c, r] of around) {
       if (!w.inb(c, r)) continue;
       const ms = w.markersAt.get(w.idx(c, r)), us = w.unitsAt.get(w.idx(c, r));
       if (ms) return this.events.marker(ms[0], false);
@@ -340,16 +345,18 @@ AZ.Game = class {
       for (const a of this.pendingActs(b)) opts.push({ label: `★ ${U.esc(a.label)}`, cls: "hook", act: "do:" + a.id });
       for (const [th, st] of this.threadSteps(b)) opts.push({ label: `◆ ${U.esc(th.title)}: ${U.esc(st.text)}`, cls: "side", act: "thread", th });
       opts.push(...this.boardOptions(b));
-      if (b.port) opts.push({ label: "Harbour: book passage, hire a boat, crews", act: "harbour" });
-      opts.push({ label: `Market: food 🟡 ${P.ration(w, b)} a day, water ${s.vessel || s.voyage ? `casks 🟡 ${P.water(w, b)} a day` : "free"}`, act: "market" });
+      if (b.port || (this.sim && this.sim.lines.some(L => L.from === b.i))) opts.push({ label: b.port ? "Harbour and coach office: sailings, coaches, boats for hire" : "Coach office: coaches and carriers' wagons", act: "harbour" });
+      opts.push({ label: `Market: food 🟡 ${P.ration(w, b)} a day; goods to buy and sell`, act: "market" });
       opts.push({ label: `Inn: a room until morning (🟡 ${P.inn(w, b)})${this.shipWarn()}`, act: "inn", disabled: s.purse < P.inn(w, b) });
       opts.push({ label: `Give alms at the ${b.temple ? "temple" : "shrine"} (🟡 ${P.alms(w, b)})`, act: "alms", disabled: s.purse < P.alms(w, b) });
       opts.push({ label: "Notice board: work and errands", act: "board", cls: "side" });
+      // marked places in or beside the town can be visited from the town itself
+      for (const n of w.near(b.t[0], b.t[1], 2)) if (n.kind === "marker") opts.push({ label: `Visit the ${U.esc(n.o.name)} (${U.esc(n.o.type)}, ${n.d < 0.5 ? "in town" : "just outside"})`, cls: "side", act: { go: () => this.events.marker(n.o, false) } });
       for (const p of people) if (p.role !== "Notice board") opts.push({ label: `${p.role}${p.name ? `: ${U.esc(p.name)}` : ""}`, act: p });
-      if (s.cond.fever) opts.push({ label: `Ask the ${b.temple ? "priest" : "shrine-keeper"} to treat your fever (${this.healCost(b) ? "🟡 " + this.healCost(b) : "free"})`, act: "heal", disabled: s.purse < this.healCost(b) });
+      if (s.cond.fever || s.cond.gravely) opts.push({ label: `Ask the ${b.temple ? "priest" : "shrine-keeper"} to treat your fever (${this.healCost(b) ? "🟡 " + this.healCost(b) : "free"})`, act: "heal", disabled: s.purse < this.healCost(b) });
       if (s.cond.damaged && b.port && s.vessel) opts.push({ label: `Have the boat repaired (🟡 ${P.repair(w, b)}, 12 h)`, act: "repair", disabled: s.purse < P.repair(w, b) });
       opts.push({ label: "Leave", act: "leave" });
-      const k = await this.ui.choose(`<b>${U.esc(b.name)}</b> · ${AZ.Clock.fmt(s.clock)} · 🟡 ${U.rn(s.purse, 1)} · food ${s.sup.food} d, water ${s.sup.water} d${this.voyageLine()}`, opts, { cancel: opts.length - 1 });
+      const k = await this.ui.choose(`<b>${U.esc(b.name)}</b> · ${AZ.Clock.fmt(s.clock)} · 🟡 ${U.rn(s.purse, 2)} · food ${s.sup.food} rations${this.voyageLine()}`, opts, { cancel: opts.length - 1 });
       const o = opts[k];
       if (o.act === "leave") break;
       if (typeof o.act === "string" && o.act.startsWith("do:")) o.act = { "do:alms": "alms", "do:rest": "inn", "do:book": "harbour" }[o.act] || o.act;
@@ -361,6 +368,7 @@ AZ.Game = class {
       if (o.act === "inn") {
         const t0 = s.clock;
         const out = this.events.fx({ coin: -P.inn(w, b), time: Math.max(1, AZ.Clock.nextDawn(s.clock, this.lat()) - s.clock), cure: ["hurt"] });
+        this.slept();
         const act = this.doAct("rest", b);
         await this.ui.say(`You sleep in ${U.esc(b.name)}. ${AZ.Clock.span(s.clock - t0)} pass ${T("mixed")}.${out}${act ? ` <span class="hook">★ ${U.esc(act.label)}</span>` : ""}`); continue;
       }
@@ -369,7 +377,7 @@ AZ.Game = class {
         const act = this.doAct("alms", b);
         await this.ui.say(`You give alms at the ${b.temple ? "temple" : "shrine"} of the ${U.esc(w.P.religions[w.C.religion[b.cell]].name)}.${out}${act ? ` <span class="hook">★ ${U.esc(act.label)}</span>` : ""}`); continue;
       }
-      if (o.act === "heal") { const out = this.events.fx({ coin: -this.healCost(b), time: 6, cure: ["fever"] }, `Treated for fever in ${U.esc(b.name)}.`); await this.ui.say(`Bitter tea, cool cloths and a long prayer. By evening the fever breaks.${out}`); continue; }
+      if (o.act === "heal") { const out = this.events.fx({ coin: -this.healCost(b), time: 6, cure: ["fever", "gravely"] }, `Treated for fever in ${U.esc(b.name)}.`); await this.ui.say(`Bitter tea, cool cloths and a long prayer. By evening the fever breaks.${out}`); continue; }
       if (o.act === "repair") { const out = this.events.fx({ coin: -P.repair(w, b), time: 12, cure: ["damaged"] }, `Repairs in ${U.esc(b.name)}.`); await this.ui.say(`Shipwrights work through the day.${out}`); continue; }
       if (o.act && o.act.go) { await o.act.go(); if (s.aboard) break; continue; }
       const p = o.act;
@@ -419,7 +427,7 @@ AZ.Game = class {
     if (!this.anim && !this.ui.busy()) {
       this.tick();
       if (this.ui.busy()) { /* a crew call or a departure opened a window */ }
-      else if (s.voyage && s.aboard && s.voyage.state === "sea") this.voyageStep();
+      else if (s.voyage && s.aboard && s.voyage.state === "sea" && !s.voyPause) this.voyageStep();
       else if (s.auto) { const d = this.autoDir(); if (d) this.tryMove(d); else { this.setAuto(false); s.autoPath = null; } }
       else if (this.held.length) this.tryMove(this.held[this.held.length - 1]);
     }
@@ -427,9 +435,10 @@ AZ.Game = class {
     if (this.anim) { const t = Math.min(1, (now - this.anim.t0) / this.anim.dur); cx = this.anim.from[0] + (this.anim.to[0] - this.anim.from[0]) * t; cy = this.anim.from[1] + (this.anim.to[1] - this.anim.from[1]) * t; }
     const frame = this.anim ? 1 + (Math.floor(now / 120) % 2) : 0;
     const sprites = [];
+    if (this.sim) for (const r of this.sim.regs) if (r.a > 200 && Math.abs(r.t[0] - s.c) < 45 && Math.abs(r.t[1] - s.r) < 28) sprites.push({ img: this.ren.art.unit({ state: r.state, naval: false }), c: r.t[0], r: r.t[1] });
     if (s.vessel && !(s.aboard && !s.voyage)) sprites.push({ img: this.ren.art.vessel(s.vessel.cls === "ship" ? "ship" : "boat", "left"), c: s.vessel.c, r: s.vessel.r });
     if (s.voyage && !s.aboard && s.voyage.state === "port" && s.voyage.at) sprites.push({ img: this.ren.art.vessel("ship", "left"), c: s.voyage.at[0], r: s.voyage.at[1] });
-    const me = s.aboard ? this.ren.art.vessel(s.voyage ? "ship" : s.vessel?.cls === "ship" ? "ship" : "boat", s.dir === "left" ? "left" : "right")
+    const me = s.aboard && s.voyage && s.voyage.mode === "land" ? this.ren.art.vessel("wagon", s.dir === "left" ? "left" : "right") : s.aboard ? this.ren.art.vessel(s.voyage ? "ship" : s.vessel?.cls === "ship" ? "ship" : "boat", s.dir === "left" ? "left" : "right")
       : this.ren.art.walker(s.dir, frame, this.tv.pal);
     sprites.push({ img: me, c: cx, r: cy });
     const cp = this.cpNext(), leg = cp && cp.legIn;

@@ -174,8 +174,8 @@ AZ.Renderer = class {
         x.drawImage(s, X + ((16 - s.width) >> 1), Y + 16 - s.height);
         continue;
       }
-      const us = w.unitsAt.get(id);
-      if (us) { const s = art.unit(us[0]); x.drawImage(s, X, Y + 16 - s.height); continue; }
+      const us = (w.unitsAt.get(id) || []).filter(u => !(AZ.sim && AZ.sim.regs.some(r => r.id === `${u.state}:${u.i}`)));
+      if (us.length) { const s = art.unit(us[0]); x.drawImage(s, X, Y + 16 - s.height); continue; }
       if (!L) continue;
       const B = w.bits(c, r);
       if (B.road || B.trail || B.river) continue;

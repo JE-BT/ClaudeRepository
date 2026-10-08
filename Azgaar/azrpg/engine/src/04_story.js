@@ -390,7 +390,8 @@ AZ.Know = class {
     const w = this.w, P = this.P, U = AZ.U, T = AZ.T, tv = this.tv;
     const cell = b.cell, s = this.st(b.state), cu = P.cultures[b.culture], re = P.religions[w.C.religion[cell]];
     const kin = b.culture === tv.culture, faith = w.C.religion[cell] === tv.faith;
-    let rel = b.state ? this.rel(tv.homeState, b.state) : "Unknown";
+    const occ = AZ.sim && AZ.sim.occupied[b.i] != null && AZ.sim.occupied[b.i] !== b.state ? AZ.sim.occupied[b.i] : null;
+    let rel = (occ ?? b.state) ? (AZ.sim ? AZ.sim.rel(tv.homeState, occ ?? b.state) : this.rel(tv.homeState, b.state)) : "Unknown";
     const sst = (g.s?.stand?.s || {})[b.state] || 0;
     if (sst <= -2 && rel !== "Enemy") rel = "Suspicion";
     if (sst >= 2 && (rel === "Suspicion" || rel === "Rival")) rel = "Neutral";
@@ -458,7 +459,8 @@ AZ.Know = class {
     people.push({ role: b.walls || b.citadel || b.capital ? "Captain of the watch" : "Elder", name: nm("watch"), talk: () => {
       const L = [];
       if (b.state) {
-        L.push(`${nm("watch")} speaks for ${s.fullName}, a ${s.form.toLowerCase()} ${T("data")}. Your people stand to theirs as: <b>${rel}</b> ${T("data")}.`);
+        if (occ) L.push(`<b class="hook">${b.name} is held by ${this.st(occ).fullName}</b> ${T("mixed")}; their officer keeps the gate.`);
+        L.push(`${nm("watch")} speaks for ${(occ ? this.st(occ) : s).fullName}, a ${(occ ? this.st(occ) : s).form.toLowerCase()} ${T("data")}. Your people stand to theirs as: <b>${rel}</b> ${T(occ || (AZ.sim && AZ.sim.atWar(tv.homeState, b.state)) ? "mixed" : "data")}.`);
         if (rel === "Enemy") L.push(`You are held and questioned for six hours before they let you go ${T("mixed")}.`);
         else if (rel === "Suspicion" || rel === "Rival") L.push(`They ask your business twice and write your name down ${T("mixed")}.`);
         const wars = (s.campaigns || []).filter(cp => cp.end == null);

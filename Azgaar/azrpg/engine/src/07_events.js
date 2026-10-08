@@ -129,7 +129,7 @@ AZ.planCost = function (w, jr) {
     const from = w.P.burgs[w.C.burg[seg.from]] || jr.origin.burg, days = (seg.planEnd - seg.planStart) / 24;
     if (!seg.moving) cost += Math.ceil(days) * (AZ.Prices.inn(w, from) + AZ.Prices.ration(w, from));
     else if (AZ.vesselClass(seg.transport) === "ship") cost += AZ.Prices.fare(w, from, seg.miles) + days * AZ.Prices.ration(w, from);
-    else cost += days * (3 * (AZ.Prices.wage(w, from) + AZ.Prices.ration(w, from)) + AZ.Prices.hire(w, from) + AZ.Prices.ration(w, from) + 4 * AZ.Prices.water(w, from));
+    else cost += days * (3 * (AZ.Prices.wage(w, from) + AZ.Prices.ration(w, from)) + AZ.Prices.hire(w, from) + AZ.Prices.ration(w, from));
   }
   return cost * 1.15;
 };
@@ -176,7 +176,7 @@ AZ.Events = class {
     const g = this.g, s = this.s, U = AZ.U, bits = [];
     if (!e) return "";
     if (e.time) { s.clock += e.time; bits.push(`${AZ.Clock.span(e.time)} pass`); }
-    if (e.coin) { const before = s.purse; s.purse = Math.max(0, s.purse + e.coin); bits.push(`🟡 ${s.purse - before >= 0 ? "+" : ""}${s.purse - before}`); }
+    if (e.coin) { const before = s.purse; s.purse = U.rn(Math.max(0, s.purse + e.coin), 2); const d = U.rn(s.purse - before, 2); bits.push(`🟡 ${d >= 0 ? "+" : ""}${d}`); }
     for (const [k, id, n] of e.stand || []) {
       const tab = k === "f" ? s.stand.f : s.stand.s;
       tab[id] = (tab[id] || 0) + n;
@@ -185,7 +185,7 @@ AZ.Events = class {
     }
     if (e.cond) { s.cond[e.cond] = true; bits.push(AZ.COND[e.cond].on); }
     for (const c of e.cure || []) if (s.cond[c]) { delete s.cond[c]; bits.push(AZ.COND[c].off); }
-    if (e.flag) { s.flags[e.flag] = true; }
+    if (e.flag) { s.flags[e.flag] = true; if (e.flag === "boarded" && s.goods && Object.keys(s.goods).length) { s.goods = {}; bits.push("your goods are taken"); } }
     if (e.unflag) delete s.flags[e.unflag];
     if (e.reveal) { const n = g.revealLeads(e.reveal); bits.push(`${n} new places entered in your journal`); }
     if (e.thread) g.startThread(e.thread);
@@ -252,6 +252,9 @@ AZ.COND = {
   fever: { on: "you are fevered", off: "the fever breaks", slow: 1.3, label: "fevered" },
   hurt: { on: "you are hurt", off: "you are mended", slow: 1.2, label: "hurt" },
   damaged: { on: "the vessel is damaged", off: "the vessel is repaired", slow: 1.25, label: "vessel damaged" },
+  gravely: { on: "you are gravely ill", off: "the illness passes", slow: 1.6, label: "gravely ill" },
+  tired: { on: "you are tired", off: "you are rested", slow: 1.15, label: "tired" },
+  exhausted: { on: "you are exhausted", off: "you are rested", slow: 1.4, label: "exhausted" },
 };
 
 // marker scenes (type -> {auto, radius, sea, land, run})
@@ -298,8 +301,8 @@ AZ.MARKERS = (() => {
         { label: "Just a meal (🟡 1)", disabled: s.purse < 1, fx: { coin: -1, time: 1 }, text: "The food is as good as they say." },
         { label: "Move on", fx: null, text: "" }], `m${m.i}`);
     } },
-    "hot-springs": { run: async (ev, m, head) => ev.scene(head, esc(m.note), [{ label: "Bathe (3 h)", fx: { time: 3, cure: ["fever", "hurt"] }, text: "The heat goes into your bones and takes the ache with it." }, { label: "Move on", fx: null, text: "" }], `m${m.i}`) },
-    "water-sources": { run: async (ev, m, head) => ev.scene(head, esc(m.note), [{ label: "Drink, and fill a flask (2 h)", fx: { time: 2, cure: ["fever"], flag: "flask" }, text: "Cold, clean water. You fill a flask for the road; it may help later." }, { label: "Move on", fx: null, text: "" }], `m${m.i}`) },
+    "hot-springs": { run: async (ev, m, head) => ev.scene(head, esc(m.note), [{ label: "Bathe (3 h)", fx: { time: 3, cure: ["fever", "gravely", "hurt"] }, text: "The heat goes into your bones and takes the ache with it." }, { label: "Move on", fx: null, text: "" }], `m${m.i}`) },
+    "water-sources": { run: async (ev, m, head) => ev.scene(head, esc(m.note), [{ label: "Drink, and fill a flask (2 h)", fx: { time: 2, cure: ["fever", "gravely"], flag: "flask" }, text: "Cold, clean water. You fill a flask for the road; it may help later." }, { label: "Move on", fx: null, text: "" }], `m${m.i}`) },
     "sacred-forests": { run: async (ev, m, head) => { const r = ev.relByName(m.note); return ev.scene(head, esc(m.note), [{ label: "Leave an offering (🟡 2)", disabled: ev.s.purse < 2, fx: r ? { coin: -2, time: 1, stand: [["f", r.i, 1]] } : { coin: -2 }, text: `You leave something at the oldest tree${r ? ` for the ${esc(r.name)}` : ""}.` }, { label: "Pass through quietly", fx: { time: 1 }, text: "" }], `m${m.i}`); } },
     statues: { run: async (ev, m, head) => ev.scene(head, esc(m.note.split("\n")[0]), [{ label: "Copy the inscription (2 h)", fx: { time: 2, flag: "inscription" }, text: "You copy every mark as well as you can. Someone, somewhere, may read it." }, { label: "Move on", fx: null, text: "" }], `m${m.i}`) },
     libraries: { run: async (ev, m, head) => {

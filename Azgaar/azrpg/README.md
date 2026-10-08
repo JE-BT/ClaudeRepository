@@ -88,6 +88,29 @@ navigable water only (rivers by discharge: boats 40 m³/s, ships 400). Prices co
 market; supplies run down daily; fishing and foraging (R) stretch them. The journal explains each
 leg from the data and lists errands, leads and the record against par.
 
+## The moving world (alpha 2)
+
+One simulation, seeded from the world seed and advanced day by day with the game clock
+(`engine/src/14_sim.js`, wired in `15_alpha2.js`). The map is the starting point and the momentum:
+
+- **Markets**: each market's stock of each good moves with daily supply (burg production and rural
+  output) against demand; food swings with the season at the market's latitude (harvest in autumn,
+  the hungry gap in spring); disease, dearth and occupation cut supply; closed lines stop the trade
+  flows (the map's deals). Prices follow stock. Towns spare only a share of their food for
+  travellers, so what you can buy depends on the town, the season and what you bought before.
+- **Lines**: fixed timetables you can learn. Trade runs between market centres (from the deals),
+  coastal packets between neighbouring ports, the plan's own packets, and coaches and carriers'
+  wagons between towns on the same land. A line stops running for war, bad relations (by road),
+  occupation, quarantine or disaster at either end, and starts again when that ends.
+- **Hazards**: disease spreads along the lines and burns out; eruptions, floods, faults and
+  tsunamis end; empty granaries bring dearth, which eases when the stock recovers.
+- **War**: the wars already under way move: regiments march on the enemy's nearest town, defenders
+  move to meet them, battles are fought by strength, towns fall after a siege (a week, three for
+  walls, a month for a capital with a citadel), peace comes with losses, time or conquest.
+- **News**: everything that happens is news, heard in towns once it has had time to travel
+  (60 miles a day). The journal keeps news, timetables and prices with the date you learned them;
+  the world map draws the lines you know. Errands ask you to scout armies and report to the watch.
+
 ## The journey
 
 The map's journey is the plan and is never changed. The plan clock starts on Day 1 at 06:00 (spring

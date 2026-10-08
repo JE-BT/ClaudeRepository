@@ -64,9 +64,10 @@ Object.assign(AZ.Game.prototype, {
     const y = kind === "fish" ? this.fishYield(s.c, s.r) : this.forageYield(s.c, s.r);
     if (y.why) return this.ui.say(`You cannot: ${y.why}.`);
     s.clock += 6;
+    this.awakeTick(6);
     s.sup.food += y.n;
     if (y.n > 0) { s.hunger = 0; delete s.cond.hungry; delete s.cond.starving; }
-    this.log(`${kind === "fish" ? "Fished" : "Foraged"} six hours: ${y.n} rations.`);
+    this.log(`${kind === "fish" ? "Fished" : "Foraged"} six hours: ${y.n} ration${y.n === 1 ? "" : "s"}.`);
     this.dirty = true;
     return this.ui.say(`${kind === "fish" ? `Six hours with lines and nets${y.fishers > 1 ? `, ${y.fishers} of you` : ""}` : "Six hours of gathering, snaring and digging"}: <b>${y.n} ration${y.n === 1 ? "" : "s"}</b>. ${U.cap(y.where)} ${AZ.T("mixed")}.`);
   },
@@ -116,7 +117,7 @@ Object.assign(AZ.Game.prototype, {
 AZ.Game.prototype.rest = async function () {
   const s = this.s, U = AZ.U, w = this.w;
   if (s.voyage && s.aboard) return this.shipTalk();
-  const sick = s.cond.fever || s.cond.hurt;
+  const sick = s.cond.fever || s.cond.gravely || s.cond.hurt;
   const atSea = s.aboard && !w.isLand(s.c, s.r);
   const fy = this.fishYield(s.c, s.r), fo = !s.aboard ? this.forageYield(s.c, s.r) : { why: "aboard" };
   const opts = [
@@ -130,13 +131,14 @@ AZ.Game.prototype.rest = async function () {
   if (o.id === "no") return;
   if (o.id === "fish" || o.id === "forage") return this.provide(o.id);
   const t0 = s.clock;
-  if (o.id === "two") { this.events.fx({ time: 48, cure: ["fever", "hurt"] }, "Rested two days."); this.ui.toast("Two days' rest. You feel yourself again."); return; }
+  if (o.id === "two") { this.events.fx({ time: 48, cure: ["fever", "gravely", "hurt"] }, "Rested two days."); this.slept(); this.ui.toast("Two days' rest. You feel yourself again."); return; }
   if (o.id === "dawn") {
     s.clock = AZ.Clock.nextDawn(s.clock, this.lat());
+    this.slept();
     if (s.vessel) { s.vessel.anchored = true; s.vessel.morale = Math.min(100, (s.vessel.morale || 70) + 4); s.vessel.nightKey = Math.floor((s.clock + 12) / 24); }
     const act = this.doAct("anchor");
     if (act) this.ui.toast(`<span class="hook">★ ${U.esc(act.label)}</span>`, "gold");
-  } else s.clock += o.id;
+  } else { s.clock += o.id; if (o.id >= 6) this.slept(); }
   this.ui.toast(`${AZ.Clock.span(s.clock - t0)} pass. ${AZ.Clock.fmt(s.clock)}.`);
   this.dirty = true;
 };

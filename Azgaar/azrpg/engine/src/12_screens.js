@@ -12,7 +12,7 @@ Object.assign(AZ.Game.prototype, {
     const wx = this.weather();
     const conds = Object.keys(s.cond).map(k => AZ.COND[k]?.label || k).join(", ");
     el.loc.innerHTML = `<div class="big">${U.esc(place)}</div><div>${U.esc(terr)} · ${w.temp(today)} · ${wx.label}</div><div>${AZ.Clock.fmt(s.clock)} · ${light.phase} · ${season}</div>` +
-      `<div class="dim">🟡 ${U.rn(s.purse, 1)} · food ${s.sup.food} · water ${s.sup.water}${conds ? ` · <span class="late">${conds}</span>` : ""}</div>`;
+      `<div class="dim">🟡 ${U.rn(s.purse, 2)} · food ${s.sup.food}${this.goodsCount() ? ` · goods ${this.goodsCount()}` : ""} · awake ${Math.round(s.awake || 0)} h${conds ? ` · <span class="late">${conds}</span>` : ""}</div>`;
     let trip = "";
     const here = this.cpHere(), next = this.cpNext();
     if (this.jr) {
@@ -27,8 +27,8 @@ Object.assign(AZ.Game.prototype, {
       } else if (s.done) trip += `<div class="hook">${U.esc(this.jr.J.name)}: complete</div>`;
     }
     const v = s.voyage, bo = s.vessel;
-    if (v) trip += `<div>${s.aboard ? "Aboard" : "Booked on"} ${U.esc(v.ship)} (${v.role}) → ${U.esc(v.stops[v.leg]?.name || "")}${v.state === "port" ? ` · sails ${AZ.Clock.fmt(v.departAt)}` : ""}${this.fast ? " · ⏩" : ""}</div>`;
-    else if (bo) trip += `<div>${s.aboard ? "Aboard" : "Ashore; your boat waits"}: ${U.esc(bo.kind)} (${bo.mode})${bo.crew ? ` · crew ${bo.crew}, morale ${Math.round(bo.morale)}` : " · no crew"}${s.auto ? ' · <b class="hook">autopilot</b>' : ""}</div>`;
+    if (v) trip += `<div>${s.aboard ? "Aboard" : "Booked on"} ${U.esc(v.ship)} (${v.role}) → ${U.esc(v.stops[v.leg]?.name || "")}${v.state === "port" ? ` · sails ${AZ.Clock.fmt(v.departAt)}` : ""}${s.voyPause ? " · ⏸ holding (P)" : this.fast ? " · ⏩ (F)" : ""}</div>`;
+    else if (bo) trip += `<div>${s.aboard ? "Aboard" : "Ashore; your boat waits"}: ${U.esc(bo.kind)} (${bo.mode})${bo.crew ? ` · crew ${bo.crew}, morale ${Math.round(bo.morale)}${bo.strikes ? `, strikes ${bo.strikes}/3` : ""}` : " · no crew"}${s.auto ? ' · <b class="hook">autopilot</b>' : ""}</div>`;
     else if (s.auto) trip += `<div class="dim">walking to the waypoint · F to stop</div>`;
     el.trip.innerHTML = trip + this.threadLine();
     const lens = AZ.LENSES[this.lensIdx];
@@ -60,11 +60,12 @@ Object.assign(AZ.Game.prototype, {
     const v = s.vessel;
     this.ui.modal(`<div class="sheet"><h2>Journal</h2>
       <h3>The traveller ${AZ.T("new")}</h3><p><b>${U.esc(tv.name)}</b>, ${tv.age}, ${U.esc(tv.trade)} (${U.esc(tv.kindLabel || "")}). ${U.cap(U.esc(tv.why))}. ${w.P.cultures[tv.culture].name}; faith: ${w.P.religions[tv.faith]?.name}. Carries ${U.esc(tv.token)}.</p>
-      <h3>Purse, stores, condition, standing</h3><p>🟡 ${U.rn(s.purse, 1)} · food ${s.sup.food} rations · water ${s.sup.water} · ${Object.keys(s.cond).map(k => AZ.COND[k]?.label || k).join(", ") || "well"}${v ? ` · ${U.esc(v.kind)} (${v.mode}), crew ${v.crew}, morale ${Math.round(v.morale)}` : ""} · ${[...Object.entries(s.stand.f).map(([i, n]) => `${U.esc(w.P.religions[i]?.name)} ${n > 0 ? "+" : ""}${n}`), ...Object.entries(s.stand.s).map(([i, n]) => `${U.esc(w.P.states[i]?.name)} ${n > 0 ? "+" : ""}${n}`)].join(" · ") || "no standing earned or lost yet"} ${AZ.T("mixed")}</p>
+      <h3>Purse, stores, condition, standing</h3><p>🟡 ${U.rn(s.purse, 2)} · food ${s.sup.food} rations · goods: ${Object.entries(s.goods || {}).filter(([, n]) => n > 0).map(([g, n]) => `${n} ${U.esc(this.know.good(g).toLowerCase())}`).join(", ") || "none"} · ${Object.keys(s.cond).map(k => AZ.COND[k]?.label || k).join(", ") || "well"}${v ? ` · ${U.esc(v.kind)} (${v.mode}), crew ${v.crew}, morale ${Math.round(v.morale)}` : ""} · ${[...Object.entries(s.stand.f).map(([i, n]) => `${U.esc(w.P.religions[i]?.name)} ${n > 0 ? "+" : ""}${n}`), ...Object.entries(s.stand.s).map(([i, n]) => `${U.esc(w.P.states[i]?.name)} ${n > 0 ? "+" : ""}${n}`)].join(" · ") || "no standing earned or lost yet"} ${AZ.T("mixed")}</p>
       ${jr ? `<h3>The route: checkpoints, par and the reasons ${AZ.T("mixed")}</h3><p class="dim">The map's journey is the plan: par times from dawn on Day 1 with each mode's speed and hours a day. It is not a rule: take another ship, hire a boat, walk, skip a checkpoint. Reaching ${U.esc(jr.dest.name)} ends the pilgrimage.</p>
       <table class="plan"><tr><th>#</th><th>Checkpoint and leg</th><th>Par</th><th>Record</th><th>Against par</th><th>The plan's tasks</th></tr>${cpRows}</table>` : ""}
       <h3>Side stories</h3>${s.threads.length ? s.threads.map(th => `<div class="${th.done ? "dim" : "side"}">◆ ${U.esc(th.title)}: ${th.done ? th.outcome : U.esc(th.steps[th.phase].text)}${th.deadline && !th.done ? ` (by ${AZ.Clock.fmt(th.deadline)})` : ""}</div>`).join("") : '<p class="dim">None yet. Look at notice boards in towns.</p>'}
       <h3>Leads (click to set a waypoint)</h3><div class="leads">${leads.map(l => `<div class="lead side" data-c="${l.t[0]}" data-r="${l.t[1]}">${U.esc(l.name)} (${U.esc(l.type || "")}, ${l.from}) · ${this.know.dirDist(s.c, s.r, l.t).txt}</div>`).join("") || '<p class="dim">Nothing yet: rumours, sightings and libraries add leads.</p>'}</div>
+      ${this.newsHtml ? this.newsHtml() : ""}${this.timetableHtml ? this.timetableHtml() : ""}
       <h3>Seen so far</h3><p>States ${cnt("st", "states")} · cultures ${cnt("cu", "cultures")} · faiths ${cnt("re", "religions")} · biomes ${s.seen.bi.length} · towns ${s.seen.b.length} · marked places ${s.seen.m.length} of ${w.P.markers.length} · forces ${s.seen.u.length} · zones ${s.seen.z.length} of ${w.P.zones.length}</p>
       <h3>Log</h3><div class="log">${s.log.slice().reverse().map(e => `<div class="${e.cls}"><span class="dim">${AZ.Clock.fmt(e.t)}</span> ${e.html}</div>`).join("") || "<div class='dim'>Nothing yet.</div>"}</div>
       <p class="dim">J or Esc to close</p></div>`, e => { if (["Escape", "j", "J", "x", "X"].includes(e.key)) this.ui.closeModal(); });
@@ -74,13 +75,14 @@ Object.assign(AZ.Game.prototype, {
     this.ui.modal(`<div class="sheet"><h2>How to play</h2><table class="keys">
       <tr><th>Arrows / WASD</th><td>Walk, or steer your own or hired boat</td></tr>
       <tr><th>Space / Enter</th><td>Go into a town (also from its harbour) · read a marker · hail a unit · go ashore or board · talk aboard a ship · look around</td></tr>
-      <tr><th>F</th><td>Follow a path: to your waypoint if you set one (map click, or a lead in the journal), otherwise along the plan's course to the next checkpoint (boats); on foot, to the waypoint. As a passenger, F lets the days pass faster. Any arrow takes over.</td></tr>
+      <tr><th>F</th><td>Follow a path: to your waypoint if you set one (map click, or a lead in the journal), otherwise along the plan's course to the next checkpoint (boats); on foot, to the waypoint. As a passenger, F switches between normal pace and fast days, P holds the ship still so you can talk, rest or trade time your own way (Space or R aboard). Any arrow takes over your own boat.</td></tr>
       <tr><th>R</th><td>Anchor, camp or wait (dawn, 1, 3 or 6 hours, or two days to recover); fish where there is water, forage and hunt on land (six hours each)</td></tr>
       <tr><th>I · L · M · J</th><td>Inspector · lens · world map (click for a waypoint) · journal (route, reasons, side stories, leads)</td></tr>
       <tr><th>+ / − · Esc · H</th><td>Zoom · menu · help</td></tr></table>
       <h3>The plan is par, not a rule</h3><p>The map's journey gives checkpoints, par times and tasks (★, gold). Do the tasks yourself: book passage, give alms, take a room, anchor for the night. Take another ship, hire a boat, walk, or skip a checkpoint; reaching the last one ends the pilgrimage.</p>
       <h3>Ships and boats</h3><p>A <b>booked ship</b> has a captain with his own itinerary and a sailing time; it does not wait. Bring your own food. If you work the passage (some trades can), you pay no fare and are paid at the end. A <b>hired boat</b> is yours to steer: you pay wages and hire each dawn and feed the crew. They call for anchor at dusk and shelter in storms; overrule them and morale falls; low morale ends in mutiny.</p>
-      <h3>Money and stores</h3><p>Prices come from each town's market (cheapest food, the state's sales tax). Everyone eats once a day; water runs out in three days on foot unless you pass a river, lake or town. Hunger and thirst slow you, then you collapse. Fishing is best in coastal shallows and on the map's fish and whale grounds; a boat's crew fishes with you. Foraging depends on the biome, the land's own food output, the season and the weather.</p>
+      <h3>Money and stores</h3><p>Prices come from each town's market (cheapest food, the state's sales tax). Everyone eats once a day; hunger slows you, then you collapse. Markets also trade goods: buy what a town makes, sell where another market pays more (prices move as you trade). You need sleep: after 18 hours awake you are tired, after 30 exhausted, after 44 you fall asleep where you stand. Fever, untreated, turns grave on the third day and takes you down on the sixth. Fishing is best in coastal shallows and on the map's fish and whale grounds; a boat's crew fishes with you. Foraging depends on the biome, the land's own food output, the season and the weather.</p>
+      <h3>A moving world</h3><p>Markets, lines, zones and armies change day by day (seeded from the world seed). Food for sale depends on the market's stock and the season. Harbours and coach offices post fixed timetables; lines stop in war, quarantine and disaster. News travels about 60 miles a day and is heard in towns: the journal keeps what you have heard and the timetables you have read.</p>
       <h3>Side stories</h3><p>Notice boards post errands from the map: trade, relief for stricken towns, letters along alliances and enmities, dispatches for armies at war, strange places, offerings for faith seats. Rumours and sightings become leads (teal) in the journal.</p>
       <p>Tags: ${AZ.T("data")} read from the map files · ${AZ.T("mixed")} a stated rule applied to data · ${AZ.T("new")} invented for this playthrough. One tile is ${AZ.U.num(this.w.miles, 2)} miles.</p>
       <p class="dim">Esc to close</p></div>`);
@@ -108,7 +110,7 @@ Object.assign(AZ.Game.prototype, {
   worldMap() {
     const w = this.w, s = this.s, U = AZ.U, ui = this.ui;
     const maxW = Math.min(window.innerWidth - 40, 1600), sc = Math.min(maxW / w.cols, (window.innerHeight - 140) / w.rows);
-    ui.modal(`<div class="mapwrap"><div class="maphead"><b>World map</b> · ${U.esc(w.P.world.name)} · lens: <span id="mlens">${AZ.LENSES[this.lensIdx].name}</span> · click: set a teal waypoint · L: lens · M/Esc: close</div><canvas id="wmap" width="${Math.round(w.cols * sc)}" height="${Math.round(w.rows * sc)}"></canvas><div id="minfo" class="dim">Brighter ground is ground you have seen.</div></div>`);
+    ui.modal(`<div class="mapwrap"><div class="maphead"><b>World map</b> · ${U.esc(w.P.world.name)} · lens: <span id="mlens">${AZ.LENSES[this.lensIdx].name}</span> · click: set a teal waypoint · L: lens · M/Esc: close<br><span class="dim">Lines you know: blue by sea, tan by road, red dashed if last heard not running</span></div><canvas id="wmap" width="${Math.round(w.cols * sc)}" height="${Math.round(w.rows * sc)}"></canvas><div id="minfo" class="dim">Brighter ground is ground you have seen.</div></div>`);
     const cv = document.getElementById("wmap"), ctx = cv.getContext("2d");
     const draw = () => {
       ctx.imageSmoothingEnabled = false;
@@ -127,6 +129,14 @@ Object.assign(AZ.Game.prototype, {
         ctx.beginPath(); sg.chain.forEach(([c, r], i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, (c + 0.5) * sc, (r + 0.5) * sc)); ctx.stroke();
       }
       for (const b of w.P.burgs) if (b) { ctx.fillStyle = b.capital ? "#fff" : "rgba(255,255,255,0.6)"; const z = b.capital ? 3 : 2; ctx.fillRect(b.t[0] * sc - z / 2, b.t[1] * sc - z / 2, z, z); }
+      // the passenger network as you know it: lines you have read on timetables or heard of
+      if (this.sim) for (const [id, seen] of Object.entries(s.lineSeen || {})) {
+        const L = this.sim.lines[+id]; if (!L) continue;
+        const A = w.P.burgs[L.from], B = w.P.burgs[L.to];
+        ctx.strokeStyle = !seen.ok ? "rgba(255,110,90,0.8)" : L.mode === "sea" ? "rgba(140,220,255,0.75)" : "rgba(230,190,120,0.85)";
+        ctx.setLineDash(seen.ok ? [] : [3, 3]); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo((A.t[0] + 0.5) * sc, (A.t[1] + 0.5) * sc); ctx.lineTo((B.t[0] + 0.5) * sc, (B.t[1] + 0.5) * sc); ctx.stroke(); ctx.setLineDash([]);
+      }
       if (this.jr) for (const sg of this.jr.segs) { ctx.fillStyle = "#f5c542"; ctx.fillRect(sg.place.tile[0] * sc - 3, sg.place.tile[1] * sc - 3, 6, 6); }
       for (const l of s.leads) if (l && l.t) { ctx.fillStyle = "#4fd1c5"; ctx.fillRect(l.t[0] * sc - 2, l.t[1] * sc - 2, 4, 4); }
       if (s.waypoint) { ctx.strokeStyle = "#4fd1c5"; ctx.lineWidth = 2; ctx.strokeRect(s.waypoint[0] * sc - 5, s.waypoint[1] * sc - 5, 10, 10); }
@@ -232,6 +242,8 @@ AZ.boot = async function (packText) {
       const k = e.key;
       if (DK[k]) { e.preventDefault(); if (g.s.auto) g.setAuto(false); if (!g.held.includes(DK[k])) g.held.push(DK[k]); return; }
       if (k === " " || k === "Enter" || k === "z" || k === "Z") { e.preventDefault(); g.interact(); }
+      else if ((k === "f" || k === "F") && g.s.voyage && g.s.aboard) { if (g.s.voyPause) { g.s.voyPause = false; g.fast = false; } else g.fast = !g.fast; g.ui.toast(g.fast ? "Days pass quickly (F for normal pace, P to hold)." : "Normal pace (F to speed up, P to hold)."); g.dirty = true; }
+      else if ((k === "p" || k === "P") && g.s.voyage && g.s.aboard) { g.s.voyPause = !g.s.voyPause; g.ui.toast(g.s.voyPause ? "Holding: time passes only when you act (Space for the ship, R to rest)." : "Sailing on."); g.dirty = true; }
       else if (k === "f" || k === "F") { if (e.shiftKey) { g.fast = true; g.setAuto(true); } else { g.fast = false; g.setAuto(!g.s.auto); } }
       else if (k === "r" || k === "R") g.rest();
       else if (k === "i" || k === "I") g.toggleInspect();
