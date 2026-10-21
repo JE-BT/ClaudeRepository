@@ -958,7 +958,7 @@ class World:
         """Azgaar's getHeight in metres: (h - 18) ** exponent on land, a shallow ramp at sea."""
         if h >= 20:
             return (h - 18) ** self.h_exp
-        if h > 0:
+        if h >= 1:
             return (h - 20) / h * 50
         return -990.0
 
