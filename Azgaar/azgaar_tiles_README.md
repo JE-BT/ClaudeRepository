@@ -29,6 +29,9 @@ One Python file, standard library only (Python 3.9 or newer).
 
 ## Files a world needs
 
+Version 1.1 reads marker and regiment icons from Azgaar 1.154 and newer, which stores an emoji as its code
+points (`glyph-1f333` for 🌳); every output now shows the emoji itself, and the `units` layer has an `icon` column.
+
 - the `.map` save (Azgaar 1.153 or newer)
 - the Cells GeoJSON export (Azgaar: Menu > Export > GeoJSON > Cells). The `.map` keeps no cell
   outlines, so every areal figure depends on it. It is matched to the map by content, so its date
@@ -98,7 +101,7 @@ whole map.
 | `borders` | multiline | state borders, with each side's stance toward the other and their campaigns |
 | `rivers`, `routes` | line | drawn or cell courses, discharge, lengths, the burgs along each route |
 | `journeys`, `stops` | line, point | each segment and stay, with transport, speed and the plan's clock (Azgaar's rule) |
-| `burgs`, `markers`, `units` | point | names, grid and point references, and their main attributes |
+| `burgs`, `markers`, `units` | point | names, grid and point references, and their main attributes (markers and regiments with their emoji icon) |
 | `centres` | point | the interpolated surfaces at every tile centre (see below) |
 | `deals`, `traffic`, `markets` | line, line, point | trade as recorded, its load on the route network, and the markets (see below) |
 

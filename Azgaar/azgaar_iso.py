@@ -37,7 +37,7 @@ from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict
 from pathlib import Path
 
-TOOL_VERSION = "1.0"
+TOOL_VERSION = "1.1"
 LAYERS = ["tiles", "centres", "blocks", "squares", "land", "zones", "borders", "rivers", "routes", "journeys", "stops",
           "burgs", "markers", "units", "markets", "deals", "traffic"]
 LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
@@ -47,6 +47,452 @@ ROUTE_COST = {"roads": 1.0, "trails": 1.3, "searoutes": 0.5}   # as azgaar_tiles
 OFF_ROUTE_COST = 2.0                                            # as SURFACE_RULES["off_route_cost"]
 NAN = float("nan")
 U16_NULL = 65535
+
+
+# ====================================================================== icons and pixel art
+_GLYPH = re.compile(r"(?:glyph|emoji)[-_]((?:[0-9a-f]{2,6})(?:[-_][0-9a-f]{2,6})*)", re.I)
+
+
+def icon_text(icon):
+    """A marker's or regiment's icon as text. Azgaar 1.154 and newer store the emoji as its code points
+    ('glyph-1f333', 'glyph-1f3f4-200d-2620-fe0f'); older maps, and azgaar_tiles 1.1 exports, the emoji itself."""
+    if not isinstance(icon, str):
+        return icon
+    s = icon.strip()
+    m = _GLYPH.fullmatch(s)
+    if m:
+        try:
+            return "".join(chr(int(h, 16)) for h in re.split(r"[-_]", m.group(1)))
+        except (ValueError, OverflowError):
+            return s
+    return s
+
+
+# Pixel-art sprites for the page: rows of palette letters, '.' clear. The page adds a one-pixel outline
+# in a darker shade of whatever each sprite borders. LEAF and GRASS recolour the leaf (L l m) and grass
+# (h H) letters; g and G are recoloured to the state's colour on flags.
+BASE = {
+    "w": "#9a6a3e", "W": "#5e3c22",                      # trunk
+    "c": "#8fd06a", "C": "#55a042", "e": "#2f6e30",      # cactus
+    "r": "#c4bfb3", "R": "#918b80", "q": "#605b55",      # rock
+    "s": "#f6fafc", "S": "#c6d8e6",                      # snow
+    "y": "#f3dd96", "Y": "#d9b764", "z": "#b38f4a",      # sand, wheat
+    "h": "#a9db5c", "H": "#64a83c",                      # grass
+    "f": "#e8525a", "F": "#f4d04a", "v": "#fbfbf2",      # flowers
+    "u": "#a8dcf6", "U": "#5a9fd8",                      # water
+    "i": "#eef9fd", "I": "#a6d2ea",                      # ice
+    "o": "#d8684a", "O": "#9c3f2c",                      # red roof
+    "p": "#7d8bab", "P": "#525d7c",                      # slate roof
+    "a": "#e2bb5e", "A": "#a8823a",                      # thatch
+    "x": "#f1e5c9", "X": "#c8b48e",                      # plaster
+    "t": "#cfcbc2", "T": "#97928a",                      # stone
+    "n": "#3c2b22", "j": "#ffd86a",                      # door, lit window
+    "g": "#d23c3c", "G": "#8e2424",                      # flag (recoloured by state)
+    "d": "#b07b4c", "D": "#74502f",                      # wood
+    "b": "#f7f2e4", "B": "#d4cbb5",                      # cloth, sail
+    "M": "#52525c",                                      # pole
+    "L": "#8fd14f", "l": "#57a83a", "m": "#2f7330",      # leaves (recoloured by variant)
+}
+LEAF = {
+    "temperate": ("#8fd14f", "#57a83a", "#2f7330"),
+    "tropical": ("#aadf3e", "#66b42c", "#2f7d26"),
+    "jungle": ("#7fd046", "#3e9a35", "#1e6430"),
+    "conifer": ("#63a56c", "#3a7a4f", "#22543a"),
+    "taiga": ("#729f80", "#46735c", "#29493f"),
+    "savanna": ("#bcc75c", "#8c9c38", "#5c6b24"),
+    "dry": ("#b9a76c", "#8e7e4d", "#5f5235"),
+    "wet": ("#82b96c", "#4f8a50", "#2c5e3a"),
+    "palm": ("#9ed84a", "#5aa337", "#2e7a2c"),
+    "autumn": ("#f0b04a", "#d0702e", "#8f3f24"),
+}
+GRASS = {
+    "temperate": ("#a9db5c", "#64a83c"),
+    "savanna": ("#dad36c", "#aca23f"),
+    "tundra": ("#c2c194", "#8e8d64"),
+    "wet": ("#93cc7c", "#4f8f55"),
+    "dry": ("#d6c98a", "#a6965a"),
+}
+
+SPRITES = {
+    # ------------------------------------------------------------------ trees
+    "oak": [
+        "...lll...",
+        "..lLLLl..",
+        ".lLLLLll.",
+        "lLLLllllm",
+        "lLLllllmm",
+        "lllllllmm",
+        ".llllmmm.",
+        "..mmmmm..",
+        "....wW...",
+        "....wW...",
+        "...wwWW..",
+    ],
+    "oak_small": [
+        "..lll..",
+        ".lLLll.",
+        "lLLlllm",
+        "llllmmm",
+        ".lmmmm.",
+        "...wW..",
+        "...wW..",
+    ],
+    "pine": [
+        "...L...",
+        "..LLl..",
+        "..Llm..",
+        ".LLllm.",
+        "..Llm..",
+        ".LLllm.",
+        "LLlllmm",
+        ".Llllm.",
+        "LLlllmm",
+        "Lllllmm",
+        "...W...",
+        "...W...",
+    ],
+    "pine_snow": [
+        "...s...",
+        "..ssl..",
+        "..Llm..",
+        ".sslmm.",
+        "..Llm..",
+        ".ssllm.",
+        "LLlllmm",
+        ".sslllm",
+        "Lllllmm",
+        "...W...",
+        "...W...",
+    ],
+    "fir": [
+        "...L...",
+        "..LLl..",
+        "..Llm..",
+        ".LLlm..",
+        "..Llmm.",
+        ".LLllm.",
+        "..Llmm.",
+        ".LLlllm",
+        "LLllmm.",
+        ".Llllmm",
+        "LLlllmm",
+        "Llllmmm",
+        "...W...",
+        "...W...",
+    ],
+    "palm": [
+        "...LLlll...",
+        ".LLlLLlllm.",
+        "LL.lLlLlmmm",
+        "L..l.w.m..m",
+        ".....w.....",
+        ".....w.....",
+        "....w......",
+        "....w......",
+        "....W......",
+        "....W......",
+        "...wW......",
+    ],
+    "jungle": [
+        "...lLLl.ll.",
+        ".llLLLllLll",
+        "lLLLLlllllm",
+        "lLLllllllmm",
+        "lllllmmlmmm",
+        ".lllmmmmmm.",
+        "..mm.wWmm..",
+        ".....wW....",
+        ".....wW....",
+        "....wwWW...",
+    ],
+    "acacia": [
+        "..lLLLLlll...",
+        ".lLLLlllllmm.",
+        "lLLlllllmmmmm",
+        "..mmmwmmWm...",
+        ".....w.W.....",
+        "......wW.....",
+        "......wW.....",
+        ".....wwWW....",
+    ],
+    "bush": [
+        "..ll..",
+        ".lLllm",
+        "lLlllm",
+        ".lmmm.",
+    ],
+    "dead_tree": [
+        "w...w..",
+        ".w.w..W",
+        "..ww.W.",
+        "...wW..",
+        "...wW..",
+        "..wwWW.",
+    ],
+    # ------------------------------------------------------------------ ground cover
+    "grass": [
+        "h.h.h",
+        "hHhHh",
+        ".HHH.",
+    ],
+    "flowers": [
+        "f.F.v",
+        "hHhHh",
+        ".HHH.",
+    ],
+    "reeds": [
+        "W...W",
+        "W.W.W",
+        "h.W.h",
+        "h.h.h",
+        "hHhHh",
+        ".HHH.",
+    ],
+    "puddle": [
+        "..uuU..",
+        ".uUUUU.",
+    ],
+    "dry_shrub": [
+        "..h..",
+        "h.H.h",
+        ".hHH.",
+    ],
+    # ------------------------------------------------------------------ desert
+    "cactus": [
+        "...C...",
+        "..cCe..",
+        "c.cCe..",
+        "c.cCe.e",
+        "ccCCe.e",
+        ".ecCeee",
+        "..cCe..",
+        "..cCe..",
+        "..cCe..",
+    ],
+    "cactus_small": [
+        ".cfe.",
+        "cCCee",
+        "cCCee",
+        ".eee.",
+    ],
+    "dune": [
+        ".....yyY....",
+        "...yyyYYzz..",
+        ".yyyYYYzzzz.",
+        "yyYYYzzzzzzz",
+    ],
+    # ------------------------------------------------------------------ rocks, snow and ice
+    "rock": [
+        ".rrR..",
+        "rrRRq.",
+        "rRRqqq",
+        ".qqqq.",
+    ],
+    "rock_snow": [
+        ".ssS..",
+        "ssSSR.",
+        "rRRqqq",
+        ".qqqq.",
+    ],
+    "ice": [
+        "..ii....",
+        ".iiIi...",
+        ".iIIIi.i",
+        "iiIIIIiI",
+        "iIIIIIII",
+    ],
+    "peak": [
+        "........r........",
+        ".......rrR.......",
+        "......rrRRq......",
+        ".....rrrRRqq.....",
+        "....rrrRRRqqq....",
+        "...rrRrRRqqqqq...",
+        "..rrRRRRRRqqqqq..",
+        ".rrRRRRRqqqqqqqq.",
+        "rrRRRRRRqqqqqqqqq",
+    ],
+    "peak_snow": [
+        "........s........",
+        ".......ssS.......",
+        "......ssSSS......",
+        ".....sssSSqq.....",
+        "....rsrRSRqqq....",
+        "...rrRrRRqqqqq...",
+        "..rrRRRRRRqqqqq..",
+        ".rrRRRRRqqqqqqqq.",
+        "rrRRRRRRqqqqqqqqq",
+    ],
+    "peak_small": [
+        ".....r.....",
+        "....rrR....",
+        "...rrRRq...",
+        "..rrRRRqq..",
+        ".rrRRRqqqq.",
+        "rrRRRqqqqqq",
+    ],
+    "hill": [
+        "...lLLl....",
+        ".lLLllllm..",
+        "lLlllllmmmm",
+    ],
+    # ------------------------------------------------------------------ water
+    "wave": [
+        ".vv..",
+        "v..vv",
+    ],
+    "iceberg": [
+        "...ii...",
+        "..iiIi..",
+        ".iiIIIi.",
+        "uUUUUUUu",
+    ],
+    # ------------------------------------------------------------------ farms
+    "haystack": [
+        ".yY..",
+        "yyYz.",
+        "yYYzz",
+    ],
+    # ------------------------------------------------------------------ buildings (for town icons)
+    "hut": [
+        "...a...",
+        "..aaA..",
+        ".aaaAA.",
+        "aaaaAAA",
+        ".xxnxX.",
+        ".xxnxX.",
+    ],
+    "tent": [
+        "...b...",
+        "..bbB..",
+        ".bbbBB.",
+        "bbbnBBB",
+        "bbbnBBB",
+    ],
+    "house": [
+        "...oo...",
+        "..oooO..",
+        ".ooooOO.",
+        "ooooooOO",
+        ".xjxxXX.",
+        ".xnxjXX.",
+        ".xnxxXX.",
+    ],
+    "house_slate": [
+        "...pp...",
+        "..pppP..",
+        ".ppppPP.",
+        "ppppppPP",
+        ".xjxxXX.",
+        ".xxxnXX.",
+        ".xjxnXX.",
+    ],
+    "house_long": [
+        "..oooooooO..",
+        ".ooooooooOO.",
+        "ooooooooooOO",
+        ".xjxxjxxnxX.",
+        ".xxxxxxxnxX.",
+    ],
+    "shack": [
+        ".dDd..",
+        "dddDD.",
+        ".xnX..",
+        ".xnX..",
+    ],
+    "church": [
+        "....n....",
+        "...pPP...",
+        "...pPP...",
+        "...tjT...",
+        "...ttT...",
+        "..oooOO..",
+        ".ooooOOO.",
+        "oooooOOOO",
+        ".ttjttjT.",
+        ".tttnntT.",
+        ".tttnntT.",
+    ],
+    "temple": [
+        "....F....",
+        "..FFFFF..",
+        ".FFFFFFz.",
+        "xxxxxxxxX",
+        ".x.x.x.X.",
+        ".x.x.x.X.",
+        ".x.x.x.X.",
+        "ttttttttT",
+    ],
+    "tower": [
+        "t.t.T",
+        "tttTT",
+        ".tjT.",
+        ".tTT.",
+        ".tjT.",
+        ".tTT.",
+        ".tTT.",
+        ".tnT.",
+    ],
+    "wall": [
+        "t.t.t.t.t.t.t.t.t.t.t",
+        "tttttttttttttttttttTT",
+        "tTtTtTtTtTtTtTtTtTtTT",
+    ],
+    "castle": [
+        "........Mgg......",
+        "........Mggg.....",
+        "........M........",
+        ".......t.t.T.....",
+        "t.t.T..tttTT.t.tT",
+        "tttTT..tjjTT.tttT",
+        "tjtTT.ttttTTTtjTT",
+        "tttTTttttttTTtttT",
+        "tttTTtttnnttTtttT",
+        "tttTTtttnnttTtttT",
+    ],
+    "boat": [
+        "...M.....",
+        "...bb....",
+        "...bbB...",
+        "...bbbB..",
+        "dDdDdDdDd",
+        ".dDDDDDD.",
+    ],
+    "crates": [
+        "dDdD.",
+        "dDdDd",
+        "DDDDD",
+    ],
+    # ------------------------------------------------------------------ regiments and fleets
+    "banner": [
+        "Mggg...",
+        "MgGgg..",
+        "Mggg...",
+        "M..tt..",
+        "M.tttT.",
+        "M.xxX..",
+        "MggggG.",
+        "M.gggG.",
+        "M.d.D..",
+        "M.d.D..",
+    ],
+    "ship": [
+        "....M....",
+        "...gggG..",
+        "...gggG..",
+        "...bbbB..",
+        "dDdDdDdDd",
+        ".dDDDDDD.",
+    ],
+}
+
+# which leaf/grass variants each sprite can take (the first is the default)
+VARIANTS = {
+    "oak": list(LEAF), "oak_small": list(LEAF), "pine": ["conifer", "taiga", "temperate"], "pine_snow": ["taiga", "conifer"],
+    "fir": ["conifer", "jungle"], "palm": ["palm"], "jungle": ["jungle", "tropical"], "acacia": ["savanna"],
+    "bush": list(LEAF), "hill": ["temperate", "savanna", "dry", "taiga", "tropical", "wet"],
+    "grass": list(GRASS), "flowers": list(GRASS), "reeds": ["wet"], "dry_shrub": ["dry", "tundra"],
+}
 
 
 def log(*a):
@@ -1016,10 +1462,10 @@ def build(ex: Export, title=None, unit=None, scale=None, compress=True, max_deal
         markets.append({"id": p.get("market"), "centre": p.get("centre"), "ref": p.get("ref"), "burgs": p.get("burgs"),
                         "cells": p.get("cells"), "export": p.get("export_value"), "import": p.get("import_value"),
                         "pi": p.get("price_index"), "fi": p.get("food_index"), "xy": [round(x, B.dec), round(y, B.dec)]})
-    markers = [{"id": p.get("marker"), "name": p.get("name"), "type": p.get("type"), "icon": p.get("icon"), "ref": p.get("ref"),
+    markers = [{"id": p.get("marker"), "name": p.get("name"), "type": p.get("type"), "icon": icon_text(p.get("icon")), "ref": p.get("ref"),
                 "pref": p.get("point_ref"), "note": p.get("note"), "xy": B.flat([B.P(g["coordinates"])])}
                for g, p in feats("markers") if g]
-    units_ = [{"name": p.get("name"), "state": p.get("state"), "men": p.get("men"), "naval": bool(p.get("naval")),
+    units_ = [{"name": p.get("name"), "state": p.get("state"), "men": p.get("men"), "naval": bool(p.get("naval")), "icon": icon_text(p.get("icon")),
                "comp": p.get("composition"), "ref": p.get("ref"), "base": p.get("base_ref"), "xy": B.flat([B.P(g["coordinates"])])}
               for g, p in feats("units") if g]
 
@@ -1124,7 +1570,8 @@ def write_html(out_path, meta_bytes, blob_bytes, compress=True):
     b64 = base64.b64encode(pack(blob_bytes)).decode("ascii")
     payload = (f'<script type="application/octet-stream" id="iso-meta" data-enc="{enc}">{m64}</script>\n'
                f'<script type="application/octet-stream" id="iso-blob" data-enc="{enc}">{b64}</script>')
-    html = PAGE.replace("<!--PAYLOAD-->", payload)
+    sprites = json.dumps({"base": BASE, "leaf": LEAF, "grass": GRASS, "sprites": SPRITES}, separators=(",", ":"))
+    html = PAGE.replace("<!--PAYLOAD-->", payload).replace("/*SPRITES*/null", sprites)
     Path(out_path).write_text(html, encoding="utf-8")
     return len(html.encode("utf-8"))
 
@@ -1155,7 +1602,8 @@ def main(argv=None):
         out = folder / f"{ex.name} iso.html"
     size = write_html(out, raw_meta, raw_blob, compress=not args.no_compress)
     print(f"Wrote {out} ({size / 1e6:.1f} MB): {meta['tiles']['n']:,} tiles, "
-          f"{sum(1 for f in meta['fields'] if f['paint'])} paint layers, {len(meta['burgs'])} burgs, {len(meta['deals']):,} deals")
+          f"{sum(1 for f in meta['fields'] if f['paint'])} paint layers, {len(meta['burgs'])} burgs, {len(meta['deals']):,} deals; "
+          f"pixel-art style with {len(SPRITES)} sprites")
     for n in B.notes:
         print(f"  {n}")
     return 0
@@ -1233,7 +1681,8 @@ body {
 }
 canvas.layer { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #gl { touch-action: none; }
-#ov, #fx { pointer-events: none; }
+#ov, #fx, #ovl { pointer-events: none; }
+#ovl { inset: auto; left: 0; top: 0; image-rendering: crisp-edges; image-rendering: pixelated; }
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -1411,6 +1860,7 @@ dl.kv .painted { color: var(--accent); }
 </head>
 <body>
 <canvas id="gl" class="layer" aria-label="Isometric map of the world's tiles"></canvas>
+<canvas id="ovl" class="layer" aria-hidden="true"></canvas>
 <canvas id="ov" class="layer" aria-hidden="true"></canvas>
 <canvas id="fx" class="layer" aria-hidden="true"></canvas>
 
@@ -1429,6 +1879,7 @@ dl.kv .painted { color: var(--accent); }
     <summary>Paint the tiles</summary>
     <div class="sec">
       <select id="paint" aria-label="Value to paint the tiles with"></select>
+      <div id="style-slot"></div>
       <div class="legend" id="legend"></div>
     </div>
   </details>
@@ -1471,6 +1922,7 @@ dl.kv .painted { color: var(--accent); }
 <!--PAYLOAD-->
 <script>
 "use strict";
+const SPRITE_DEFS = /*SPRITES*/null;
 (async () => {
 const $ = (s, el = document) => el.querySelector(s);
 const el = (tag, attrs = {}, ...kids) => {
@@ -1606,7 +2058,7 @@ function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^=
 function catColor(f, code) {
   if (!code) return null;
   const name = f.dict[code - 1];
-  if (f.ramp === "biome" && BIOME[name]) return hex(BIOME[name]);
+  if (f.ramp === "biome") { const b = S.style === "pixel" ? BIOME_PX[name] : BIOME[name]; if (b) return hex(b); }
   return PALETTE[(code - 1) % PALETTE.length];
 }
 const css = (c) => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
@@ -1703,10 +2155,10 @@ const GX = new Float32Array(N), GY = new Float32Array(N);
 // ====================================================================== state
 const S = {
   paint: F["biome"] ? "@landscape" : (F["elevation"] ? "elevation" : (FIELDS.find((f) => f.paint) || {}).key),
-  exag: EXAG0, steps: 0, shade: true, outlines: true,
+  exag: EXAG0, steps: 0, shade: true, outlines: true, style: "pixel", px: 2, detail: 1,
   cam: { x: 0, y: 0, zoom: 1, yaw: 0, pitch: 38 },
   show: { burgs: true, labels: true, markets: true, markers: true, units: false, rivers: true, routes: true, coast: true,
-          borders: true, states: true, zones: false, journeys: true, squares: false, blocks: false },
+          borders: true, states: true, zones: false, journeys: true, squares: false, blocks: false, decor: true },
   trade: { on: false, kinds: [true, true, true], straight: false, traffic: false, speed: 60, goods: null, focus: null, dim: 0.6 },
   isolate: null, sel: -1, selBurg: -1, hover: -1,
 };
@@ -1731,49 +2183,87 @@ computeTops();
 const glc = $("#gl");
 const gl = glc.getContext("webgl2", { antialias: true, alpha: false, depth: true, preserveDrawingBuffer: false, powerPreference: "high-performance" });
 if (!gl) { fail("This page draws the tiles with WebGL 2, which this browser or device has switched off."); return; }
+// Positions are worked out in CSS pixels from the middle of the screen and mapped to the target by uNdcS
+// and uNdcO, so the same shader draws to the screen, the picking image and the low-resolution art-pixel target.
 const VS = `#version 300 es
 precision highp float; precision highp int; precision highp sampler2D;
 layout(location=0) in vec2 aOff; layout(location=1) in vec3 aInfo; layout(location=2) in vec2 aPos;
-uniform sampler2D uTop, uCol, uMask; uniform int uTW;
-uniform vec2 uTarget, uRot, uPitch, uView; uniform float uZoom, uDepth, uBase, uShadeTop, uDim; uniform vec3 uLight, uDimTo;
-out vec3 vCol; out float vEdge; flat out int vId; flat out float vTop; flat out float vWater;
+uniform sampler2D uTop, uCol, uMask, uInfo; uniform int uTW, uPixel;
+uniform vec2 uTarget, uRot, uPitch, uNdcS, uNdcO; uniform float uZoom, uDepth, uBase, uShadeTop, uDim; uniform vec3 uLight;
+out vec3 vCol; out float vEdge; out vec2 vWorld; flat out int vId; flat out float vTop; flat out float vWater; flat out float vPat; flat out float vDim; flat out float vSh;
 void main(){
   int id = gl_InstanceID; ivec2 tc = ivec2(id % uTW, id / uTW);
-  float top = texelFetch(uTop, tc, 0).r; vec4 c = texelFetch(uCol, tc, 0); vec2 mk = texelFetch(uMask, tc, 0).rg; float m = mk.r;
+  float top = texelFetch(uTop, tc, 0).r; vec4 c = texelFetch(uCol, tc, 0); vec2 mk = texelFetch(uMask, tc, 0).rg;
   float kind = aInfo.x; float z = kind < 2.5 ? top : uBase;
-  vec2 p = aPos + aOff - uTarget;
+  vec2 w = aPos + aOff; vec2 p = w - uTarget;
   float xr = uRot.x * p.x - uRot.y * p.y, yr = uRot.y * p.x + uRot.x * p.y;
-  gl_Position = vec4(xr * uZoom / (uView.x * 0.5), (yr * uPitch.x + z * uPitch.y) * uZoom / (uView.y * 0.5), (yr * uPitch.y - z * uPitch.x) / uDepth, 1.0);
-  vec3 col = c.rgb;
-  if (kind < 1.5) { col *= mix(1.0, c.a * 2.0, uShadeTop); vTop = 1.0; }
-  else { float diff = max(dot(vec3(aInfo.yz, 0.0), uLight), 0.0); col *= 0.5 + 0.44 * diff; if (kind > 2.5) col *= 0.62; vTop = 0.0; }
-  float g = dot(col, vec3(0.299, 0.587, 0.114));
-  float d = max(uDim, (1.0 - m) * 0.82);
-  vCol = mix(col, mix(vec3(g), uDimTo, 0.78), d);
-  vEdge = kind < 0.5 ? 1.0 : 0.0; vId = id; vWater = mk.g;
+  vec2 s = vec2(xr, yr * uPitch.x + z * uPitch.y) * uZoom;
+  gl_Position = vec4(s * uNdcS + uNdcO, (yr * uPitch.y - z * uPitch.x) / uDepth, 1.0);
+  float k;
+  if (kind < 1.5) { k = mix(1.0, c.a * 2.0, uShadeTop); if (uPixel == 1) k = floor(k * 9.0 + 0.5) / 9.0; vTop = 1.0; }
+  else { float diff = max(dot(vec3(aInfo.yz, 0.0), uLight), 0.0); k = 0.5 + 0.44 * diff; if (uPixel == 1) k = floor(k * 5.0 + 0.5) / 5.0; if (kind > 2.5) k *= 0.62; vTop = 0.0; }
+  vCol = c.rgb * k; vSh = k;
+  vDim = max(uDim, (1.0 - mk.r) * 0.82);
+  vEdge = kind < 0.5 ? 1.0 : 0.0; vId = id; vWater = mk.g; vWorld = w;
+  vPat = texelFetch(uInfo, tc, 0).r * 255.0;
 }`;
+// Ground patterns for the pixel-art style, on a grid fixed to the map (so they do not swim when the view
+// moves): 1 grass, 2 forest floor, 3 sand, 4 snow, 5 tundra and cold desert, 6 wetland, 7 water, 8 rock, 9 fields.
 const FS = `#version 300 es
 precision highp float; precision highp int;
-in vec3 vCol; in float vEdge; flat in int vId; flat in float vTop; flat in float vWater;
-uniform int uPick; uniform float uOutline; out vec4 o;
+in vec3 vCol; in float vEdge; in vec2 vWorld; flat in int vId; flat in float vTop; flat in float vWater; flat in float vPat; flat in float vDim; flat in float vSh;
+uniform int uPick, uPixel; uniform float uOutline, uPatK, uFieldT; uniform vec3 uDimTo; out vec4 o;
+float hsh(ivec2 q) { uint h = uint(q.x) * 1597334677u ^ uint(q.y) * 3812015801u; h ^= h >> 16; h *= 2246822519u; h ^= h >> 13; h *= 3266489917u; h ^= h >> 16; return float(h & 65535u) / 65535.0; }
+vec3 pattern(vec3 c) {
+  int p = int(vPat + 0.5);
+  vec2 g = vWorld * uPatK; ivec2 q = ivec2(floor(g)); float n = hsh(q);
+  if (p == 1) { if (n > 0.93) return c * 1.14; if (n < 0.06) return c * 0.86; return c; }
+  if (p == 2) { if (n < 0.24) return c * 0.83; if (n > 0.96) return c * 1.12; return c; }
+  if (p == 3) { float r = hsh(ivec2(q.x >> 2, q.y)); int row = q.y & 3; if (row == 0 && r > 0.45) return c * 1.08; if (row == 1 && r > 0.45) return c * 0.92; if (n < 0.03) return c * 0.84; return c; }
+  if (p == 4) { if (n < 0.06) return c * vec3(0.86, 0.9, 0.97); if (n > 0.97) return min(c * 1.06, vec3(1.0)); return c; }
+  if (p == 5) { if (n < 0.13) return c * 0.84; if (n > 0.93) return c * 1.1; return c; }
+  if (p == 6) { if (hsh(q >> 1) > 0.86) return mix(c, vec3(0.36, 0.56, 0.74) * vSh, 0.7); if (n < 0.12) return c * 0.82; return c; }
+  if (p == 7) { if (hsh(ivec2(q.x >> 1, q.y)) > 0.972) return min(c * 1.32 + 0.05, vec3(1.0)); if (n < 0.05) return c * 0.92; return c; }
+  if (p == 8) { if (n < 0.16) return c * 0.84; if (n > 0.93) return c * 1.12; return c; }
+  if (p == 9) {
+    ivec2 f = ivec2(floor(g / uFieldT)); float a = hsh(f + ivec2(7, 131)), b = hsh(f + ivec2(91, 17));
+    vec3 crop = a < 0.34 ? vec3(0.86, 0.76, 0.4) : (a < 0.72 ? vec3(0.52, 0.71, 0.31) : vec3(0.62, 0.48, 0.31));
+    vec3 col = crop * vSh;
+    if ((((b > 0.5) ? q.x : q.y) & 1) == 0) col *= 0.88;
+    vec2 lf = g - vec2(f) * uFieldT;
+    if ((lf.x < 1.0 && b > 0.3) || (lf.y < 1.0 && a > 0.25)) col = vec3(0.27, 0.43, 0.22) * vSh;
+    return mix(c, col, 0.85);
+  }
+  return c;
+}
 void main(){
   if (uPick == 1) { int k = vId + 1; o = vec4(float(k & 255) / 255.0, float((k >> 8) & 255) / 255.0, float((k >> 16) & 255) / 255.0, 1.0); return; }
   vec3 c = vCol;
-  if (vTop > 0.5 && uOutline > 0.0) { float w = fwidth(vEdge); float e = 1.0 - smoothstep(0.0, w * 1.15, vEdge); c = mix(c, c * 0.66, e * uOutline * (1.0 - 0.7 * vWater)); }
-  o = vec4(c, 1.0);
+  if (uPixel == 1 && vTop > 0.5 && uPatK > 0.0 && vPat > 0.5) c = pattern(c);
+  if (vTop > 0.5 && uOutline > 0.0) {
+    float w = fwidth(vEdge); float e = 1.0 - smoothstep(0.0, w * 1.15, vEdge);
+    if (uPixel == 1) e = step(0.5, e);
+    c = mix(c, c * 0.66, e * uOutline * (1.0 - 0.7 * vWater));
+  }
+  float gr = dot(c, vec3(0.299, 0.587, 0.114));
+  o = vec4(mix(c, mix(vec3(gr), uDimTo, 0.78), vDim), 1.0);
 }`;
 function shader(type, src) {
   const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
   if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
   return s;
 }
-const prog = gl.createProgram();
-try {
-  gl.attachShader(prog, shader(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
-} catch (e) { fail("The tile shader did not compile: " + e.message); return; }
-const U = {};
-for (const n of ["uTop", "uCol", "uMask", "uTW", "uTarget", "uRot", "uPitch", "uView", "uZoom", "uDepth", "uBase", "uShadeTop", "uDim", "uLight", "uDimTo", "uPick", "uOutline"]) U[n] = gl.getUniformLocation(prog, n);
+function program(vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, shader(gl.VERTEX_SHADER, vs)); gl.attachShader(p, shader(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  return p;
+}
+const uniformsOf = (p, names) => Object.fromEntries(names.map((n) => [n, gl.getUniformLocation(p, n)]));
+let prog;
+try { prog = program(VS, FS); } catch (e) { fail("The tile shader did not compile: " + e.message); return; }
+const U = uniformsOf(prog, ["uTop", "uCol", "uMask", "uInfo", "uTW", "uPixel", "uTarget", "uRot", "uPitch", "uNdcS", "uNdcO", "uZoom", "uDepth", "uBase",
+  "uShadeTop", "uDim", "uLight", "uDimTo", "uPick", "uOutline", "uPatK", "uFieldT"]);
 
 // template prism: top fan (centre + ring) and one wall quad per edge
 const NV = SHAPE.length, tv = [], ti = [];
@@ -1795,18 +2285,19 @@ const pb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, pb); gl.bufferData(
 gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 2, gl.FLOAT, false, 8, 0); gl.vertexAttribDivisor(2, 1);
 gl.bindVertexArray(null);
 const TW = Math.min(2048, Math.max(1, Math.ceil(Math.sqrt(N)))), TH = Math.ceil(N / TW);
-function makeTex(unit, ifmt, fmt, type, data) {
+function makeTex(unit, ifmt, fmt, type, data, w = TW, h = TH) {
   const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texImage2D(gl.TEXTURE_2D, 0, ifmt, TW, TH, 0, fmt, type, data);
+  gl.texImage2D(gl.TEXTURE_2D, 0, ifmt, w, h, 0, fmt, type, data);
   return t;
 }
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-const topData = new Float32Array(TW * TH), colData = new Uint8Array(TW * TH * 4), maskData = new Uint8Array(TW * TH * 2);
+const topData = new Float32Array(TW * TH), colData = new Uint8Array(TW * TH * 4), maskData = new Uint8Array(TW * TH * 2), infoData = new Uint8Array(TW * TH);
 const texTop = makeTex(0, gl.R32F, gl.RED, gl.FLOAT, topData);
 const texCol = makeTex(1, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, colData);
 const texMask = makeTex(2, gl.RG8, gl.RG, gl.UNSIGNED_BYTE, maskData);
+const texInfo = makeTex(4, gl.R8, gl.RED, gl.UNSIGNED_BYTE, infoData);
 function upload(unit, tex, fmt, type, data) { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tex); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, TW, TH, fmt, type, data); }
 function uploadTops() { topData.set(TOP); upload(0, texTop, gl.RED, gl.FLOAT, topData); }
 uploadTops();
@@ -1827,6 +2318,34 @@ function ensurePick(w, h) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   pickDirty = true;
 }
+
+// the pixel-art style draws the tiles and their details into a target 1/P of the screen's size, then
+// scales it up with every art pixel P device pixels square
+let lowFB = null, lowTex = null, lowDepth = null, lowW = 0, lowH = 0;
+function ensureLow() {
+  if (lowFB && lowW === RT.w && lowH === RT.h) return;
+  if (lowFB) { gl.deleteFramebuffer(lowFB); gl.deleteTexture(lowTex); gl.deleteRenderbuffer(lowDepth); }
+  lowW = RT.w; lowH = RT.h;
+  lowTex = gl.createTexture(); gl.activeTexture(gl.TEXTURE6); gl.bindTexture(gl.TEXTURE_2D, lowTex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, lowW, lowH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  lowDepth = gl.createRenderbuffer(); gl.bindRenderbuffer(gl.RENDERBUFFER, lowDepth); gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT24, lowW, lowH);
+  lowFB = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, lowFB);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, lowTex, 0);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, lowDepth);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+}
+const BVS = `#version 300 es
+void main(){ gl_Position = vec4(float((gl_VertexID & 1) * 4 - 1), float((gl_VertexID >> 1) * 4 - 1), 0.0, 1.0); }`;
+const BFS = `#version 300 es
+precision highp float; precision highp int; precision highp sampler2D;
+uniform sampler2D uTex; uniform vec2 uOff; uniform float uP; out vec4 o;
+void main(){ o = texelFetch(uTex, ivec2(floor((gl_FragCoord.xy + uOff) / uP)), 0); }`;
+let blitProg;
+try { blitProg = program(BVS, BFS); } catch (e) { fail("The pixel shader did not compile: " + e.message); return; }
+const UB = uniformsOf(blitProg, ["uTex", "uOff", "uP"]);
+const blitVao = gl.createVertexArray();
 
 // ====================================================================== camera
 let VW = 1, VH = 1, DPR = 1;
@@ -1864,13 +2383,38 @@ function resize() {
   VW = innerWidth; VH = innerHeight;
   for (const c of [glc, ov, fx]) { c.width = Math.round(VW * DPR); c.height = Math.round(VH * DPR); }
   octx.setTransform(DPR, 0, 0, DPR, 0, 0); fctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  sizeLines();
   dirty.terrain = dirty.overlay = true; pickDirty = true;
 }
-const ov = $("#ov"), fx = $("#fx"), octx = ov.getContext("2d"), fctx = fx.getContext("2d");
+const ovl = $("#ovl"), ov = $("#ov"), fx = $("#fx"), lctx = ovl.getContext("2d"), octx = ov.getContext("2d"), fctx = fx.getContext("2d");
 const dirty = { terrain: true, overlay: true, fx: true };
 const groundColor = () => hex(getComputedStyle(document.documentElement).getPropertyValue("--ground").trim() || "#d9dfe5");
 let GROUND = groundColor();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { GROUND = groundColor(); dirty.terrain = dirty.overlay = true; });
+
+// The art-pixel grid. In the pixel-art style one art pixel is P device pixels (P from the pixel size and the
+// screen's density); the tiles, their details and the line layers are drawn at that resolution and scaled up
+// without smoothing. The grid is centred on the screen, so a part of a pixel may be cut at each edge.
+const RT = { pdev: 1, w: 1, h: 1, offX: 0, offY: 0, top: 0 };
+function rtDims() {
+  const W = glc.width, H = glc.height, a = S.style === "pixel" ? Math.max(1, Math.round(S.px * DPR)) : 1;
+  RT.pdev = a; RT.w = Math.ceil(W / a); RT.h = Math.ceil(H / a);
+  RT.offX = Math.floor((RT.w * a - W) / 2); RT.offY = Math.floor((RT.h * a - H) / 2); RT.top = RT.h * a - H - RT.offY;
+}
+const ART = () => (S.style === "pixel" ? RT.pdev / DPR : 1);   // CSS pixels per art pixel
+function sizeLines() {
+  rtDims();
+  ovl.width = RT.w; ovl.height = RT.h;
+  Object.assign(ovl.style, { left: `${-RT.offX / DPR}px`, top: `${-RT.top / DPR}px`, width: `${(RT.w * RT.pdev) / DPR}px`, height: `${(RT.h * RT.pdev) / DPR}px` });
+  lctx.setTransform(DPR / RT.pdev, 0, 0, DPR / RT.pdev, RT.offX / RT.pdev, RT.top / RT.pdev);
+}
+// where CSS pixels from the middle of the screen land in a target, and how many target pixels make an art pixel
+function mapScreen() { return { sx: 2 / VW, sy: 2 / VH, ox: 0, oy: 0, tw: glc.width, th: glc.height, pxCss: 1 / DPR, art: Math.max(1, Math.round(DPR)) }; }
+function mapLow() {
+  const W = glc.width, H = glc.height, a = RT.pdev;
+  return { sx: (2 * DPR) / (a * RT.w), sy: (2 * DPR) / (a * RT.h), ox: (W + 2 * RT.offX) / (a * RT.w) - 1, oy: (H + 2 * RT.offY) / (a * RT.h) - 1,
+           tw: RT.w, th: RT.h, pxCss: a / DPR, art: 1 };
+}
 
 function lightVec() {
   // light from the upper left of the screen, whatever the heading
@@ -1878,30 +2422,61 @@ function lightVec() {
   let x = hx + lx, y = hy + ly; const L = Math.hypot(x, y); x /= L; y /= L;
   return [x, y];
 }
-function drawTerrain(pick = false) {
+const depthRange = () => (RADIUS + Math.hypot(S.cam.x, S.cam.y) + ZMAX + Math.abs(BASE)) * 1.05;
+function drawTiles(M, pick) {
   gl.useProgram(prog);
   gl.bindVertexArray(vao);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texTop);
   gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texCol);
   gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texMask);
-  gl.uniform1i(U.uTop, 0); gl.uniform1i(U.uCol, 1); gl.uniform1i(U.uMask, 2); gl.uniform1i(U.uTW, TW);
+  gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, texInfo);
+  gl.uniform1i(U.uTop, 0); gl.uniform1i(U.uCol, 1); gl.uniform1i(U.uMask, 2); gl.uniform1i(U.uInfo, 4); gl.uniform1i(U.uTW, TW);
   gl.uniform2f(U.uTarget, S.cam.x, S.cam.y); gl.uniform2f(U.uRot, cv.c, cv.s); gl.uniform2f(U.uPitch, cv.sp, cv.cp);
-  gl.uniform2f(U.uView, VW, VH); gl.uniform1f(U.uZoom, S.cam.zoom);
-  gl.uniform1f(U.uDepth, (RADIUS + Math.hypot(S.cam.x, S.cam.y) + ZMAX + Math.abs(BASE)) * 1.05);
+  gl.uniform2f(U.uNdcS, M.sx, M.sy); gl.uniform2f(U.uNdcO, M.ox, M.oy); gl.uniform1f(U.uZoom, S.cam.zoom);
+  gl.uniform1f(U.uDepth, depthRange());
   gl.uniform1f(U.uBase, BASE); gl.uniform1f(U.uShadeTop, S.shade ? 1 : 0);
   const [lx, ly] = lightVec(); gl.uniform3f(U.uLight, lx, ly, 0);
   gl.uniform1f(U.uDim, S.trade.on ? S.trade.dim : 0);
   gl.uniform3f(U.uDimTo, GROUND[0] / 255, GROUND[1] / 255, GROUND[2] / 255);
   gl.uniform1i(U.uPick, pick ? 1 : 0);
-  const tilePx = SPACING * S.cam.zoom;
-  gl.uniform1f(U.uOutline, S.outlines ? Math.max(0, Math.min(1, (tilePx - 7) / 10)) : 0);
+  const px = !pick && S.style === "pixel";
+  gl.uniform1i(U.uPixel, px ? 1 : 0);
+  const tileA = (SPACING * S.cam.zoom) / (px ? ART() : 1);           // a tile's width in art pixels (CSS pixels when smooth)
+  gl.uniform1f(U.uOutline, S.outlines ? Math.max(0, Math.min(1, (tileA - 7) / 10)) : 0);
+  if (px && tileA >= 6) {
+    const K = 2 ** Math.min(6, Math.max(2, Math.floor(Math.log2(tileA))));   // pattern texels across a tile, never finer than an art pixel
+    gl.uniform1f(U.uPatK, K / SPACING); gl.uniform1f(U.uFieldT, Math.max(2, Math.round(K / 6)));
+  } else { gl.uniform1f(U.uPatK, 0); gl.uniform1f(U.uFieldT, 2); }
   gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
-  if (pick) { gl.bindFramebuffer(gl.FRAMEBUFFER, pickFB); gl.viewport(0, 0, pickW, pickH); gl.clearColor(0, 0, 0, 0); }
-  else { gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, glc.width, glc.height); gl.clearColor(GROUND[0] / 255, GROUND[1] / 255, GROUND[2] / 255, 1); }
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.drawElementsInstanced(gl.TRIANGLES, ti.length, gl.UNSIGNED_SHORT, 0, N);
   gl.bindVertexArray(null);
-  if (pick) gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+}
+function drawTerrain(pick = false) {
+  if (pick) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, pickFB); gl.viewport(0, 0, pickW, pickH); gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    drawTiles(mapScreen(), true);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    return;
+  }
+  // tiles smaller than a few art pixels only alias in the low-resolution target, so they are drawn smooth
+  const px = S.style === "pixel" && (SPACING * S.cam.zoom) / ART() >= 2.5;
+  let M;
+  if (px) { rtDims(); ensureLow(); gl.bindFramebuffer(gl.FRAMEBUFFER, lowFB); gl.viewport(0, 0, RT.w, RT.h); M = mapLow(); }
+  else { gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, glc.width, glc.height); M = mapScreen(); }
+  gl.clearColor(GROUND[0] / 255, GROUND[1] / 255, GROUND[2] / 255, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  drawTiles(M, false);
+  drawSprites(M);
+  if (px) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, glc.width, glc.height);
+    gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE);
+    gl.useProgram(blitProg); gl.bindVertexArray(blitVao);
+    gl.activeTexture(gl.TEXTURE6); gl.bindTexture(gl.TEXTURE_2D, lowTex);
+    gl.uniform1i(UB.uTex, 6); gl.uniform2f(UB.uOff, RT.offX, RT.offY); gl.uniform1f(UB.uP, RT.pdev);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.bindVertexArray(null);
+  }
 }
 const pickPx = new Uint8Array(4);
 function pickTile(sx, sy) {
@@ -1928,12 +2503,42 @@ function shadeTops() {
   }
   return out;
 }
+// the pixel-art landscape: a game palette for the biomes, the land banded by height and the sea by depth
+const BIOME_PX = { "Marine": "#2f63a8", "Hot desert": "#ecd38a", "Cold desert": "#c6bc92", "Savanna": "#cfc165", "Grassland": "#96c95a",
+  "Tropical seasonal forest": "#7db84a", "Temperate deciduous forest": "#58a243", "Tropical rainforest": "#3f9437",
+  "Temperate rainforest": "#3d8248", "Taiga": "#4c7550", "Tundra": "#a6a382", "Glacier": "#e9f2f5", "Wetland": "#5a9061" };
+const BIOME_PAT = { "Hot desert": 3, "Cold desert": 5, "Savanna": 1, "Grassland": 1, "Tropical seasonal forest": 2, "Temperate deciduous forest": 2,
+  "Tropical rainforest": 2, "Temperate rainforest": 2, "Taiga": 2, "Tundra": 5, "Glacier": 4, "Wetland": 6 };
+const SNOWLINE = 2600, ROCKLINE = 1200;
+const snowy = (i) => ELEV[i] >= SNOWLINE || (ELEV[i] >= ROCKLINE && tempC(i) < -6);
+function landscapePx(i) {
+  const e = ELEV[i];
+  if (!LAND[i]) {
+    if (e > 0) return [90, 159, 214];
+    return e > -60 ? [79, 143, 208] : e > -250 ? [63, 121, 191] : e > -1000 ? [48, 100, 168] : e > -3000 ? [39, 81, 144] : [30, 64, 119];
+  }
+  const c = hex(BIOME_PX[biomeOf(i)] || "#96c95a");
+  if (snowy(i)) return [236, 243, 246];
+  if (e >= 1800) return mixc(c, [143, 138, 133], 0.8);
+  if (e >= ROCKLINE) return mixc(c, [154, 140, 120], 0.55);
+  if (e >= 700) return mixc(c, [181, 154, 106], 0.28);
+  if (e >= 300) return mixc(c, [255, 255, 235], 0.07);
+  return c;
+}
+function patternOf(i) {
+  if (!LAND[i]) return 7;
+  if (snowy(i)) return 4;
+  if (ELEV[i] >= ROCKLINE) return 8;
+  if (FARM[i]) return 9;
+  return BIOME_PAT[biomeOf(i)] || 1;
+}
 function paint() {
-  const key = S.paint, shade = shadeTops();
+  const key = S.paint, shade = shadeTops(), px = S.style === "pixel";
   const put = (i, c) => { colData[4 * i] = c[0]; colData[4 * i + 1] = c[1]; colData[4 * i + 2] = c[2]; colData[4 * i + 3] = shade[i]; };
   if (key === "@landscape") {
     const bio = F["biome"];
     for (let i = 0; i < N; i++) {
+      if (px) { put(i, landscapePx(i)); continue; }
       if (!LAND[i]) { put(i, RAMPS.sea(Math.max(-4000, ELEV[i]))); continue; }
       let c = bio ? catColor(bio, values(bio)[i]) : null;
       if (!c) c = RAMPS.land(ELEV[i]);
@@ -1983,6 +2588,10 @@ function paint() {
       LEG = { kind: "num", f, t0, t1, conv };
     }
   }
+  // ground patterns: the full set on the landscape, only the water's on a painted value
+  const land = px && key === "@landscape";
+  for (let i = 0; i < N; i++) infoData[i] = !px ? 0 : land ? patternOf(i) : (LAND[i] ? 0 : 7);
+  upload(4, texInfo, gl.RED, gl.UNSIGNED_BYTE, infoData);
   upload(1, texCol, gl.RGBA, gl.UNSIGNED_BYTE, colData);
   applyMask();
   renderLegend();
@@ -1996,20 +2605,42 @@ function applyMask() {
 }
 
 // ====================================================================== vector layers
+// The tiles are the cells of a lattice, so a point lies in the tile whose centre is nearest, if that tile
+// exists. On a sheet the outer tiles' edges are the sheet's edge; layers that run past it are cut there.
+const SHAPE_SIGN = (() => { let a = 0; for (let k = 0; k < NV; k++) { const p = SHAPE[k], q = SHAPE[(k + 1) % NV]; a += p[0] * q[1] - q[0] * p[1]; } return a >= 0 ? 1 : -1; })();
+const SHAPE_EDGES = SHAPE.map((a, k) => { const b = SHAPE[(k + 1) % NV]; return [a[0], a[1], b[0] - a[0], b[1] - a[1], Math.hypot(b[0] - a[0], b[1] - a[1])]; });
+const EDGE_EPS = SPACING * 0.02;
+function insideTile(t, x, y, eps = EDGE_EPS) {
+  const dx = x - POS[2 * t], dy = y - POS[2 * t + 1];
+  for (const [ax, ay, ex, ey, len] of SHAPE_EDGES) if (SHAPE_SIGN * (ex * (dy - ay) - ey * (dx - ax)) < -eps * len) return false;
+  return true;
+}
+const tileOf = (x, y) => { const t = tileAt(x, y, SPACING * 0.8); return t >= 0 && insideTile(t, x, y) ? t : -1; };
 function lineObj(xyArr, tiles) {
   const n = xyArr.length / 2, xy = new Float32Array(xyArr), tile = new Int32Array(tiles), z = new Float32Array(n);
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (let k = 0; k < n; k++) { const x = xy[2 * k], y = xy[2 * k + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
   return { xy, n, tile, z, bb: [x0, y0, x1, y1] };
 }
-// a line's pieces over the tiles: on a sheet, layers run on past its edge and are cut there
+// a line's pieces over the tiles: on a sheet, a line leaving the tiles is cut where it crosses the edge
 function prepLine(flat, onWater = false, clip = true) {
   const pieces = []; let xy = [], tl = [];
   const flush = () => { if (xy.length >= 4) pieces.push(lineObj(xy, tl)); xy = []; tl = []; };
+  let px = 0, py = 0, pt = -1;
   for (let k = 0; k < flat.length; k += 2) {
-    const x = flat[k], y = flat[k + 1], t = tileAt(x, y, SPACING * 1.05);
-    if (t < 0 && clip) { flush(); continue; }
-    xy.push(x, y); tl.push(onWater ? -1 : t);
+    const x = flat[k], y = flat[k + 1];
+    if (!clip) { const t = tileAt(x, y, SPACING * 1.05); xy.push(x, y); tl.push(onWater ? -1 : t); continue; }
+    const t = tileOf(x, y);
+    if (k > 0 && (t >= 0) !== (pt >= 0)) {          // the edge lies between this point and the last
+      const fromIn = pt >= 0;
+      let ax = px, ay = py, bx = x, by = y;
+      for (let it = 0; it < 14; it++) { const mx = (ax + bx) / 2, my = (ay + by) / 2; if ((tileOf(mx, my) >= 0) === fromIn) { ax = mx; ay = my; } else { bx = mx; by = my; } }
+      const ex = fromIn ? ax : bx, ey = fromIn ? ay : by, et = tileOf(ex, ey);
+      xy.push(ex, ey); tl.push(onWater ? -1 : (et >= 0 ? et : (fromIn ? pt : t)));
+      if (fromIn) flush();
+    }
+    if (t >= 0) { xy.push(x, y); tl.push(onWater ? -1 : t); }
+    px = x; py = y; pt = t;
   }
   flush();
   return pieces;
@@ -2030,6 +2661,99 @@ for (const p of META.paths) {
   for (let k = 1; k < o.n; k++) o.cum[k] = o.cum[k - 1] + Math.hypot(o.xy[2 * k] - o.xy[2 * k - 2], o.xy[2 * k + 1] - o.xy[2 * k - 1]);
   o.len = o.cum[o.n - 1] || 1e-9; L.paths.push(o);
 }
+
+// Zone fills, tile by tile. A zone's outline is cut to each tile it crosses (Sutherland-Hodgman against the
+// tile's convex outline) and every tile wholly inside is filled whole, each piece at its own tile's height.
+// So a zone that runs off a sheet is filled only over the sheet's tiles, holes stay open, and the fill sits
+// on the blocks instead of stretching between their heights. Worked out the first time zones are shown.
+let ZFILL = null;
+function clipToTile(ring, t) {
+  const cx = POS[2 * t], cy = POS[2 * t + 1];
+  let pts = ring;
+  for (const [ax0, ay0, ex, ey] of SHAPE_EDGES) {
+    if (pts.length < 6) return null;
+    const ax = ax0 + cx, ay = ay0 + cy, out = [];
+    const side = (x, y) => SHAPE_SIGN * (ex * (y - ay) - ey * (x - ax));
+    const n = pts.length / 2;
+    let sx = pts[2 * n - 2], sy = pts[2 * n - 1], ss = side(sx, sy);
+    for (let k = 0; k < n; k++) {
+      const x = pts[2 * k], y = pts[2 * k + 1], s = side(x, y);
+      if (s >= 0) {
+        if (ss < 0) { const u = ss / (ss - s); out.push(sx + (x - sx) * u, sy + (y - sy) * u); }
+        out.push(x, y);
+      } else if (ss >= 0) { const u = ss / (ss - s); out.push(sx + (x - sx) * u, sy + (y - sy) * u); }
+      sx = x; sy = y; ss = s;
+    }
+    pts = out;
+  }
+  return pts.length >= 6 ? pts : null;
+}
+function ringArea(p) { let a = 0; const n = p.length / 2; for (let k = 0; k < n; k++) { const j = (k + 1) % n; a += p[2 * k] * p[2 * j + 1] - p[2 * j] * p[2 * k + 1]; } return a / 2; }
+function buildZoneFill(z) {
+  const rings = [];
+  for (const poly of z.polys) for (const r of poly) if (r.length >= 6) rings.push(r);
+  const out = { full: [], parts: [] };
+  if (!rings.length) return out;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const r of rings) for (let k = 0; k < r.length; k += 2) { x0 = Math.min(x0, r[k]); x1 = Math.max(x1, r[k]); y0 = Math.min(y0, r[k + 1]); y1 = Math.max(y1, r[k + 1]); }
+  // edges by horizontal band, for even-odd point tests; and the tiles the outline passes through
+  const band = SPACING, bands = new Map(), edge = new Set(), step = SPACING / 6;
+  for (const r of rings) {
+    const n = r.length / 2;
+    for (let k = 0; k < n; k++) {
+      const j = (k + 1) % n, ax = r[2 * k], ay = r[2 * k + 1], bx = r[2 * j], by = r[2 * j + 1];
+      if (ay !== by) {
+        const b0 = Math.floor((Math.min(ay, by) - y0) / band), b1 = Math.floor((Math.max(ay, by) - y0) / band);
+        for (let b = b0; b <= b1; b++) { if (!bands.has(b)) bands.set(b, []); bands.get(b).push(ax, ay, bx, by); }
+      }
+      const m = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step));
+      for (let s = 0; s <= m; s++) { const t = tileAt(ax + ((bx - ax) * s) / m, ay + ((by - ay) * s) / m, SPACING * 0.8); if (t >= 0) edge.add(t); }
+    }
+  }
+  const inside = (x, y) => {
+    const e = bands.get(Math.floor((y - y0) / band)); if (!e) return false;
+    let c = false;
+    for (let k = 0; k < e.length; k += 4) { const ay = e[k + 1], by = e[k + 3]; if ((ay > y) !== (by > y) && e[k] + ((y - ay) * (e[k + 2] - e[k])) / (by - ay) > x) c = !c; }
+    return c;
+  };
+  const gx0 = Math.max(0, Math.floor((x0 - BX0) / BK)), gx1 = Math.min(BW - 1, Math.floor((x1 - BX0) / BK));
+  const gy0 = Math.max(0, Math.floor((y0 - BY0) / BK)), gy1 = Math.min(BH - 1, Math.floor((y1 - BY0) / BK));
+  for (let gy = gy0; gy <= gy1; gy++) for (let gx = gx0; gx <= gx1; gx++) {
+    const k = gy * BW + gx;
+    for (let q = bucketStart[k]; q < bucketStart[k + 1]; q++) { const i = bucketItems[q]; if (!edge.has(i) && inside(POS[2 * i], POS[2 * i + 1])) out.full.push(i); }
+  }
+  const tiny = SPACING * SPACING * 1e-4;
+  for (const t of edge) {
+    const rs = [];
+    for (const r of rings) { const c = clipToTile(r, t); if (c && Math.abs(ringArea(c)) > tiny) rs.push(Float32Array.from(c)); }
+    if (rs.length) out.parts.push({ t, rs });
+  }
+  out.full = Int32Array.from(out.full);
+  return out;
+}
+// fills a zone's tiles one by one (even-odd only within a tile, so its holes stay open while tiles whose
+// tops overlap on screen do not cancel out)
+function zoneFill(c, zf, lift) {
+  const m = SPACING * S.cam.zoom * 1.5 + 30;
+  const vis = (t) => { const [sx, sy] = project(POS[2 * t], POS[2 * t + 1], TOP[t]); return sx > -m && sy > -m && sx < VW + m && sy < VH + m; };
+  for (const t of zf.full) {
+    if (!vis(t)) continue;
+    const x = POS[2 * t], y = POS[2 * t + 1], z = TOP[t] + lift;
+    c.beginPath();
+    for (let k = 0; k < NV; k++) { const [sx, sy] = project(x + SHAPE[k][0], y + SHAPE[k][1], z); if (k) c.lineTo(sx, sy); else c.moveTo(sx, sy); }
+    c.fill();
+  }
+  for (const p of zf.parts) {
+    if (!vis(p.t)) continue;
+    const z = TOP[p.t] + lift;
+    c.beginPath();
+    for (const r of p.rs) {
+      for (let k = 0; k < r.length; k += 2) { const [sx, sy] = project(r[k], r[k + 1], z); if (k) c.lineTo(sx, sy); else c.moveTo(sx, sy); }
+      c.closePath();
+    }
+    c.fill("evenodd");
+  }
+}
 const PT = (xy) => { const t = tileAt(xy[0], xy[1], SPACING * 1.5); return { x: xy[0], y: xy[1], tile: t }; };
 const BURGS = META.burgs.map((b, k) => Object.assign(PT(b.xy), { b, k }));
 const MARKETS = META.markets.map((m, k) => Object.assign(PT(m.xy), { m, k }));
@@ -2049,6 +2773,316 @@ function updateZ() {
   for (const arr of [BURGS, MARKETS, MARKERS, UNITS, STOPS, PLACES]) for (const p of arr) p.z = zOf(p.tile);
 }
 updateZ();
+
+// ====================================================================== pixel art: sprites
+// SPRITE_DEFS holds the art: each sprite is rows of palette letters ('.' is clear). Baking adds a one-pixel
+// outline in a darker shade of whatever it borders, and swaps in the leaf, grass or flag colours asked for.
+const SPRITE_CACHE = new Map();
+function bakeSprite(name, variant = null, recolor = null) {
+  const key = `${name}:${variant || ""}:${recolor ? Object.values(recolor).join("") : ""}`;
+  let s = SPRITE_CACHE.get(key);
+  if (s) return s;
+  const D = SPRITE_DEFS, rows = D.sprites[name];
+  const pal = Object.assign({}, D.base);
+  if (variant && D.leaf[variant]) [pal.L, pal.l, pal.m] = D.leaf[variant];
+  if (variant && D.grass[variant]) [pal.h, pal.H] = D.grass[variant];
+  if (recolor) Object.assign(pal, recolor);
+  const rgb = {}; for (const k in pal) rgb[k] = hex(pal[k]);
+  const w = rows[0].length + 2, h = rows.length + 2, px = new Uint8ClampedArray(w * h * 4), on = new Uint8Array(w * h);
+  rows.forEach((r, y) => { for (let x = 0; x < r.length; x++) { const ch = r[x]; if (ch === ".") continue; const c = rgb[ch] || [255, 0, 255], o = ((y + 1) * w + x + 1); px.set([c[0], c[1], c[2], 255], o * 4); on[o] = 1; } });
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const o = y * w + x; if (on[o]) continue;
+    let best = null, bs = Infinity;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const X = x + dx, Y = y + dy; if (X < 0 || Y < 0 || X >= w || Y >= h || !on[Y * w + X]) continue;
+      const q = (Y * w + X) * 4, sum = px[q] + px[q + 1] + px[q + 2]; if (sum < bs) { bs = sum; best = q; }
+    }
+    if (best !== null) px.set([px[best] * 0.42, px[best + 1] * 0.42, px[best + 2] * 0.42, 255], o * 4);
+  }
+  s = { w, h, px };
+  SPRITE_CACHE.set(key, s);
+  return s;
+}
+function spriteCanvas(name, variant = null, recolor = null) {
+  const s = bakeSprite(name, variant, recolor);
+  if (!s.cv) { s.cv = document.createElement("canvas"); s.cv.width = s.w; s.cv.height = s.h; s.cv.getContext("2d").putImageData(new ImageData(s.px, s.w, s.h), 0, 0); }
+  return s.cv;
+}
+
+// ---- what grows where: per placement slot, the chance of nothing and the weights of each sprite
+// ('name:variant'); "big" sprites (peaks, hills, dunes, icebergs) stay visible further out
+const DECOR_BIOME = {
+  "Hot desert": [0.55, [["cactus", 12], ["cactus_small", 10], ["dune", 13], ["rock", 6], ["dry_shrub:dry", 4]]],
+  "Cold desert": [0.58, [["rock", 18], ["dry_shrub:dry", 14], ["dune", 6], ["dead_tree", 4]]],
+  "Savanna": [0.35, [["acacia:savanna", 18], ["grass:savanna", 32], ["bush:savanna", 15]]],
+  "Grassland": [0.32, [["grass:temperate", 38], ["flowers:temperate", 14], ["bush:temperate", 10], ["oak_small:temperate", 6]]],
+  "Tropical seasonal forest": [0.1, [["jungle:tropical", 22], ["palm:palm", 18], ["oak:tropical", 30], ["bush:tropical", 20]]],
+  "Temperate deciduous forest": [0.06, [["oak:temperate", 50], ["oak_small:temperate", 30], ["pine:temperate", 8], ["bush:temperate", 6]]],
+  "Tropical rainforest": [0.03, [["jungle:jungle", 55], ["palm:palm", 20], ["bush:jungle", 22]]],
+  "Temperate rainforest": [0.05, [["fir:conifer", 50], ["pine:conifer", 30], ["oak:wet", 10], ["bush:wet", 5]]],
+  "Taiga": [0.1, [["pine:taiga", 55], ["pine_snow:taiga", 15], ["rock", 5], ["bush:taiga", 10], ["pine:conifer", 5]]],
+  "Tundra": [0.5, [["rock", 18], ["grass:tundra", 20], ["dry_shrub:tundra", 12]]],
+  "Glacier": [0.62, [["ice", 23], ["rock_snow", 15]]],
+  "Wetland": [0.2, [["reeds:wet", 45], ["puddle", 20], ["bush:wet", 10], ["oak_small:wet", 5]]],
+};
+const HILL_LEAF = { "Savanna": "savanna", "Hot desert": "dry", "Cold desert": "dry", "Tundra": "dry", "Taiga": "taiga", "Tropical seasonal forest": "tropical",
+  "Tropical rainforest": "tropical", "Wetland": "wet" };
+const FARMABLE = new Set(["Grassland", "Savanna", "Temperate deciduous forest", "Tropical seasonal forest", "Temperate rainforest", "Taiga", "Tropical rainforest"]);
+const BIG = new Set(["peak", "peak_snow", "peak_small", "dune", "iceberg"]);
+
+// ---- the climate at a tile, and its biome (worked out from temperature and rain when the export has none)
+const fTempC = F["temp_c"], fTempD = F["temp"], fPrec = F["prec_mm"];
+function tempC(i) {
+  if (fTempC) return numOf(fTempC, i);
+  if (fTempD) { const t = numOf(fTempD, i); return TU === "°F" ? ((t - 32) * 5) / 9 : TU === "K" ? t - 273.15 : t; }
+  return NaN;
+}
+function guessBiome(i) {
+  if (!LAND[i]) return "Marine";
+  const t = tempC(i), p = fPrec ? numOf(fPrec, i) : NaN;
+  if (Number.isNaN(t)) return "Grassland";
+  if (t < -5) return "Glacier"; if (t < 0) return "Tundra"; if (t < 5) return "Taiga";
+  if (Number.isNaN(p)) return t > 20 ? "Savanna" : "Grassland";
+  if (t > 22 && p < 250) return "Hot desert"; if (p < 200) return "Cold desert";
+  if (t > 20) return p > 1600 ? "Tropical rainforest" : p > 900 ? "Tropical seasonal forest" : "Savanna";
+  return p > 1500 ? "Temperate rainforest" : p > 700 ? "Temperate deciduous forest" : "Grassland";
+}
+const fBiome = F["biome"];
+const biomeOf = (i) => (fBiome && catOf(fBiome, i)) || guessBiome(i);
+
+// ---- placement. Each tile has a few slots scattered over it; what fills a slot follows the biome, the
+// height (hills, peaks and snow), the people (fields where the countryside is crowded) and the sea (waves,
+// icebergs). Slots near towns, roads, trails and rivers are left clear.
+function h32(a, b) {
+  let h = Math.imul(a ^ 0x9e3779b9, 0x85ebca6b) ^ Math.imul((b + 0x632be5ab) | 0, 0xc2b2ae35);
+  h ^= h >>> 15; h = Math.imul(h, 0x2c1b3c6d); h ^= h >>> 12; h = Math.imul(h, 0x297a2d39); h ^= h >>> 15;
+  return (h >>> 0) / 4294967296;
+}
+const FARM = new Uint8Array(N);
+const DECOR = { n: 0, keys: [], index: new Map(), data: null };
+const KEEP = new Set(), KC = SPACING / 7;
+const keepKey = (x, y) => Math.floor((y - BY0) / KC) * 1048576 + Math.floor((x - BX0) / KC);
+function keepLine(flat, r) {
+  for (let k = 0; k + 3 < flat.length; k += 2) {
+    const ax = flat[k], ay = flat[k + 1], bx = flat[k + 2], by = flat[k + 3], m = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / (KC * 0.5)));
+    for (let s = 0; s <= m; s++) {
+      const x = ax + ((bx - ax) * s) / m, y = ay + ((by - ay) * s) / m;
+      for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) KEEP.add(keepKey(x + dx * KC, y + dy * KC));
+    }
+  }
+}
+function buildDecor() {
+  for (const r of META.rivers) keepLine(r.pts, 1);
+  for (const r of META.routes) if (r.group !== "searoutes") keepLine(r.pts, 1);
+  const clear = new Map();
+  for (const B of BURGS) { if (B.tile < 0) continue; const t = { capital: 0.62, city: 0.55, town: 0.42 }[B.b.group] || 0.3; addTo(clear, B.tile, [B.x, B.y, t * SPACING]); }
+  for (const s of STOPS) if (s.tile >= 0) addTo(clear, s.tile, [s.x, s.y, 0.18 * SPACING]);
+  // crowded countryside: the share of land tiles with fewer people
+  const fDen = F["density"] || F["rural"] || F["people"], dv = values(fDen);
+  let q80 = Infinity, q92 = Infinity;
+  if (dv) {
+    const a = []; for (let i = 0; i < N; i++) if (LAND[i] && dv[i] > 0) a.push(dv[i]);
+    a.sort((x, y) => x - y);
+    if (a.length > 20) { q80 = a[Math.floor(0.8 * (a.length - 1))]; q92 = a[Math.floor(0.92 * (a.length - 1))]; }
+  }
+  const slots = N > 150000 ? 5 : 7, inr = Math.min(...SHAPE_EDGES.map(([ax, ay, ex, ey, len]) => Math.abs(ax * ey - ay * ex) / len));
+  const out = [], idx = DECOR.index;
+  const sprite = (key) => { let k = idx.get(key); if (k === undefined) { k = DECOR.keys.length; DECOR.keys.push(key); idx.set(key, k); } return k; };
+  const pick = (table, r) => { let tot = 0; for (const [, w] of table) tot += w; let u = r * tot; for (const [k, w] of table) { u -= w; if (u <= 0) return k; } return table[table.length - 1][0]; };
+  const emit = (x, y, i, key, rank, flip) => {
+    const big = BIG.has(key.split(":")[0]);
+    out.push(x, y, i, sprite(key) + 256 * Math.min(255, Math.floor(rank * 256)) + 65536 * (flip ? 1 : 0) + 131072 * (big ? 1 : 0));
+  };
+  for (let i = 0; i < N; i++) {
+    const cx = POS[2 * i], cy = POS[2 * i + 1], e = ELEV[i], t = tempC(i), rot = h32(i, 1) * Math.PI * 2;
+    const cl = clear.get(i);
+    const free = (x, y) => !KEEP.has(keepKey(x, y)) && !(cl && cl.some(([bx, by, r]) => Math.hypot(x - bx, y - by) < r));
+    const at = (k, spread = 1) => {
+      const r = inr * 0.78 * spread * Math.sqrt((k + 0.5) / slots), a = rot + k * 2.39996;
+      return [cx + Math.cos(a) * r + (h32(i, 40 + k) - 0.5) * inr * 0.16, cy + Math.sin(a) * r + (h32(i, 60 + k) - 0.5) * inr * 0.16];
+    };
+    if (!LAND[i]) {
+      const lake = e > 0, cold = t < -3;
+      for (let k = 0; k < 3; k++) {
+        const r = h32(i, 100 + k), p = lake ? 0.06 : cold ? 0.12 : e > -150 ? 0.14 : 0.07;
+        if (r >= p) continue;
+        const [x, y] = at(k * 2, 1.1); if (!free(x, y)) continue;
+        emit(x, y, i, cold && !lake ? "iceberg" : "wave", h32(i, 120 + k), h32(i, 140 + k) > 0.5);
+      }
+      continue;
+    }
+    const b = biomeOf(i), spec = DECOR_BIOME[b] || DECOR_BIOME.Grassland;
+    let empty = spec[0], table = spec[1], first = 0;
+    // hills and mountains take the middle of the tile
+    if (e >= 1500) {
+      const [x, y] = at(0, 0.25);
+      emit(x, y, i, e >= SNOWLINE || t < -4 ? "peak_snow" : "peak", h32(i, 7) * 0.1, h32(i, 8) > 0.5);
+      first = 1; empty = Math.min(0.92, empty + 0.5);
+      if (e >= 2200) table = [["rock_snow", 4], ["rock", 3]];
+      else table = t < 0 ? [["pine_snow:taiga", 5], ["rock", 3]] : [["pine:conifer", 5], ["rock", 3], ["bush:" + (HILL_LEAF[b] || "temperate"), 2]];
+    } else if (e >= 700 && h32(i, 9) < 0.65) {
+      const [x, y] = at(0, 0.35);
+      emit(x, y, i, e >= 1100 ? "peak_small" : `hill:${HILL_LEAF[b] || "temperate"}`, h32(i, 7) * 0.12, h32(i, 8) > 0.5);
+      first = 1; empty = Math.min(0.9, empty + 0.15);
+    }
+    // fields where the countryside is crowded
+    if (dv && FARMABLE.has(b) && e < ROCKLINE && dv[i] >= q80) {
+      FARM[i] = 1;
+      empty = 1 - (1 - empty) * (dv[i] >= q92 ? 0.12 : 0.35);
+      table = table.concat([["haystack", 40 * (1 - empty)]]);
+    }
+    if (t < -2) table = table.map(([k, w]) => [k.startsWith("pine:") ? "pine_snow:taiga" : k, w]);
+    for (let k = first; k < slots; k++) {
+      const r = h32(i, 200 + k);
+      if (r < empty) continue;
+      const [x, y] = at(k); if (!free(x, y)) continue;
+      emit(x, y, i, pick(table, (r - empty) / (1 - empty)), h32(i, 300 + k), h32(i, 400 + k) > 0.5);
+    }
+  }
+  DECOR.data = new Float32Array(out);
+  DECOR.n = out.length / 4;
+}
+buildDecor();
+
+// ---- the atlas: every sprite the decorations use, baked once and packed in shelves
+const ATLAS = { w: 256, h: 1, rects: [] };
+{
+  const baked = DECOR.keys.map((key) => { const [n, v] = key.split(":"); return bakeSprite(n, v || null); });
+  const order = baked.map((_, k) => k).sort((a, b) => baked[b].h - baked[a].h);
+  let x = 0, y = 0, rowH = 0;
+  for (const k of order) {
+    const s = baked[k];
+    if (x + s.w > ATLAS.w) { x = 0; y += rowH; rowH = 0; }
+    ATLAS.rects[k] = [x, y, s.w, s.h]; x += s.w; rowH = Math.max(rowH, s.h);
+  }
+  ATLAS.h = Math.max(1, y + rowH);
+  const img = new Uint8Array(ATLAS.w * ATLAS.h * 4);
+  baked.forEach((s, k) => { const [ax, ay] = ATLAS.rects[k]; for (let r = 0; r < s.h; r++) img.set(s.px.subarray(r * s.w * 4, (r + 1) * s.w * 4), ((ay + r) * ATLAS.w + ax) * 4); });
+  ATLAS.tex = makeTex(5, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, img, ATLAS.w, ATLAS.h);
+}
+// Each decoration is a billboard standing on its tile, snapped to the art-pixel grid and scaled by whole
+// pixels. Its depth rises up the sprite as a standing object's would, so taller tiles in front hide it.
+const NR = Math.max(1, ATLAS.rects.length);
+const SVS = `#version 300 es
+precision highp float; precision highp int; precision highp sampler2D;
+layout(location=0) in vec2 aCorner; layout(location=1) in vec4 aInst;
+uniform sampler2D uTop, uMask; uniform int uTW;
+uniform vec2 uTarget, uRot, uPitch, uNdcS, uNdcO, uTgt; uniform float uZoom, uDepth, uScale, uFrac, uBigOn, uPxCss, uDim;
+uniform vec4 uRect[${NR}];
+out vec2 vUV; flat out vec4 vR; flat out float vDim;
+void main(){
+  float pk = aInst.w; int spr = int(mod(pk, 256.0)); float rank = mod(floor(pk / 256.0), 256.0) / 255.0;
+  float fl = mod(floor(pk / 65536.0), 2.0); float big = floor(pk / 131072.0);
+  if (big > 0.5 ? uBigOn < 0.5 : rank >= uFrac) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+  int tile = int(aInst.z + 0.5); ivec2 tc = ivec2(tile % uTW, tile / uTW);
+  float top = texelFetch(uTop, tc, 0).r; vec2 mk = texelFetch(uMask, tc, 0).rg;
+  vec2 p = aInst.xy - uTarget;
+  float xr = uRot.x * p.x - uRot.y * p.y, yr = uRot.y * p.x + uRot.x * p.y;
+  vec2 s = vec2(xr, yr * uPitch.x + top * uPitch.y) * uZoom;
+  vec2 px = ((s * uNdcS + uNdcO) * 0.5 + 0.5) * uTgt;
+  vec4 r = uRect[spr]; vec2 sz = r.zw * uScale;
+  vec2 org = floor(vec2(px.x - sz.x * 0.5, px.y - uScale) + 0.5);
+  vec2 q = org + aCorner * sz;
+  float lift = aCorner.y * sz.y * uPxCss / (uZoom * max(uPitch.y, 0.22));
+  gl_Position = vec4(q / uTgt * 2.0 - 1.0, clamp((yr * uPitch.y - (top + lift) * uPitch.x) / uDepth - 0.0004, -0.999, 0.999), 1.0);
+  vUV = vec2(fl > 0.5 ? 1.0 - aCorner.x : aCorner.x, 1.0 - aCorner.y) * r.zw;
+  vR = r; vDim = max(uDim, (1.0 - mk.r) * 0.82);
+}`;
+const SFS = `#version 300 es
+precision highp float; precision highp int; precision highp sampler2D;
+in vec2 vUV; flat in vec4 vR; flat in float vDim; uniform sampler2D uAtlas; uniform vec3 uDimTo; uniform float uMute; out vec4 o;
+void main(){
+  vec4 c = texelFetch(uAtlas, ivec2(vR.xy) + ivec2(clamp(floor(vUV), vec2(0.0), vR.zw - 1.0)), 0);
+  if (c.a < 0.5) discard;
+  vec3 col = c.rgb; float g = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(col, vec3(g * 0.85 + 0.1), uMute);
+  o = vec4(mix(col, mix(vec3(g), uDimTo, 0.78), vDim), 1.0);
+}`;
+let sprog = null, US = null, svao = null;
+try {
+  sprog = program(SVS, SFS);
+  US = uniformsOf(sprog, ["uTop", "uMask", "uAtlas", "uTW", "uTarget", "uRot", "uPitch", "uNdcS", "uNdcO", "uTgt", "uZoom", "uDepth", "uScale", "uFrac",
+    "uBigOn", "uPxCss", "uDim", "uDimTo", "uMute", "uRect"]);
+  svao = gl.createVertexArray(); gl.bindVertexArray(svao);
+  const cb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, cb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 8, 0);
+  const ibf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, ibf); gl.bufferData(gl.ARRAY_BUFFER, DECOR.data, gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 16, 0); gl.vertexAttribDivisor(1, 1);
+  gl.bindVertexArray(null);
+} catch (e) { console.warn("Decorations are off: " + e.message); sprog = null; }
+const RECTS = new Float32Array(NR * 4); ATLAS.rects.forEach((r, k) => RECTS.set(r, k * 4));
+// how big the decorations are drawn, and how many, at the current zoom
+function decorScale(M) {
+  const tileArt = (SPACING * S.cam.zoom) / (M.pxCss * M.art);
+  const k = Math.max(1, Math.min(6, Math.round(tileArt / 30)));
+  return { tileArt, scale: k * M.art, frac: Math.min(1, S.detail * Math.max(0, Math.min(1, (tileArt - 10) / 30)) ** 1.5), big: S.detail > 0 && tileArt >= 5 };
+}
+function drawSprites(M) {
+  if (!sprog || !S.show.decor || !DECOR.n) return;
+  const d = decorScale(M);
+  if (d.frac <= 0 && !d.big) return;
+  gl.useProgram(sprog); gl.bindVertexArray(svao);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texTop);
+  gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texMask);
+  gl.activeTexture(gl.TEXTURE5); gl.bindTexture(gl.TEXTURE_2D, ATLAS.tex);
+  gl.uniform1i(US.uTop, 0); gl.uniform1i(US.uMask, 2); gl.uniform1i(US.uAtlas, 5); gl.uniform1i(US.uTW, TW);
+  gl.uniform2f(US.uTarget, S.cam.x, S.cam.y); gl.uniform2f(US.uRot, cv.c, cv.s); gl.uniform2f(US.uPitch, cv.sp, cv.cp);
+  gl.uniform2f(US.uNdcS, M.sx, M.sy); gl.uniform2f(US.uNdcO, M.ox, M.oy); gl.uniform2f(US.uTgt, M.tw, M.th);
+  gl.uniform1f(US.uZoom, S.cam.zoom); gl.uniform1f(US.uDepth, depthRange()); gl.uniform1f(US.uScale, d.scale);
+  gl.uniform1f(US.uFrac, d.frac); gl.uniform1f(US.uBigOn, d.big ? 1 : 0); gl.uniform1f(US.uPxCss, M.pxCss);
+  gl.uniform1f(US.uDim, S.trade.on ? S.trade.dim : 0); gl.uniform3f(US.uDimTo, GROUND[0] / 255, GROUND[1] / 255, GROUND[2] / 255);
+  gl.uniform1f(US.uMute, S.paint === "@landscape" ? 0 : 0.45); gl.uniform4fv(US.uRect, RECTS);
+  gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
+  gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, DECOR.n);
+  gl.bindVertexArray(null);
+}
+
+// ---- town icons: buildings put together by the town's size, its features and its people's way of life
+const ICONS = new Map();
+const stateColor = (name) => { const f = F["state"] || F["t:state"]; const k = f ? f.dict.indexOf(name) : -1; return k >= 0 ? PALETTE[k % PALETTE.length] : [120, 120, 130]; };
+const cssHex = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+const flagOf = (state) => { const c = stateColor(state); return { g: cssHex(c), G: cssHex(c.map((v) => v * 0.62)) }; };
+function tierOf(b) {
+  const g = (b.group || "").toLowerCase();
+  if (g === "capital" || (b.flags || []).includes("capital")) return 4;
+  if (g === "city") return 3; if (g === "town") return 2; if (g === "village") return 1; if (g === "hamlet") return 0;
+  const p = b.people || 0; return p >= 20000 ? 3 : p >= 5000 ? 2 : p >= 1000 ? 1 : 0;
+}
+function burgParts(b) {
+  const f = new Set(b.flags || []), g = (b.group || "").toLowerCase().replace(/[\s-]+/g, "_"), nomad = b.type === "Nomadic", t = tierOf(b);
+  const hut = nomad ? "tent" : "hut", house = nomad ? "tent" : "house", slate = nomad ? "tent" : "house_slate";
+  let P;
+  if (g === "fort") P = [["tower", 0, 1], ["wall", 0, -1]];
+  else if (g === "monastery") P = [["church", 0, 1], [hut, 7, 0]];
+  else if (g === "caravanserai") P = [["tent", -5, 0], ["house_long", 3, 1]];
+  else if (g === "trading_post") P = [[house, 0, 1], ["crates", 6, -1]];
+  else P = [[[hut, 0, 0]], [[house, -3, 1], [hut, 4, 0]], [[slate, -5, 3], [house, 4, 3], [hut, -1, 0]],
+    [["house_long", 0, 5], [slate, -8, 2], [house, 8, 2], [house, 0, 0]], [["castle", 0, 4], [house, -11, 1], [slate, 11, 1]]][t].slice();
+  if (f.has("temple") && g !== "monastery") P.push(["church", t >= 3 ? -5 : 0, t >= 2 ? 6 : 3]);
+  if (f.has("citadel") && t < 4 && g !== "fort") P.push(["tower", t >= 3 ? 10 : 6, 4]);
+  if (f.has("walls") && g !== "fort") P.push(["wall", 0, -2]);
+  if (f.has("port")) P.push(["boat", t >= 3 ? 15 : t >= 2 ? 11 : 8, -3]);
+  if (f.has("shanty")) P.push(["shack", t >= 3 ? -15 : -9, -1]);
+  if (f.has("plaza") && t >= 2) P.push(["crates", 3, -2]);
+  return P;
+}
+function burgIcon(b) {
+  const parts = burgParts(b), flag = flagOf(b.state);
+  const key = parts.map((p) => p.join(",")).join(";") + (tierOf(b) === 4 ? flag.g : "");
+  let ic = ICONS.get(key);
+  if (ic) return ic;
+  const placed = parts.map(([n, cx, by]) => { const s = bakeSprite(n, null, n === "castle" ? flag : null); return { n, s, x: cx - Math.floor(s.w / 2), y: -by - s.h, by }; });
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const p of placed) { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x + p.s.w); y1 = Math.max(y1, p.y + p.s.h); }
+  const cv = document.createElement("canvas"); cv.width = x1 - x0; cv.height = y1 - y0;
+  const c = cv.getContext("2d");
+  placed.sort((a, b) => b.by - a.by);
+  for (const p of placed) c.drawImage(spriteCanvas(p.n, null, p.n === "castle" ? flag : null), p.x - x0, p.y - y0);
+  ic = { cv, w: cv.width, h: cv.height, ax: -x0, ay: -y0 };   // (ax, ay): the ground point under the town, in icon pixels
+  ICONS.set(key, ic);
+  return ic;
+}
+const unitIcon = (u) => spriteCanvas(u.naval ? "ship" : "banner", null, flagOf(u.state));
 
 // state labels: weighted centre of each state's land tiles
 const STATE_LABELS = [];
@@ -2138,44 +3172,72 @@ function halo(ctx, text, x, y, font, fill, align = "center") {
   ctx.lineJoin = "round"; ctx.lineWidth = 3.2; ctx.strokeStyle = DARK() ? "rgba(14,19,26,.85)" : "rgba(247,248,250,.9)";
   ctx.strokeText(text, x, y); ctx.fillStyle = fill; ctx.fillText(text, x, y);
 }
+// Each zone is filled as an opaque mask of its tiles, then laid on the map once: a light tint when smooth,
+// a hatch of whole art pixels (the pixel-art way of showing something see-through) in the pixel-art style.
+let ZBUF = null;
+function zoneLayer(cl, z, zf, alpha) {
+  if (!ZBUF) ZBUF = document.createElement("canvas");
+  if (ZBUF.width !== ovl.width || ZBUF.height !== ovl.height) { ZBUF.width = ovl.width; ZBUF.height = ovl.height; }
+  const zc = ZBUF.getContext("2d"), col = ZONE_HUE(z.type), px = S.style === "pixel";
+  zc.globalCompositeOperation = "source-over"; zc.setTransform(1, 0, 0, 1, 0, 0); zc.clearRect(0, 0, ZBUF.width, ZBUF.height);
+  zc.setTransform(cl.getTransform()); zc.fillStyle = "#000"; zoneFill(zc, zf, 0.002);
+  zc.setTransform(1, 0, 0, 1, 0, 0); zc.globalCompositeOperation = "source-in";
+  if (px) {
+    const t = document.createElement("canvas"); t.width = t.height = 4; const x = t.getContext("2d");
+    x.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},.18)`; x.fillRect(0, 0, 4, 4);
+    x.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},.7)`; for (let k = 0; k < 4; k++) x.fillRect(k, 3 - k, 1, 1);
+    zc.fillStyle = zc.createPattern(t, "repeat");
+  } else zc.fillStyle = css(col);
+  zc.fillRect(0, 0, ZBUF.width, ZBUF.height);
+  zc.globalCompositeOperation = "source-over";
+  cl.save(); cl.setTransform(1, 0, 0, 1, 0, 0); cl.globalAlpha = alpha * (px ? 1 : 0.22); cl.drawImage(ZBUF, 0, 0); cl.restore();
+}
 function drawOverlay() {
-  const c = octx; c.clearRect(0, 0, VW, VH); HITS = [];
+  const c = octx, cl = lctx; c.clearRect(0, 0, VW, VH); HITS = [];
+  cl.save(); cl.setTransform(1, 0, 0, 1, 0, 0); cl.clearRect(0, 0, ovl.width, ovl.height); cl.restore();
   const tilePx = SPACING * S.cam.zoom, ink = DARK() ? "#e4e9ef" : "#1b2430";
-  const sh = S.show;
-  const lw = (w) => Math.max(0.6, Math.min(w, w * (tilePx / 8)));
-  c.globalAlpha = S.trade.on ? 0.45 : 1;
-  if (sh.zones) for (const o of L.zones) {
-    if (!onScreen(o.bb, ZMAX)) continue;
-    const col = ZONE_HUE(o.f.type); pathOf(c, o, false, 0.002);
-    c.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},.22)`; c.fill();
-    c.setLineDash([5, 4]); c.lineWidth = 1.4; c.strokeStyle = css(col); c.stroke(); c.setLineDash([]);
+  const sh = S.show, px = S.style === "pixel", art = ART();
+  // line widths in CSS pixels; the pixel-art style keeps every line at least one art pixel wide
+  const lw = (w) => Math.max(px ? art : 0.6, Math.min(w, w * (tilePx / 8)));
+  const fixed = (w) => (px ? Math.max(art, Math.round(w / art) * art) : w);
+  const dash = (a) => (px ? a.map((v) => Math.max(1, Math.round(v / art)) * art) : a);
+  cl.globalAlpha = S.trade.on ? 0.45 : 1;
+  cl.lineCap = px ? "butt" : "round"; cl.lineJoin = px ? "miter" : "round";
+  if (sh.zones && META.zones.length) {
+    if (!ZFILL) ZFILL = META.zones.map(buildZoneFill);
+    META.zones.forEach((z, k) => zoneLayer(cl, z, ZFILL[k], cl.globalAlpha));
+    for (const o of L.zones) {
+      if (!onScreen(o.bb, ZMAX)) continue;
+      const col = ZONE_HUE(o.f.type); pathOf(cl, o, false, 0.002);
+      cl.setLineDash(dash([5, 4])); cl.lineWidth = fixed(1.4); cl.strokeStyle = css(col); cl.stroke(); cl.setLineDash([]);
+    }
   }
-  if (sh.coast) { c.lineWidth = lw(1.1); c.strokeStyle = DARK() ? "rgba(200,220,240,.55)" : "rgba(30,50,80,.55)"; for (const o of L.land) { if (!onScreen(o.bb, 0)) continue; pathOf(c, o, false); c.stroke(); } }
+  if (sh.coast) { cl.lineWidth = lw(1.1); cl.strokeStyle = DARK() ? "rgba(200,220,240,.55)" : "rgba(30,50,80,.55)"; for (const o of L.land) { if (!onScreen(o.bb, 0)) continue; pathOf(cl, o, false); cl.stroke(); } }
   if (sh.squares) {
-    c.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--grid"); c.lineWidth = 1.3;
-    for (const o of L.squares) { if (!onScreen(o.bb, ZMAX)) continue; pathOf(c, o, false); c.stroke(); }
+    cl.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--grid"); cl.lineWidth = fixed(1.3);
+    for (const o of L.squares) { if (!onScreen(o.bb, ZMAX)) continue; pathOf(cl, o, false); cl.stroke(); }
   }
   if (sh.blocks && tilePx > 2.5) {
-    const ga = c.globalAlpha;
-    c.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--grid"); c.globalAlpha = ga * 0.45; c.lineWidth = 0.8;
-    for (const o of L.blocks) { if (!onScreen(o.bb, ZMAX)) continue; pathOf(c, o, false); c.stroke(); }
-    c.globalAlpha = ga;
+    const ga = cl.globalAlpha;
+    cl.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--grid"); cl.globalAlpha = ga * 0.45; cl.lineWidth = fixed(0.8);
+    for (const o of L.blocks) { if (!onScreen(o.bb, ZMAX)) continue; pathOf(cl, o, false); cl.stroke(); }
+    cl.globalAlpha = ga;
   }
   if (sh.rivers) {
-    c.strokeStyle = "#3d7fc4"; c.lineCap = "round"; c.lineJoin = "round";
+    cl.strokeStyle = px ? "#3f86cf" : "#3d7fc4";
     for (const o of L.rivers) {
       if (!onScreen(o.bb, ZMAX)) continue;
-      c.lineWidth = Math.max(0.8, Math.min(5, Math.sqrt(o.f.discharge || 1) / 6 * Math.min(1.5, tilePx / 6)));
-      pathOf(c, o, false, SPACING * 0.01); c.stroke();
+      const w = Math.max(0.8, Math.min(5, Math.sqrt(o.f.discharge || 1) / 6 * Math.min(1.5, tilePx / 6)));
+      cl.lineWidth = fixed(w); pathOf(cl, o, false, SPACING * 0.01); cl.stroke();
     }
   }
   if (sh.borders) {
     for (const o of L.borders) {
       if (!onScreen(o.bb, ZMAX)) continue;
       const st = worstStance(o.f);
-      pathOf(c, o, false, SPACING * 0.02);
-      c.lineWidth = 4; c.strokeStyle = DARK() ? "rgba(14,19,26,.6)" : "rgba(255,255,255,.65)"; c.stroke();
-      c.setLineDash([7, 4]); c.lineWidth = 1.8; c.strokeStyle = STANCE[st] || STANCE.Neutral; c.stroke(); c.setLineDash([]);
+      pathOf(cl, o, false, SPACING * 0.02);
+      cl.lineWidth = fixed(4); cl.strokeStyle = DARK() ? "rgba(14,19,26,.6)" : "rgba(255,255,255,.65)"; cl.stroke();
+      cl.setLineDash(dash([7, 4])); cl.lineWidth = fixed(1.8); cl.strokeStyle = STANCE[st] || STANCE.Neutral; cl.stroke(); cl.setLineDash([]);
     }
   }
   if (sh.routes) {
@@ -2183,24 +3245,24 @@ function drawOverlay() {
       if (!onScreen(o.bb, ZMAX)) continue;
       const g = o.f.group;
       if (g === "trails" && tilePx < 1.5) continue;
-      pathOf(c, o, false, SPACING * 0.015);
-      if (g === "searoutes") { c.setLineDash([2, 5]); c.lineWidth = 1.2; c.strokeStyle = DARK() ? "rgba(170,205,240,.75)" : "rgba(30,70,120,.6)"; }
-      else if (g === "roads") { c.setLineDash([]); c.lineWidth = lw(2.2); c.strokeStyle = "#9b3b25"; }
-      else { c.setLineDash([5, 3]); c.lineWidth = lw(1.3); c.strokeStyle = DARK() ? "#c49a6c" : "#7a5536"; }
-      c.stroke(); c.setLineDash([]);
+      pathOf(cl, o, false, SPACING * 0.015);
+      if (g === "searoutes") { cl.setLineDash(dash([2, 5])); cl.lineWidth = fixed(1.2); cl.strokeStyle = DARK() ? "rgba(170,205,240,.75)" : "rgba(30,70,120,.6)"; }
+      else if (g === "roads") { cl.setLineDash([]); cl.lineWidth = px ? fixed(lw(2.2)) : lw(2.2); cl.strokeStyle = px ? "#a8743f" : "#9b3b25"; }
+      else { cl.setLineDash(dash([5, 3])); cl.lineWidth = px ? fixed(lw(1.3)) : lw(1.3); cl.strokeStyle = DARK() ? "#c49a6c" : "#7a5536"; }
+      cl.stroke(); cl.setLineDash([]);
     }
   }
   if (S.trade.traffic && L.traffic.length) {
     let maxv = 0; for (const o of L.traffic) maxv = Math.max(maxv, o.f.value || 0);
-    c.lineCap = "round";
     for (const o of L.traffic) {
       if (!onScreen(o.bb, ZMAX)) continue;
       const gi = GOODS.indexOf(o.f.top); const col = gi >= 0 ? GOOD_COLOR[gi] : [120, 120, 120];
-      c.lineWidth = 1 + 9 * Math.sqrt((o.f.value || 0) / (maxv || 1));
-      c.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},.55)`; pathOf(c, o, false, SPACING * 0.03); c.stroke();
+      cl.lineWidth = fixed(1 + 9 * Math.sqrt((o.f.value || 0) / (maxv || 1)));
+      cl.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},.55)`; pathOf(cl, o, false, SPACING * 0.03); cl.stroke();
     }
   }
-  c.globalAlpha = 1;
+  cl.globalAlpha = 1;
+  c.lineCap = "round"; c.lineJoin = "round";
   if (S.trade.on) drawTradePaths(c);
   if (sh.journeys) {
     for (const o of L.journeys) {
@@ -2233,8 +3295,14 @@ function drawOverlay() {
   }
   if (sh.units) for (const u of UNITS) {
     const [x, y] = project(u.x, u.y, u.z); if (x < -20 || y < -20 || x > VW + 20 || y > VH + 20) continue;
-    const st = F["state"] ? F["state"].dict.indexOf(u.u.state) : -1;
-    const col = st >= 0 ? PALETTE[st % PALETTE.length] : [120, 120, 130];
+    if (px) {
+      const cvs = unitIcon(u.u), k = iconScale(tilePx), w = cvs.width * k, h = cvs.height * k;
+      const left = snap(x - w / 2), top = snap(y - h + k);
+      c.imageSmoothingEnabled = false; c.drawImage(cvs, left, top, w, h);
+      HITS.push({ x, y: y - h / 2, r: Math.max(8, h / 2), kind: "unit", o: u });
+      continue;
+    }
+    const col = stateColor(u.u.state);
     c.strokeStyle = ink; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 16); c.stroke();
     c.fillStyle = css(col); c.beginPath();
     if (u.u.naval) { c.moveTo(x, y - 16); c.lineTo(x + 10, y - 12); c.lineTo(x, y - 8); } else c.rect(x, y - 16, 10, 7);
@@ -2248,18 +3316,29 @@ function drawOverlay() {
       c.beginPath(); c.arc(x, y - 3, 2.6, 0, Math.PI * 2); c.fillStyle = DARK() ? "#f0f3f6" : "#fff"; c.fill();
       c.lineWidth = 1; c.strokeStyle = "#8a4b9e"; c.stroke(); HITS.push({ x, y: y - 3, r: 6, kind: "marker", o: m }); continue;
     }
-    c.beginPath(); c.arc(x, y - 10, 9, 0, Math.PI * 2); c.fillStyle = DARK() ? "rgba(20,26,34,.9)" : "rgba(255,255,255,.92)"; c.fill();
-    c.lineWidth = 1; c.strokeStyle = "rgba(0,0,0,.25)"; c.stroke();
-    c.font = "12px system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
-    c.fillStyle = ink; c.fillText(m.m.icon || "•", x, y - 9.5);
+    const icon = markerIcon(m.m);
+    if (px) {   // a square badge of whole art pixels
+      const a = Math.max(1, Math.round(art)), s = 9 * a, l = snap(x - s), t = snap(y - 10 - s);
+      c.fillStyle = DARK() ? "#2a3240" : "#fbf8ef"; c.fillRect(l, t, 2 * s, 2 * s);
+      c.fillStyle = DARK() ? "#c9d2dd" : "#3b3226"; c.fillRect(l, t, 2 * s, a); c.fillRect(l, t + 2 * s - a, 2 * s, a); c.fillRect(l, t, a, 2 * s); c.fillRect(l + 2 * s - a, t, a, 2 * s);
+      c.fillRect(snap(x - a), t + 2 * s, 2 * a, 3 * a);
+    } else {
+      c.beginPath(); c.arc(x, y - 10, 9, 0, Math.PI * 2); c.fillStyle = DARK() ? "rgba(20,26,34,.9)" : "rgba(255,255,255,.92)"; c.fill();
+      c.lineWidth = 1; c.strokeStyle = "rgba(0,0,0,.25)"; c.stroke();
+    }
+    c.font = "12px system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+    c.fillStyle = ink; c.fillText(icon, x, y - 9.5);
     HITS.push({ x, y: y - 10, r: 10, kind: "marker", o: m });
   }
   if (S.sel >= 0) outlineTile(c, S.sel, getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(), 2.6);
   dirty.overlay = false;
 }
+const snap = (v) => Math.round(v * DPR) / DPR;
+// icons are drawn in whole art pixels, and a size up when the tiles are large
+const iconScale = (tilePx) => ART() * Math.max(1, Math.min(4, Math.round(tilePx / ART() / 40)));
 function drawBurgs(c, tilePx, ink) {
   const order = BURGS.slice().sort((a, b) => (b.b.people || 0) - (a.b.people || 0));
-  const taken = [], grid = new Map(), cellSz = 60;
+  const grid = new Map(), cellSz = 60;
   const free = (b) => {
     for (let gx = Math.floor(b[0] / cellSz); gx <= Math.floor(b[2] / cellSz); gx++) for (let gy = Math.floor(b[1] / cellSz); gy <= Math.floor(b[3] / cellSz); gy++) {
       for (const o of grid.get(gx + "," + gy) || []) if (!(b[2] < o[0] || b[0] > o[2] || b[3] < o[1] || b[1] > o[3])) return false;
@@ -2268,17 +3347,36 @@ function drawBurgs(c, tilePx, ink) {
   };
   const occupy = (b) => { for (let gx = Math.floor(b[0] / cellSz); gx <= Math.floor(b[2] / cellSz); gx++) for (let gy = Math.floor(b[1] / cellSz); gy <= Math.floor(b[3] / cellSz); gy++) { const k = gx + "," + gy; if (!grid.has(k)) grid.set(k, []); grid.get(k).push(b); } };
   const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
-  const tierOf = (b) => (b.group === "capital" ? 4 : b.group === "city" ? 3 : b.group === "town" ? 2 : 1);
+  const icons = S.style === "pixel", k = iconScale(tilePx);
+  const iconBoxes = [];
+  const freeIcon = (b) => !iconBoxes.some((o) => !(b[2] < o[0] || b[0] > o[2] || b[3] < o[1] || b[1] > o[3]));
+  const takeIcon = (b) => iconBoxes.push(b);
   const pins = [];
   for (const B of order) {
-    const [x, y] = project(B.x, B.y, B.z); if (x < -40 || y < -40 || x > VW + 40 || y > VH + 40) continue;
-    const t = tierOf(B.b);
-    if ((t === 1 && tilePx < 3) || (t === 2 && tilePx < 1.2)) continue;
-    const stem = 7 + t * 3.5, r = 1.8 + t * 0.9;
-    pins.push({ B, x, y, t, stem, r });
+    const [x, y] = project(B.x, B.y, B.z); if (x < -60 || y < -60 || x > VW + 60 || y > VH + 60) continue;
+    const t = Math.max(1, tierOf(B.b));
+    if (icons ? (t === 1 && tilePx < 6) || (t === 2 && tilePx < 2.5) || (t === 3 && tilePx < 1.2) : (t === 1 && tilePx < 3) || (t === 2 && tilePx < 1.2)) continue;
+    if (icons) {
+      // larger towns first; a smaller town whose buildings would sit mostly on another's waits for a closer zoom
+      const ic = burgIcon(B.b), w = ic.w * k, h = ic.h * k, left = x - ic.ax * k, top = y - ic.ay * k;
+      const core = [left + w * 0.25, top + h * 0.3, left + w * 0.75, top + h];
+      if (S.selBurg !== B.k && !freeIcon(core)) continue;
+      takeIcon(core);
+      pins.push({ B, x, y, t, ic, top, h, w });
+    }
+    else { const stem = 7 + t * 3.5, r = 1.8 + t * 0.9; pins.push({ B, x, y, t, stem, r, top: y - stem - r }); }
   }
-  for (const p of pins.slice().reverse()) {   // small ones first, so large pins sit on top
-    const { B, x, y, t, stem, r } = p; const sel = S.selBurg === B.k;
+  for (const p of pins.slice().reverse()) {   // small ones first, so large ones sit on top
+    const { B, x, y } = p; const sel = S.selBurg === B.k;
+    if (icons) {
+      const left = snap(x - p.ic.ax * k), top = snap(p.top);
+      c.imageSmoothingEnabled = false; c.drawImage(p.ic.cv, left, top, p.w, p.h);
+      if (sel) { c.fillStyle = accent; const a = Math.max(1, Math.round(ART())); c.fillRect(left - a, snap(y) + a, p.w + 2 * a, 2 * a); }
+      if (S.show.markets && marketOfBurg.has(B.k)) diamond(c, x, p.top - 7, ink);
+      HITS.push({ x, y: p.top + p.h / 2, r: Math.max(8, Math.min(p.w, p.h) / 2 + 2), kind: "burg", o: B });
+      continue;
+    }
+    const { stem, r } = p;
     c.strokeStyle = sel ? accent : ink; c.lineWidth = sel ? 1.8 : 1; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - stem); c.stroke();
     const flags = B.b.flags || [];
     c.beginPath();
@@ -2286,26 +3384,29 @@ function drawBurgs(c, tilePx, ink) {
     c.fillStyle = sel ? accent : (DARK() ? "#f0f3f6" : "#ffffff"); c.fill();
     c.lineWidth = flags.includes("port") ? 2 : 1.3; c.strokeStyle = sel ? accent : (flags.includes("port") ? "#2b6cb0" : ink); c.stroke();
     if (flags.includes("capital")) { c.beginPath(); c.arc(x, y - stem, r * 0.45, 0, Math.PI * 2); c.fillStyle = ink; c.fill(); }
-    if (S.show.markets && marketOfBurg.has(B.k)) {
-      const yy = y - stem - r - 6; c.beginPath(); c.moveTo(x, yy - 4.5); c.lineTo(x + 4.5, yy); c.lineTo(x, yy + 4.5); c.lineTo(x - 4.5, yy); c.closePath();
-      c.fillStyle = "#e0a526"; c.fill(); c.lineWidth = 1; c.strokeStyle = ink; c.stroke();
-    }
+    if (S.show.markets && marketOfBurg.has(B.k)) diamond(c, x, y - stem - r - 6, ink);
     HITS.push({ x, y: y - stem, r: Math.max(7, r + 4), kind: "burg", o: B });
   }
   if (!S.show.labels) return;
   const need = { 4: 0, 3: 1.2, 2: 4, 1: 10 };
   for (const p of pins) {
-    const { B, x, y, t, stem } = p;
+    const { B, x, y, t } = p;
     if (tilePx < need[t] && S.selBurg !== B.k) continue;
     const size = 10.5 + t * 1.4, font = `${t >= 3 ? 700 : 500} ${size}px Alegreya, serif`;
     c.font = font; const w = c.measureText(B.b.name).width;
-    const bx = x + 6, by = y - stem;
+    const bx = icons ? x + p.w - p.ic.ax * k + 3 : x + 6, by = icons ? p.top + p.h / 2 : y - p.stem;
     const box = [bx - 2, by - size / 2 - 1, bx + w + 2, by + size / 2 + 1];
     if (!free(box)) continue;
     occupy(box);
     halo(c, B.b.name, bx, by, font, S.selBurg === B.k ? accent : ink, "left");
   }
 }
+function diamond(c, x, yy, ink) {
+  c.beginPath(); c.moveTo(x, yy - 4.5); c.lineTo(x + 4.5, yy); c.lineTo(x, yy + 4.5); c.lineTo(x - 4.5, yy); c.closePath();
+  c.fillStyle = "#e0a526"; c.fill(); c.lineWidth = 1; c.strokeStyle = ink; c.stroke();
+}
+// a marker's emoji; image icons and anything unreadable fall back to a dot
+const markerIcon = (m) => { const s = m.icon || ""; return !s || /^(https?:|data:|glyph-|\.?\/)/.test(s) ? "•" : s; };
 function outlineTile(c, i, color, w) {
   const x = POS[2 * i], y = POS[2 * i + 1], z = TOP[i];
   c.beginPath();
@@ -2412,7 +3513,9 @@ function renderLegend() {
   if (LEG.kind === "landscape") {
     const bio = F["biome"]; const ul = el("ul", { class: "cats" });
     if (bio) bio.dict.forEach((name, k) => ul.append(el("li", {}, el("span", { class: "sw", style: `background:${css(catColor(bio, k + 1))}` }), name, el("small", { text: bio.counts[k].toLocaleString("en") }))));
-    box.append(ul, el("p", { class: "about", text: "Biome of the cell under each tile centre, lightened with height; the sea darkens with depth." }));
+    box.append(ul, el("p", { class: "about", text: S.style === "pixel"
+      ? `Biome of the cell under each tile centre. The land is banded by height, with bare rock from ${fmtNum(ROCKLINE * hRatio)} ${HU} and snow from ${fmtNum(SNOWLINE * hRatio)} ${HU}; crowded countryside is drawn as fields, and the sea darkens in steps with depth.`
+      : "Biome of the cell under each tile centre, lightened with height; the sea darkens with depth." }));
     return;
   }
   const f = LEG.f;
@@ -2463,6 +3566,7 @@ function toggleRow(label, get, set, key) {
     ["Lettered squares", "squares", META.squares.length], ["10 by 10 blocks", "blocks", META.blocks.length],
   ];
   for (const [label, k, n] of rows) if (n) T.append(toggleRow(label, () => sh[k], (v) => { sh[k] = v; }));
+  if (DECOR.n) T.append(toggleRow("Trees, rocks and fields", () => sh.decor, (v) => { sh.decor = v; dirty.terrain = true; }));
   T.append(toggleRow("Tile outlines", () => S.outlines, (v) => { S.outlines = v; dirty.terrain = true; }));
   if (META.borders.length) {
     const used = [...new Set(META.borders.map(worstStance))].sort((a, b) => STANCE_RANK.indexOf(a) - STANCE_RANK.indexOf(b));
@@ -2470,8 +3574,15 @@ function toggleRow(label, get, set, key) {
       el("div", { style: "display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88rem" },
         used.map((s) => el("span", { style: "display:inline-flex;align-items:center;gap:5px" }, el("span", { class: "sw", style: `background:${STANCE[s] || STANCE.Neutral}` }), s))));
   }
-  if (META.burgs.length) T.append(el("p", { class: "sub", text: "Pins: taller for capitals and cities, a square head for walls, a blue ring for ports, a dark centre for capitals, a gold diamond for market centres." }));
+  if (META.burgs.length) T.append(el("p", { class: "sub", id: "burg-key" }));
 }
+function burgKey() {
+  const k = $("#burg-key"); if (!k) return;
+  k.textContent = S.style === "pixel"
+    ? "Towns: a hut or tent for a hamlet, more houses for villages and towns, a castle flying the state’s colour for a capital; a church for a temple, a tower for a citadel, walls, a boat for a port, shacks for a shanty town, a gold diamond for a market centre."
+    : "Pins: taller for capitals and cities, a square head for walls, a blue ring for ports, a dark centre for capitals, a gold diamond for market centres.";
+}
+burgKey();
 function seg(options, get, set) {
   const box = el("div", { class: "seg", role: "group" });
   const btns = options.map(([v, label]) => {
@@ -2532,7 +3643,17 @@ function renderFocus() {
 }
 buildTrade();
 {
+  $("#style-slot").append(el("p", { class: "sub", text: "Style" }), seg([["pixel", "Pixel art"], ["smooth", "Smooth"]], () => S.style, (v) => { S.style = v; setStyle(); }));
   const V = $("#view");
+  const pxRow = el("div", {}, el("p", { class: "sub", text: "Pixel size" }),
+    seg([[1, "1"], [2, "2"], [3, "3"], [4, "4"]], () => S.px, (v) => { S.px = v; setStyle(); }));
+  V.append(pxRow);
+  if (DECOR.n) V.append(slider("Trees and details", 0, 2, 0.1, () => S.detail, (v) => { S.detail = v; dirty.terrain = true; },
+    (v) => (v ? `× ${fmtNum(v)}` : "none")).node);
+  function setStyle() {
+    pxRow.hidden = S.style !== "pixel"; sizeLines(); paint(); burgKey();
+    dirty.terrain = dirty.overlay = dirty.fx = true; pickDirty = true;
+  }
   V.append(slider("Relief", 0, Math.round(EXAG0 * 4 * 10) / 10, Math.max(0.1, Math.round(EXAG0 / 20 * 10) / 10), () => S.exag,
     (v) => { S.exag = v; retop(); }, (v) => `× ${fmtNum(v)}`).node);
   const stepOpts = [[0, "Smooth"], [50, "50 m"], [100, "100 m"], [250, "250 m"], [500, "500 m"]];
@@ -2641,8 +3762,8 @@ function inspect(i, focusBurg = -1) {
   ibody.replaceChildren();
   const ordered = focusBurg >= 0 ? [BURGS[focusBurg], ...burgs.filter((b) => b.k !== focusBurg)] : burgs;
   for (const B of ordered) ibody.append(burgCard(B));
-  for (const m of tileMarkers.get(i) || []) ibody.append(el("div", { class: "card" }, el("h4", {}, `${m.m.icon || ""} ${m.m.name || "Marker"}`, el("small", { text: m.m.type })), m.m.note ? el("p", { class: "note", text: m.m.note }) : null));
-  for (const u of tileUnits.get(i) || []) ibody.append(el("div", { class: "card" }, el("h4", {}, u.u.name, el("small", { text: u.u.state })), el("p", { text: `${fmtNum(u.u.men, true)} ${u.u.naval ? "ships" : "men"}${u.u.comp ? `: ${u.u.comp}` : ""}` })));
+  for (const m of tileMarkers.get(i) || []) ibody.append(el("div", { class: "card" }, el("h4", {}, `${markerIcon(m.m)} ${m.m.name || "Marker"}`, el("small", { text: m.m.type })), m.m.note ? el("p", { class: "note", text: m.m.note }) : null));
+  for (const u of tileUnits.get(i) || []) ibody.append(el("div", { class: "card" }, el("h4", {}, `${u.u.icon && !/^(https?:|data:)/.test(u.u.icon) ? u.u.icon + " " : ""}${u.u.name}`, el("small", { text: u.u.state })), el("p", { text: `${fmtNum(u.u.men, true)} ${u.u.naval ? "ships" : "men"}${u.u.comp ? `: ${u.u.comp}` : ""}` })));
   for (const s of tileStops.get(i) || []) ibody.append(el("div", { class: "card" }, el("h4", {}, s.s.name, el("small", { text: "journey stop" })), el("p", { text: `${s.s.journey}; starts ${s.s.start}, ${fmtNum(s.s.hours)} hours` })));
   for (const g of ["Land", "People", "Realm", "Economy", "Trade", "Places", "Reference", "Other"]) {
     const rows = fieldRows(i, g); if (!rows.length) continue;
@@ -2877,7 +3998,7 @@ try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r,
 resize(); camVecs(); paint(); fit(); syncDial(); filterDeals();
 $("#loading").remove();
 requestAnimationFrame(frame);
-window.__iso = { S, META, F, inspect, flyTo, paint, focusTrade, filterDeals, pickTile, project, dirty };
+window.__iso = { S, META, F, inspect, flyTo, paint, focusTrade, filterDeals, pickTile, project, dirty, DECOR, ZFILL: () => ZFILL, sizeLines, ATLAS };
 })();
 </script>
 </body>

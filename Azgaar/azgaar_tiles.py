@@ -49,7 +49,7 @@ import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
-TOOL_VERSION = "1.0"
+TOOL_VERSION = "1.1"
 LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ"  # the Ordnance Survey alphabet: no I
 COMPASS8 = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 COMPASS16 = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
@@ -615,6 +615,29 @@ def resolve_world(arg, roots, map_name=None):
     return max(cands, key=date_key)
 
 
+_GLYPH = re.compile(r"(?:glyph|emoji)[-_]((?:[0-9a-f]{2,6})(?:[-_][0-9a-f]{2,6})*)", re.I)
+
+
+def icon_text(icon):
+    """A marker's or regiment's icon as text. Azgaar 1.154 and newer store the emoji as its code points
+    ('glyph-1f333', 'glyph-1f3f4-200d-2620-fe0f'); older maps store the emoji itself. Image icons (a URL
+    or data URI) are kept as they are."""
+    if not isinstance(icon, str):
+        return icon
+    s = icon.strip()
+    m = _GLYPH.fullmatch(s)
+    if m:
+        try:
+            return "".join(chr(int(h, 16)) for h in re.split(r"[-_]", m.group(1)))
+        except (ValueError, OverflowError):
+            return s
+    return s
+
+
+def icon_is_image(icon):
+    return isinstance(icon, str) and icon.startswith(("http://", "https://", "data:", "./", "/"))
+
+
 class World:
     def __init__(self, map_path, cells_path=None, quiet=False):
         self.map_path = Path(map_path)
@@ -884,7 +907,7 @@ class World:
         for z in self.zones:
             for c in z.get("cells", []):
                 self.cell_zones[c].append(z["i"])
-        self.markers = self.live(d["markers"])
+        self.markers = [dict(m, icon=icon_text(m.get("icon"))) for m in self.live(d["markers"])]
         self.routes = [r for r in d["routes"] if isinstance(r, dict) and r.get("points")]
         self.rivers = {r["i"]: r for r in self.live(d["rivers"])}
         self.journeys = [j for j in d["journeys"] if isinstance(j, dict)]
@@ -893,7 +916,7 @@ class World:
         for s in self.live(self.states):
             for u in s.get("military") or []:
                 if isinstance(u, dict):
-                    self.units.append(dict(u, state=s["i"]))
+                    self.units.append(dict(u, state=s["i"], icon=icon_text(u.get("icon"))))
         self._feature_rings = None
         self._river_courses = None
         self._production = None
@@ -3640,7 +3663,7 @@ def svg_sheet(w: World, g: TileGrid, ci, cj, radius, out_path, mark=None):
                      f'stroke="white" stroke-width="{fs * 0.2:.3f}" paint-order="stroke">{_xml(b["name"])}</text>')
     for mk in w.markers:
         if x0 <= mk["x"] <= x1 and y0 <= mk["y"] <= y1:
-            L.append(f'<text x="{mk["x"]:.3f}" y="{mk["y"] + fs * 0.4:.3f}" font-size="{fs * 1.3:.3f}" text-anchor="middle">{_xml(mk.get("icon", "*"))}'
+            L.append(f'<text x="{mk["x"]:.3f}" y="{mk["y"] + fs * 0.4:.3f}" font-size="{fs * 1.3:.3f}" text-anchor="middle">{_xml("*" if icon_is_image(mk.get("icon")) else (mk.get("icon") or "*"))}'
                      f'<title>{_xml(mk.get("name") or mk.get("type"))}</title></text>')
     for u in w.units:
         if x0 <= u["x"] <= x1 and y0 <= u["y"] <= y1:
@@ -5133,13 +5156,13 @@ def export_gis(w: World, g: TileGrid, out_base, fmt="geojson", crs="lonlat", win
                     "ref": g.ref(*g.locate(m["x"], m["y"])), "point_ref": g.point_ref(m["x"], m["y"]), "note": clean_note(m.get("note", "")) or None})
     if "units" in want:
         out.layer("units", "Point", [("name", "TEXT"), ("state", "TEXT"), ("men", "INTEGER"), ("naval", "INTEGER"),
-                                     ("composition", "TEXT"), ("ref", "TEXT"), ("base_ref", "TEXT")])
+                                     ("icon", "TEXT"), ("composition", "TEXT"), ("ref", "TEXT"), ("base_ref", "TEXT")])
         for u in w.units:
             if in_win(u["x"], u["y"]):
                 comp = ", ".join(f"{v} {k}" for k, v in sorted((u.get("u") or {}).items(), key=lambda kv: -kv[1]))
                 out.add("units", proj.point(u["x"], u["y"]), {
                     "name": u.get("name"), "state": w.state_name(u["state"]), "men": u.get("a"), "naval": bool(u.get("n")),
-                    "composition": comp or None, "ref": g.ref(*g.locate(u["x"], u["y"])),
+                    "icon": u.get("icon"), "composition": comp or None, "ref": g.ref(*g.locate(u["x"], u["y"])),
                     "base_ref": g.ref(*g.locate(u["bx"], u["by"])) if u.get("bx") is not None else None})
     return out.close()
 
