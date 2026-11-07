@@ -88,7 +88,10 @@ AZ.Journey = class {
     this.planEnd = t;
     this.replan();
     this.totalMiles = this.segs.reduce((a, s) => a + (s.moving ? s.miles : 0), 0);
-    this.origin = this.segs[0].place;
+    // the start is where the first segment begins, whether the journey opens with a stay or a leg
+    const s0 = this.segs[0], b0 = w.P.burgs[w.C.burg[s0.from]];
+    if (b0) this.origin = { burg: b0, name: b0.name, tile: b0.t, at: true };
+    else { const nb = w.near(s0.startTile[0], s0.startTile[1], 14).find(n => n.kind === "burg"); this.origin = nb ? { burg: nb.o, name: `near ${nb.o.name}`, tile: s0.startTile, at: false } : { burg: null, name: w.waterName(...s0.startTile), tile: s0.startTile, at: false }; }
     this.dest = this.segs[this.segs.length - 1].place;
     void U;
   }

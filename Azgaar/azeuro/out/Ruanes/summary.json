@@ -1,0 +1,619 @@
+{
+ "world": "Ruanes",
+ "map": "Ruanes smallgrid.map",
+ "cells_geojson": "Ruanes Cells 2026-10-17-23-34.geojson",
+ "network": {
+  "stops": 144,
+  "roles": {
+   "market": 57,
+   "port": 62,
+   "capital": 14,
+   "city": 83,
+   "air-request": 14,
+   "fort": 11,
+   "link": 3
+  },
+  "links": {
+   "land": 190,
+   "sea": 63
+  },
+  "neutral": [
+   "Treley",
+   "Dudmanch",
+   "Cecushuth",
+   "Yhosasera",
+   "Dudhursther",
+   "Rothbrid"
+  ],
+  "air": [
+   "Skalzigis",
+   "Grimrud",
+   "Westcke",
+   "Molyemyans",
+   "Brat",
+   "Witonwich",
+   "Louthbury",
+   "Blechleach",
+   "Hitchbury",
+   "Watchtonor",
+   "Teliondeelu",
+   "Krarnuq",
+   "Zach",
+   "Fumivo"
+  ],
+  "stars": {
+   "air": 12,
+   "sea": 22,
+   "land": 87
+  },
+  "components": [
+   144
+  ],
+  "notes": [],
+  "city_rule": "burg group 'city'",
+  "air_rule": "air journeys and portal markers in the map",
+  "spacing_px": 30.7
+ },
+ "commissions": {
+  "deals": 672,
+  "skipped_below_min_value": 0,
+  "trimmed_by_max_per_trade": {},
+  "value_quartiles": [
+   3.66,
+   6.86,
+   13.06
+  ],
+  "decks": {
+   "Provisions": 138,
+   "Luxuries": 234,
+   "Metals & arms": 76,
+   "Building": 74,
+   "Livestock": 134,
+   "Slaves": 16
+  },
+  "income": {
+   "2": 92,
+   "3": 63,
+   "4": 109,
+   "5": 37,
+   "6": 71,
+   "7": 54,
+   "8": 57,
+   "9": 41,
+   "10": 40,
+   "11": 16,
+   "12": 29,
+   "13": 3,
+   "14": 23,
+   "15": 11,
+   "16": 7,
+   "17": 5,
+   "18": 1,
+   "20": 13
+  },
+  "free_lands": 17
+ },
+ "decrees": {
+  "candidates": 111,
+  "with_routes": 83,
+  "cards": 30,
+  "families": {
+   "War": 5,
+   "Disaster": 5,
+   "Faith": 3,
+   "Enterprise": 7,
+   "Disorder": 6,
+   "Court & festival": 3,
+   "Law": 1
+  },
+  "issuers": {
+   "Oshlontyr": 4,
+   "Syhamar": 4,
+   "Entha": 4,
+   "Altfieldia": 3,
+   "Kilkleighia": 3,
+   "Shiford": 2,
+   "Stamland": 2,
+   "Craftlia": 2,
+   "Orms": 2,
+   "Lympsheadia": 1,
+   "Chaunde": 1,
+   "Nelahlidia": 1,
+   "Rar": 1
+  },
+  "decks_targeted": {
+   "Metals & arms": 5,
+   "Provisions": 6,
+   "Luxuries": 3,
+   "Slaves": 1,
+   "Livestock": 1,
+   "Building": 1
+  },
+  "dropped_small": 28,
+  "treasury": {
+   "Rar": "poor",
+   "Lympsheadia": "poor",
+   "Nelahlidia": "poor",
+   "Chaunde": "poor",
+   "Nash": "poor",
+   "Orms": "modest",
+   "Shiford": "modest",
+   "Stamland": "modest",
+   "Kilkleighia": "modest",
+   "Craftlia": "modest",
+   "Altfieldia": "rich",
+   "Oshlontyr": "rich",
+   "Syhamar": "rich",
+   "Entha": "rich"
+  }
+ },
+ "houses": [
+  {
+   "colour": "#6E3B87",
+   "town": "Craftle",
+   "state": "Craftlia",
+   "home_trades": [
+    "Metals & arms",
+    "Building"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Disaster"
+  },
+  {
+   "colour": "#2C7873",
+   "town": "Kingleton",
+   "state": "Shiford",
+   "home_trades": [
+    "Metals & arms",
+    "Livestock"
+   ],
+   "charter": "Carters' charter",
+   "patron": "War"
+  },
+  {
+   "colour": "#A8551E",
+   "town": "Totherton",
+   "state": "Entha",
+   "home_trades": [
+    "Luxuries",
+    "Metals & arms"
+   ],
+   "charter": "Carters' charter",
+   "patron": "Disorder"
+  },
+  {
+   "colour": "#3B4A9C",
+   "town": "Skalzigis",
+   "state": "Nash",
+   "home_trades": [
+    "Luxuries",
+    "Livestock"
+   ],
+   "charter": "Sky charter",
+   "patron": "Faith"
+  },
+  {
+   "colour": "#7A5C2E",
+   "town": "Ollmka",
+   "state": "Oshlontyr",
+   "home_trades": [
+    "Luxuries",
+    "Livestock"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Court & festival"
+  },
+  {
+   "colour": "#4B5563",
+   "town": "Undunzan",
+   "state": "Chaunde",
+   "home_trades": [
+    "Provisions",
+    "Building"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Enterprise"
+  }
+ ],
+ "infrastructure": {
+  "land": 50,
+  "sea": 25,
+  "air": 10,
+  "wild": 10
+ },
+ "options": {
+  "map": null,
+  "formats": [
+   "svg",
+   "png"
+  ],
+  "only": null,
+  "dpi": 300,
+  "board_width": 7200,
+  "jobs": 0,
+  "palette": true,
+  "sheets": true,
+  "sheet_dpi": 200,
+  "sheet_max": 4096,
+  "spacing": 0.016,
+  "neutral": null,
+  "air": null,
+  "air_overlap": 1,
+  "remote": 0.015,
+  "income_k": 0.75,
+  "income_min": 2,
+  "income_max": 20,
+  "min_value": 0.0,
+  "max_per_trade": null,
+  "freight": null,
+  "decrees": 30,
+  "seed": 1,
+  "players": 6,
+  "colours": [
+   "#6E3B87",
+   "#2C7873",
+   "#A8551E",
+   "#3B4A9C",
+   "#7A5C2E",
+   "#4B5563"
+  ],
+  "goal": 50,
+  "start_gold": 10,
+  "stations": 20,
+  "overhead": 30,
+  "home_overhead": 20,
+  "overhead_mode": "gold",
+  "draw": 3,
+  "debt_rounds": 3,
+  "petitions": "turn",
+  "slaves": true,
+  "infra_land": 50,
+  "wild_share": 0.12
+ },
+ "sheets": [
+  {
+   "sheet": "commissions_Provisions_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Provisions_2.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Provisions_3.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Provisions_4.png",
+   "columns": 5,
+   "rows": 4,
+   "cards": 18,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_2.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_3.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_4.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_5.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_6.png",
+   "columns": 5,
+   "rows": 7,
+   "cards": 34,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Metals_arms_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Metals_arms_2.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 36,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Building_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Building_2.png",
+   "columns": 5,
+   "rows": 7,
+   "cards": 34,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_2.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_3.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_4.png",
+   "columns": 5,
+   "rows": 3,
+   "cards": 14,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Slaves.png",
+   "columns": 5,
+   "rows": 4,
+   "cards": 16,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "decrees_1.png",
+   "columns": 7,
+   "rows": 4,
+   "cards": 28,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "decrees_2.png",
+   "columns": 7,
+   "rows": 1,
+   "cards": 2,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "reference.png",
+   "columns": 6,
+   "rows": 1,
+   "cards": 6,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "infrastructure_1.png",
+   "columns": 8,
+   "rows": 5,
+   "cards": 40,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_2.png",
+   "columns": 8,
+   "rows": 5,
+   "cards": 40,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_3.png",
+   "columns": 8,
+   "rows": 2,
+   "cards": 15,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_faces.png",
+   "columns": 4,
+   "rows": 1,
+   "cards": 4,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "tokens_plus50.png",
+   "columns": 12,
+   "rows": 1,
+   "cards": 12,
+   "card_width": 150,
+   "card_height": 150
+  },
+  {
+   "sheet": "Ruanes_board.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 4096,
+   "card_height": 2688
+  },
+  {
+   "sheet": "commissions_Provisions_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Metals_arms_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Building_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Slaves_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "decree_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "decree_anatomy.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3688,
+   "card_height": 2394
+  },
+  {
+   "sheet": "infrastructure_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "budget_house_1_Craftle.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_2_Kingleton.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_3_Totherton.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_4_Skalzigis.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_5_Ollmka.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_6_Undunzan.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  }
+ ]
+}

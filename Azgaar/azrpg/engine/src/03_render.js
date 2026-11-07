@@ -33,7 +33,7 @@ AZ.Renderer = class {
     this.CH = 32; this.zoom = 2;
     this.cache = new Map(); this.lensCache = new Map();
     this.piers = new Set([...world.ports.values()].map(([c, r]) => world.idx(c, r)));
-    this.shadeK = 0.025;
+    this.shadeK = 0.04;
   }
   // ------------------------------------------------------------------ ground
   paintGround(cx, cy) {
@@ -184,7 +184,7 @@ AZ.Renderer = class {
       if (rel) {
         const icon = /snow/i.test(rel.icon) ? "mountSnow" : /mount|vulcan/i.test(rel.icon) ? "mount" : "hill";
         const hl = icon === "hill";
-        if (U.rnd2(c, r, 31) > (hl ? 0.42 : 0.6)) continue;
+        if (U.rnd2(c, r, 31) > (hl ? 0.75 : 0.92)) continue;
         const s = art.relief(icon, look.col, U.hash32(c, r, 3) % 3);
         const ox = Math.round((U.rnd2(c, r, 32) - 0.5) * 6), oy = Math.round(U.rnd2(c, r, 33) * 3);
         x.drawImage(s, X + ox, Y + 16 - s.height + oy - (hl ? 2 : 0));

@@ -1,4 +1,4 @@
-"""Turn one Azgaar world into the full component set: board, decks, budget boards, tokens."""
+"""Turn one Azgaar world into the full component set: board, decks, decrees, budget boards, tokens."""
 from __future__ import annotations
 
 import csv
@@ -9,7 +9,10 @@ from concurrent.futures import ProcessPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
 
+from collections import Counter
+
 from . import budget, cards, decks
+from .decrees import GOLD_SHARED, SETTLE_INCOME, SETTLE_INCOME_WIDE, build_decrees
 from .board import Board
 from .geo import find_cells
 from .mapfile import AzgaarMap
@@ -18,7 +21,7 @@ from .sheets import build_sheets
 from .svgkit import save, to_png
 
 DEFAULT_COLOURS = ["#6E3B87", "#2C7873", "#A8551E", "#3B4A9C", "#7A5C2E", "#4B5563"]
-PARTS = ("board", "commissions", "events", "infrastructure", "budget", "tokens")
+PARTS = ("board", "commissions", "decrees", "reference", "infrastructure", "budget", "tokens")
 
 
 def slug(s: str) -> str:
@@ -52,16 +55,23 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
     path = resolve_map(world, roots, opts.get("map"))
     m = AzgaarMap(path)
     net = Network(m, spacing=opts["spacing"], neutral=opts["neutral"], air=opts["air"],
-                  air_overlap=opts["air_overlap"], remote=opts["remote"])
+                  air_overlap=opts["air_overlap"], remote=opts["remote"], skip_marker_types={"party"})
     geo = find_cells(path.parent, m)
     states = {s["i"]: s for s in m.live("states")}
-    deck, cstats = decks.build_commissions(net, k=opts["income_k"], lo=opts["income_min"], hi=opts["income_max"],
-                                           min_deck=opts["min_deck"], min_value=opts["min_value"],
-                                           max_per_state=opts["max_per_state"], neutral_deck=opts["neutral_deck"])
-    ev_cards, estats = decks.build_events(net, size=opts["events"], seed=opts["seed"])
+    routes = decks.build_routes(net)
+    deck, cstats = decks.build_commissions(net, routes, k=opts["income_k"], lo=opts["income_min"], hi=opts["income_max"],
+                                           min_value=opts["min_value"], max_per_trade=opts["max_per_trade"],
+                                           slaves=opts["slaves"])
+    decree_cards, dstats = build_decrees(net, routes, deck, n=opts["decrees"], seed=opts["seed"])
     colours = (opts["colours"] or DEFAULT_COLOURS)[: opts["players"]]
     houses = decks.build_houses(net, colours)
+    decks.assign_patrons(houses, dstats.pop("by_state_family"), dstats["families"])
     infra = decks.infrastructure_counts(opts["infra_land"], opts["wild_share"])
+    freight = opts.get("freight")
+    board_opts = {k: opts[k] for k in ("goal", "start_gold", "stations", "overhead", "home_overhead", "overhead_mode",
+                                       "draw", "debt_rounds", "petitions")}
+    board_opts["freight"] = freight
+    board_opts["trades"] = list(deck)
 
     root = out / slug(m.name)
     formats = tuple(opts["formats"])
@@ -82,19 +92,28 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
         emit(Board(net, geo).render(), f"board/{slug(m.name)}_board", "board", "", 1,
              f"{len(net.stops)} stops", width=opts["board_width"])
     if "commissions" in parts:
-        for sid, cs in sorted(deck.items()):
-            st = states[sid]
-            d = slug(st["name"])
-            emit(cards.commission_back(st), f"commissions/{d}/{d}_back", "commission back", st["name"])
+        for trade, cs in deck.items():
+            d = slug(trade)
+            goods_list = [g for g, _ in Counter(c.good.get("name") for c in cs).most_common()]
+            emit(cards.commission_back(trade, goods_list, len(cs)), f"commissions/{d}/{d}_back", "commission back", trade)
             for c in cs:
-                name = f"{d}_{c.index:03d}_{c.code}" + (f"_copy{c.copy}" if c.copy > 1 else "")
-                emit(cards.commission_front(c, st, states), f"commissions/{d}/{name}", "commission", st["name"], 1,
-                     f"{c.good.get('name')} {c.origin} to {c.dest}, {c.stops} stops, income {c.income}")
-    if "events" in parts:
-        emit(cards.event_back(), "events/event_back", "event back", "events")
-        for e in ev_cards:
-            note = "; ".join(f"{t.colour} {'+' if t.polarity > 0 else '-'} {t.title}" for t in (e.land, e.sea, e.air))
-            emit(cards.event_front(e), f"events/event_{e.number:03d}", "event", "events", 1, note)
+                emit(cards.commission_front(c, states, freight), f"commissions/{d}/{d}_{c.index:03d}_{c.code}",
+                     "commission", trade, 1, f"{c.good.get('name')} {c.origin} to {c.dest}, {c.stops} stops, "
+                                             f"income {c.income}")
+    if "decrees" in parts:
+        emit(cards.decree_back(m.name), "decrees/decree_back", "decree back", "decrees")
+        for dc in sorted(decree_cards, key=lambda x: x.number):
+            emit(cards.decree_front(dc, states), f"decrees/decree_{dc.number:03d}_{slug(dc.kind)}", "decree", "decrees",
+                 1, f"{dc.family}: {dc.title} ({dc.issuer_name}; {dc.area_label.lower()} {dc.area_text}; "
+                    f"{dc.routes} routes)")
+    if "reference" in parts:
+        emit(cards.reference_decree(GOLD_SHARED[5], SETTLE_INCOME, SETTLE_INCOME_WIDE, opts["petitions"]),
+             "reference/reading_a_decree",
+             "reference", "reference", max(2, len(houses)), "one per player")
+        if decree_cards:
+            sample = max(decree_cards, key=lambda x: (bool(x.on_reveal), any(p.shared for p in x.petitions), x.routes))
+            emit(cards.decree_anatomy(sample, states, opts["petitions"]), "reference/decree_anatomy", "anatomy", "", 1,
+                 f"for the rules: decree {sample.number}")
     if "infrastructure" in parts:
         emit(cards.infra_back(), "infrastructure/infrastructure_back", "infrastructure back", "infrastructure")
         for kind, n in infra.items():
@@ -102,8 +121,9 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
                  "infrastructure", n, f"expense +{decks.COSTS[kind]}" if kind in decks.COSTS else "any one type")
     if "budget" in parts:
         for k, h in enumerate(houses, 1):
-            emit(budget.budget_board(h), f"budget/house_{k}_{slug(h.town)}", "budget board", "", 1,
-                 f"{h.town}, {h.state_name}, {h.charter[0]}")
+            emit(budget.budget_board(h, **board_opts), f"budget/house_{k}_{slug(h.town)}", "budget board", "", 1,
+                 f"{h.town}, {h.state_name}, {h.charter[0]}, home trades {' and '.join(h.home_trades)}, "
+                 f"patron of {h.patron[0]} decrees")
     if "tokens" in parts:
         emit(cards.plus50_marker(), "tokens/plus50_marker", "token", "", max(2, len(houses)) * 2,
              "two per player, one for each lane")
@@ -121,9 +141,9 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
             Path(svg_path).unlink(missing_ok=True)
 
     summary = {"world": m.name, "map": path.name, "cells_geojson": geo.path.name if geo else None,
-               "network": net.summary(), "commissions": cstats, "events": estats,
-               "houses": [{"colour": h.colour, "town": h.town, "state": h.state_name, "goods": h.goods,
-                           "charter": h.charter[0]} for h in houses],
+               "network": net.summary(), "commissions": cstats, "decrees": dstats,
+               "houses": [{"colour": h.colour, "town": h.town, "state": h.state_name, "home_trades": h.home_trades,
+                           "charter": h.charter[0], "patron": h.patron[0]} for h in houses],
                "infrastructure": infra, "options": opts,
                "sheets": [{k: r[k] for k in ("sheet", "columns", "rows", "cards", "card_width", "card_height")}
                           for r in sheet_records]}
@@ -132,9 +152,8 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
         w = csv.DictWriter(fh, fieldnames=["component", "deck", "file", "count", "note"])
         w.writeheader()
         w.writerows(manifest)
-    data = {"commissions": {states[s]["name"]: [{**asdict(c), "good": c.good.get("name")} for c in cs]
-                            for s, cs in deck.items()},
-            "events": [asdict(e) for e in ev_cards],
+    data = {"commissions": {t: [{**asdict(c), "good": c.good.get("name")} for c in cs] for t, cs in deck.items()},
+            "decrees": [asdict(dc) for dc in sorted(decree_cards, key=lambda x: x.number)],
             "stops": [{**{k: v for k, v in asdict(s).items() if k != "roles"}, "roles": sorted(s.roles)}
                       for s in net.stops.values()],
             "links": [{"a": ln.a, "b": ln.b, "mode": ln.mode, "miles": round(ln.length * m.mi_per_px)}
@@ -148,7 +167,7 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
 
 
 def report(s: dict) -> str:
-    n, c, e = s["network"], s["commissions"], s["events"]
+    n, c, d = s["network"], s["commissions"], s["decrees"]
     lines = [f"# {s['world']}: azeuro build report", "",
              f"Map: `{s['map']}`. Cells GeoJSON: `{s['cells_geojson'] or 'none (no biome tint or history zones)'}`.", "",
              "## Network", "",
@@ -158,22 +177,27 @@ def report(s: dict) -> str:
              f"Links: {n['links'].get('land', 0)} land, {n['links'].get('sea', 0)} sea. Connected groups: {n['components']}.",
              f"Neutral stations: {', '.join(n['neutral'])}.",
              f"Air sites: {', '.join(n['air'])} ({n['air_rule']}).",
-             "Event stars: " + ", ".join(f"{k} {v}" for k, v in sorted(n["stars"].items())) + ".", ""]
+             "Favour stars: " + ", ".join(f"{k} {v}" for k, v in sorted(n["stars"].items())) + ".", ""]
     if n["notes"]:
         lines += ["Notes: " + "; ".join(n["notes"]), ""]
     lines += ["## Commissions", "",
-              f"{c['deals']} market-to-market deals, filed under the seller's and the buyer's state.",
+              f"{c['deals']} market-to-market deals, one card each, filed by trade "
+              f"({c['free_lands']} have a market in unclaimed land).",
               "Deck sizes: " + ", ".join(f"{k} {v}" for k, v in c["decks"].items()) + ".",
               f"Value quartiles (units x price): {c['value_quartiles']}.",
-              "Income spread (unique deals): " + ", ".join(f"{k}: {v}" for k, v in c["income"].items()) + ".", ""]
-    if c.get("trimmed_by_max_per_state"):
-        lines += [f"Trimmed by --max-per-state: {c['trimmed_by_max_per_state']}.", ""]
-    lines += ["## Events", "",
-              f"{e['cards']} cards. Marker texts per colour: {e['marker_texts']}. Set aside to keep the deck even: "
-              f"{e['set_aside'] or 'none'}.",
-              f"Share of positive events: {e['positive_share']}. Generic fillers used: {e['generic_uses'] or 'none'}.", "",
+              "Income spread: " + ", ".join(f"{k}: {v}" for k, v in c["income"].items()) + ".", ""]
+    if c.get("trimmed_by_max_per_trade"):
+        lines += [f"Trimmed by --max-per-trade: {c['trimmed_by_max_per_trade']}.", ""]
+    lines += ["## Decrees", "",
+              f"{d['cards']} cards chosen from {d['candidates']} candidates ({d['dropped_small']} touched too few "
+              f"routes).",
+              "Families: " + ", ".join(f"{k} {v}" for k, v in d["families"].items()) + ".",
+              "Issuers: " + ", ".join(f"{k} {v}" for k, v in d["issuers"].items()) + ".",
+              "Trades targeted: " + ", ".join(f"{k} {v}" for k, v in d["decks_targeted"].items()) + ".",
+              "Treasuries: " + ", ".join(f"{k} {v}" for k, v in d["treasury"].items()) + ".", "",
               "## Houses", ""]
-    lines += [f"- {h['town']} ({h['state']}): {', '.join(h['goods'])}; {h['charter']}" for h in s["houses"]]
+    lines += [f"- {h['town']} ({h['state']}): home trades {' and '.join(h['home_trades'])}; {h['charter']}; "
+              f"patron of {h['patron']} decrees" for h in s["houses"]]
     lines += ["", "## Infrastructure deck", "",
               ", ".join(f"{k} {v}" for k, v in s["infrastructure"].items()) + " (scarcity follows cost).", ""]
     if s.get("sheets"):

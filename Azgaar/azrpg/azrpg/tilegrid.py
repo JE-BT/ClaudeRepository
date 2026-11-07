@@ -4,7 +4,8 @@ Azgaar does not store a grid as data; the overlay is a pattern (src/index.html) 
 the saved style options with patternTransform="scale(s) translate(dx dy)", so a pattern point p
 lands at s * (p + d). The square pattern is 25 by 25 units with lines at multiples of 25: on
 Pyeongak (s = 0.05, dx = -2, dy = 3) squares are 1.25 px, which at 5 mi per px is 6.25 mi, and
-the first lines are at x = -0.1, y = 0.15 px. A hex overlay (Lania's pointyHex) is replaced by
+the first lines are at x = -0.1, y = 0.15 px. An overlay whose cells are smaller than 1 mile or
+larger than 20 miles is ignored in favour of 5-mile squares. A hex overlay (Lania's pointyHex) is replaced by
 squares as wide as its hexes, on the same origin. Without a usable overlay a 5-mile square is
 used. Tiles are numbered from the top-left tile that touches the map.
 """
@@ -46,7 +47,12 @@ class TileGrid:
         except Exception:
             opts = {}
         gtype = opts.get("type")
-        if gtype in PATTERN_SIZE and opts.get("scale"):
+        usable = gtype in PATTERN_SIZE and opts.get("scale") and 1.0 <= PATTERN_SIZE[gtype] * float(opts["scale"]) * mi <= 20.0
+        if gtype in PATTERN_SIZE and opts.get("scale") and not usable:
+            ignored = f"grid overlay of {PATTERN_SIZE[gtype] * float(opts['scale']) * mi:g}-mile cells ignored (outside 1-20 miles); "
+        else:
+            ignored = ""
+        if usable:
             s = float(opts["scale"])
             size = PATTERN_SIZE[gtype] * s
             x0, y0 = s * float(opts.get("dx", 0)), s * float(opts.get("dy", 0))
@@ -56,7 +62,7 @@ class TileGrid:
         else:
             size = fallback_miles / mi
             x0 = y0 = 0.0
-            source = f"no usable grid overlay; {fallback_miles:g}-mile squares"
+            source = f"{ignored or 'no usable grid overlay; '}{fallback_miles:g}-mile squares"
         ox = x0 - math.ceil(x0 / size) * size
         oy = y0 - math.ceil(y0 / size) * size
         cols = math.ceil((width - ox) / size)

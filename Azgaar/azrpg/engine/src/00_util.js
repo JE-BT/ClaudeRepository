@@ -4,6 +4,7 @@
 // stage), so the same place always looks and speaks the same way.
 // ---------------------------------------------------------------------------------------------
 const AZ = (typeof globalThis !== "undefined" ? globalThis : window).AZ = {};
+AZ.VERSION = "azrpg Alpha 2";
 
 AZ.U = (() => {
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

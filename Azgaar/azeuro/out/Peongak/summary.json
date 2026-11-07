@@ -1,0 +1,511 @@
+{
+ "world": "Persia",
+ "map": "Pyeongak.map",
+ "cells_geojson": "Persia Cells 2026-10-07-08-11.geojson",
+ "network": {
+  "stops": 47,
+  "roles": {
+   "market": 13,
+   "port": 30,
+   "capital": 22,
+   "air-request": 4,
+   "city": 21,
+   "fort": 2
+  },
+  "links": {
+   "land": 56,
+   "sea": 33
+  },
+  "neutral": [
+   "Khatho",
+   "Oxbreak",
+   "Orurem",
+   "Curmide",
+   "Bhia"
+  ],
+  "air": [
+   "Oim",
+   "Wildgemea",
+   "Tsatano",
+   "Durcojhler"
+  ],
+  "stars": {
+   "air": 6,
+   "land": 29,
+   "sea": 19
+  },
+  "components": [
+   47
+  ],
+  "notes": [],
+  "city_rule": "burg group 'city'",
+  "air_rule": "air journeys and portal markers in the map",
+  "spacing_px": 30.7
+ },
+ "commissions": {
+  "deals": 97,
+  "skipped_below_min_value": 0,
+  "trimmed_by_max_per_trade": {},
+  "value_quartiles": [
+   5.54,
+   9.8,
+   19.65
+  ],
+  "decks": {
+   "Provisions": 18,
+   "Luxuries": 57,
+   "Metals & arms": 11,
+   "Building": 5,
+   "Livestock": 1,
+   "Slaves": 5
+  },
+  "income": {
+   "2": 13,
+   "3": 21,
+   "4": 29,
+   "5": 2,
+   "6": 15,
+   "7": 4,
+   "8": 6,
+   "9": 1,
+   "10": 3,
+   "12": 3
+  },
+  "free_lands": 0
+ },
+ "decrees": {
+  "candidates": 44,
+  "with_routes": 41,
+  "cards": 30,
+  "families": {
+   "Law": 1,
+   "Disorder": 7,
+   "Enterprise": 5,
+   "War": 7,
+   "Disaster": 6,
+   "Faith": 2,
+   "Court & festival": 2
+  },
+  "issuers": {
+   "Goldyard": 3,
+   "Mornhe": 3,
+   "Sushimimius": 3,
+   "Madas": 3,
+   "Hauls": 3,
+   "Argaria": 2,
+   "Deadfairia": 2,
+   "Ladowia": 2,
+   "Cielb": 2,
+   "Newdenia": 2,
+   "Mondfordia": 1,
+   "Taldung": 1,
+   "Thornter": 1,
+   "Bayaneria": 1,
+   "Neneldgia": 1
+  },
+  "decks_targeted": {
+   "Slaves": 2,
+   "Provisions": 7,
+   "Metals & arms": 8,
+   "Luxuries": 1
+  },
+  "dropped_small": 3,
+  "treasury": {
+   "Ladowia": "poor",
+   "Voh": "poor",
+   "Samdralyr": "poor",
+   "Unzinb": "poor",
+   "Taldung": "poor",
+   "Bayaneria": "poor",
+   "Sushimimius": "poor",
+   "Anachragos": "poor",
+   "Smal": "modest",
+   "Neneldgia": "modest",
+   "Mondfordia": "modest",
+   "Hauls": "modest",
+   "Bhia": "modest",
+   "Goldyard": "modest",
+   "Madas": "modest",
+   "Kiteachruk": "rich",
+   "Deadfairia": "rich",
+   "Cielb": "rich",
+   "Thornter": "rich",
+   "Argaria": "rich",
+   "Mornhe": "rich",
+   "Newdenia": "rich"
+  }
+ },
+ "houses": [
+  {
+   "colour": "#6E3B87",
+   "town": "Wildgemea",
+   "state": "Argaria",
+   "home_trades": [
+    "Provisions",
+    "Metals & arms"
+   ],
+   "charter": "Sky charter",
+   "patron": "Disaster"
+  },
+  {
+   "colour": "#2C7873",
+   "town": "Oim",
+   "state": "Cielb",
+   "home_trades": [
+    "Provisions",
+    "Metals & arms"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Disorder"
+  },
+  {
+   "colour": "#A8551E",
+   "town": "Oxbreak",
+   "state": "Neneldgia",
+   "home_trades": [
+    "Provisions",
+    "Metals & arms"
+   ],
+   "charter": "Carters' charter",
+   "patron": "Faith"
+  },
+  {
+   "colour": "#3B4A9C",
+   "town": "Sharnarthi",
+   "state": "Sushimimius",
+   "home_trades": [
+    "Luxuries",
+    "Building"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Court & festival"
+  },
+  {
+   "colour": "#7A5C2E",
+   "town": "Deadkeep",
+   "state": "Thornter",
+   "home_trades": [
+    "Luxuries",
+    "Building"
+   ],
+   "charter": "Carters' charter",
+   "patron": "War"
+  },
+  {
+   "colour": "#4B5563",
+   "town": "Shathug",
+   "state": "Mornhe",
+   "home_trades": [
+    "Luxuries",
+    "Building"
+   ],
+   "charter": "Shipwrights' charter",
+   "patron": "Enterprise"
+  }
+ ],
+ "infrastructure": {
+  "land": 50,
+  "sea": 25,
+  "air": 10,
+  "wild": 10
+ },
+ "options": {
+  "map": null,
+  "formats": [
+   "svg",
+   "png"
+  ],
+  "only": null,
+  "dpi": 300,
+  "board_width": 7200,
+  "jobs": 0,
+  "palette": true,
+  "sheets": true,
+  "sheet_dpi": 200,
+  "sheet_max": 4096,
+  "spacing": 0.016,
+  "neutral": null,
+  "air": null,
+  "air_overlap": 1,
+  "remote": 0.015,
+  "income_k": 0.75,
+  "income_min": 2,
+  "income_max": 20,
+  "min_value": 0.0,
+  "max_per_trade": null,
+  "freight": null,
+  "decrees": 30,
+  "seed": 1,
+  "players": 6,
+  "colours": [
+   "#6E3B87",
+   "#2C7873",
+   "#A8551E",
+   "#3B4A9C",
+   "#7A5C2E",
+   "#4B5563"
+  ],
+  "goal": 50,
+  "start_gold": 10,
+  "stations": 20,
+  "overhead": 30,
+  "home_overhead": 20,
+  "overhead_mode": "gold",
+  "draw": 3,
+  "debt_rounds": 3,
+  "petitions": "turn",
+  "slaves": true,
+  "infra_land": 50,
+  "wild_share": 0.12
+ },
+ "sheets": [
+  {
+   "sheet": "commissions_Provisions.png",
+   "columns": 5,
+   "rows": 4,
+   "cards": 18,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_1.png",
+   "columns": 5,
+   "rows": 8,
+   "cards": 40,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_2.png",
+   "columns": 5,
+   "rows": 4,
+   "cards": 17,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Metals_arms.png",
+   "columns": 5,
+   "rows": 3,
+   "cards": 11,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Building.png",
+   "columns": 5,
+   "rows": 1,
+   "cards": 5,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Slaves.png",
+   "columns": 5,
+   "rows": 1,
+   "cards": 5,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "decrees_1.png",
+   "columns": 7,
+   "rows": 4,
+   "cards": 28,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "decrees_2.png",
+   "columns": 7,
+   "rows": 1,
+   "cards": 2,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "reference.png",
+   "columns": 6,
+   "rows": 1,
+   "cards": 6,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "infrastructure_1.png",
+   "columns": 8,
+   "rows": 5,
+   "cards": 40,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_2.png",
+   "columns": 8,
+   "rows": 5,
+   "cards": 40,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_3.png",
+   "columns": 8,
+   "rows": 2,
+   "cards": 15,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "infrastructure_faces.png",
+   "columns": 4,
+   "rows": 1,
+   "cards": 4,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "tokens_plus50.png",
+   "columns": 12,
+   "rows": 1,
+   "cards": 12,
+   "card_width": 150,
+   "card_height": 150
+  },
+  {
+   "sheet": "Persia_board.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 4096,
+   "card_height": 2239
+  },
+  {
+   "sheet": "commissions_Provisions_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Luxuries_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Metals_arms_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Building_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Livestock_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "commissions_Slaves_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 700,
+   "card_height": 500
+  },
+  {
+   "sheet": "decree_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 550,
+   "card_height": 950
+  },
+  {
+   "sheet": "decree_anatomy.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3688,
+   "card_height": 2394
+  },
+  {
+   "sheet": "infrastructure_back.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 500,
+   "card_height": 700
+  },
+  {
+   "sheet": "budget_house_1_Wildgemea.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_2_Oim.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_3_Oxbreak.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_4_Sharnarthi.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_5_Deadkeep.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  },
+  {
+   "sheet": "budget_house_6_Shathug.png",
+   "columns": 1,
+   "rows": 1,
+   "cards": 1,
+   "card_width": 3509,
+   "card_height": 2481
+  }
+ ]
+}

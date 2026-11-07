@@ -44,7 +44,7 @@ def engine_js() -> str:
 def build_html(map_path: Path, cells_path: Path, out: Path, folder_name: str | None = None) -> dict:
     pb = PackBuilder(map_path, cells_path, folder_name)
     b64 = pb.build_b64()
-    content = json.loads((ROOT / "data" / "descriptions_azork.json").read_text(encoding="utf-8"))
+    content = json.loads((ROOT / "data" / "descriptions.json").read_text(encoding="utf-8"))
     content = {k: content[k] for k in ("biomes", "height") if k in content}
     title = (pb.m.data["journeys"][0]["name"] if pb.m.data["journeys"] else pb.m.name) + " · azrpg"
     shell = (ENGINE / "shell.html").read_text(encoding="utf-8")

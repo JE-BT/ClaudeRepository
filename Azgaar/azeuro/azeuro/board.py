@@ -2,7 +2,7 @@
 
 Layers, bottom to top: sea, coastal shallows, land, biome tint (Cells GeoJSON), lakes, ice, relief
 (grid heights), rivers, history zones (Cells GeoJSON), state territory bands, state and sea names,
-land and sea links, event stars, stops, stop names. Everything comes from the .map except the
+land and sea links, favour stars, stops, stop names. Everything comes from the .map except the
 biome and zone shapes, which need the Cells export.
 """
 from __future__ import annotations
@@ -455,7 +455,7 @@ class Board:
             L.append(text(cx + 24, cy + 5, label, 13, weight=500))
         # stars
         x = 900
-        L.append(text(x, 32, "Event stars", 17, family="Barlow Condensed", weight=700))
+        L.append(text(x, 32, "Favour stars", 17, family="Barlow Condensed", weight=700))
         for k, (label, fill) in enumerate((("On a land route", LAND), ("On a sea route", SEA),
                                            ("Remote: read by air", "#FFFFFF"))):
             cy = 58 + k * 30
@@ -463,7 +463,7 @@ class Board:
             L.append(text(x + 32, cy + 5, label, 13, weight=500))
         # decks
         x = 1110
-        L.append(text(x, 32, "Commission decks", 17, family="Barlow Condensed", weight=700))
+        L.append(text(x, 32, "States (decree issuers)", 17, family="Barlow Condensed", weight=700))
         sts = [s for s in self.m.live("states") if s.get("i")]
         cols = max(1, math.ceil(len(sts) / 4))
         cw = min(200, (1863 - x - 20) / cols)

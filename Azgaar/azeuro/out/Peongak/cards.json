@@ -1,0 +1,6208 @@
+{
+ "commissions": {
+  "Provisions": [
+   {
+    "deal": 4226,
+    "code": "D4226",
+    "trade": "Provisions",
+    "seller_state": 4,
+    "buyer_state": 22,
+    "good": "Cheese",
+    "origin": "Orurem",
+    "dest": "Wildgemea",
+    "stops": 7,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4019.1944334072537,
+    "heading": "south",
+    "value": 34.919514105027844,
+    "tier": 3,
+    "income": 10,
+    "split": [
+     5,
+     3,
+     2
+    ],
+    "index": 1,
+    "of": 18
+   },
+   {
+    "deal": 4144,
+    "code": "D4144",
+    "trade": "Provisions",
+    "seller_state": 22,
+    "buyer_state": 20,
+    "good": "Game",
+    "origin": "Ighird",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2613.4580678616726,
+    "heading": "south-west",
+    "value": 48.27236154047465,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 2,
+    "of": 18
+   },
+   {
+    "deal": 4208,
+    "code": "D4208",
+    "trade": "Provisions",
+    "seller_state": 14,
+    "buyer_state": 22,
+    "good": "Sugarcane",
+    "origin": "Sharnarthi",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3469.8877363112706,
+    "heading": "south-east",
+    "value": 9.371563829363087,
+    "tier": 1,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 3,
+    "of": 18
+   },
+   {
+    "deal": 4228,
+    "code": "D4228",
+    "trade": "Provisions",
+    "seller_state": 15,
+    "buyer_state": 13,
+    "good": "Cheese",
+    "origin": "Hauls",
+    "dest": "Oxbreak",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 8095.422887317956,
+    "heading": "west",
+    "value": 25.591147239179538,
+    "tier": 3,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 4,
+    "of": 18
+   },
+   {
+    "deal": 4229,
+    "code": "D4229",
+    "trade": "Provisions",
+    "seller_state": 2,
+    "buyer_state": 22,
+    "good": "Cheese",
+    "origin": "Dawnband",
+    "dest": "Ighird",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 10095.6416439621,
+    "heading": "west",
+    "value": 36.15886289447856,
+    "tier": 3,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 5,
+    "of": 18
+   },
+   {
+    "deal": 4211,
+    "code": "D4211",
+    "trade": "Provisions",
+    "seller_state": 14,
+    "buyer_state": 13,
+    "good": "Sugarcane",
+    "origin": "Sharnarthi",
+    "dest": "Oxbreak",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4641.255635313972,
+    "heading": "south-east",
+    "value": 9.610694551426814,
+    "tier": 1,
+    "income": 5,
+    "split": [
+     2,
+     2,
+     1
+    ],
+    "index": 6,
+    "of": 18
+   },
+   {
+    "deal": 4152,
+    "code": "D4152",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 6,
+    "good": "Honey",
+    "origin": "Cherkeruza",
+    "dest": "Khatho",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2529.6823588187617,
+    "heading": "north",
+    "value": 3.7022514780623097,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 7,
+    "of": 18
+   },
+   {
+    "deal": 4206,
+    "code": "D4206",
+    "trade": "Provisions",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Sugarcane",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 10.12960329024726,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 8,
+    "of": 18
+   },
+   {
+    "deal": 4207,
+    "code": "D4207",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 17,
+    "good": "Sugarcane",
+    "origin": "Shathug",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5283.495983012143,
+    "heading": "south",
+    "value": 7.320677926091363,
+    "tier": 1,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 9,
+    "of": 18
+   },
+   {
+    "deal": 4214,
+    "code": "D4214",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 10,
+    "good": "Sugarcane",
+    "origin": "Shathug",
+    "dest": "Tsatano",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 7294.013429708291,
+    "heading": "south",
+    "value": 2.4063683316608153,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 10,
+    "of": 18
+   },
+   {
+    "deal": 4227,
+    "code": "D4227",
+    "trade": "Provisions",
+    "seller_state": 15,
+    "buyer_state": 3,
+    "good": "Cheese",
+    "origin": "Hauls",
+    "dest": "Shathug",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "north-east",
+    "value": 23.2793961892731,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 11,
+    "of": 18
+   },
+   {
+    "deal": 4143,
+    "code": "D4143",
+    "trade": "Provisions",
+    "seller_state": 15,
+    "buyer_state": 6,
+    "good": "Grain",
+    "origin": "Hauls",
+    "dest": "Khatho",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2695.4003533961577,
+    "heading": "east",
+    "value": 1.3890947394822,
+    "tier": 0,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 12,
+    "of": 18
+   },
+   {
+    "deal": 4151,
+    "code": "D4151",
+    "trade": "Provisions",
+    "seller_state": 4,
+    "buyer_state": 14,
+    "good": "Honey",
+    "origin": "Orurem",
+    "dest": "Sharnarthi",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "north-west",
+    "value": 9.517420850961042,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 13,
+    "of": 18
+   },
+   {
+    "deal": 4153,
+    "code": "D4153",
+    "trade": "Provisions",
+    "seller_state": 2,
+    "buyer_state": 3,
+    "good": "Honey",
+    "origin": "Dawnband",
+    "dest": "Shathug",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2385.6377993487704,
+    "heading": "north-east",
+    "value": 6.492419986266316,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 14,
+    "of": 18
+   },
+   {
+    "deal": 4209,
+    "code": "D4209",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 2,
+    "good": "Sugarcane",
+    "origin": "Shathug",
+    "dest": "Dawnband",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2385.6377993487704,
+    "heading": "south-west",
+    "value": 7.057134397267572,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 15,
+    "of": 18
+   },
+   {
+    "deal": 4210,
+    "code": "D4210",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 15,
+    "good": "Sugarcane",
+    "origin": "Shathug",
+    "dest": "Hauls",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "south-west",
+    "value": 5.821953367275898,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 16,
+    "of": 18
+   },
+   {
+    "deal": 4212,
+    "code": "D4212",
+    "trade": "Provisions",
+    "seller_state": 14,
+    "buyer_state": 4,
+    "good": "Sugarcane",
+    "origin": "Sharnarthi",
+    "dest": "Orurem",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "south-east",
+    "value": 5.539333415046049,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 17,
+    "of": 18
+   },
+   {
+    "deal": 4213,
+    "code": "D4213",
+    "trade": "Provisions",
+    "seller_state": 3,
+    "buyer_state": 6,
+    "good": "Sugarcane",
+    "origin": "Shathug",
+    "dest": "Khatho",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1318.6818668995143,
+    "heading": "east",
+    "value": 2.17182631370993,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 18,
+    "of": 18
+   }
+  ],
+  "Luxuries": [
+   {
+    "deal": 4170,
+    "code": "D4170",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 20,
+    "good": "Incense",
+    "origin": "Shathug",
+    "dest": "Oim",
+    "stops": 8,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 11509.226680157542,
+    "heading": "west",
+    "value": 24.57234240744208,
+    "tier": 3,
+    "income": 12,
+    "split": [
+     6,
+     4,
+     2
+    ],
+    "index": 1,
+    "of": 57
+   },
+   {
+    "deal": 4171,
+    "code": "D4171",
+    "trade": "Luxuries",
+    "seller_state": 2,
+    "buyer_state": 20,
+    "good": "Incense",
+    "origin": "Dawnband",
+    "dest": "Oim",
+    "stops": 8,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 12101.77782453893,
+    "heading": "west",
+    "value": 41.040078102444255,
+    "tier": 3,
+    "income": 12,
+    "split": [
+     6,
+     4,
+     2
+    ],
+    "index": 2,
+    "of": 57
+   },
+   {
+    "deal": 4158,
+    "code": "D4158",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 22,
+    "good": "Gemstones",
+    "origin": "Orurem",
+    "dest": "Wildgemea",
+    "stops": 7,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4019.1944334072537,
+    "heading": "south",
+    "value": 44.023225265719496,
+    "tier": 3,
+    "income": 10,
+    "split": [
+     5,
+     3,
+     2
+    ],
+    "index": 3,
+    "of": 57
+   },
+   {
+    "deal": 4155,
+    "code": "D4155",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 20,
+    "good": "Pearls",
+    "origin": "Ighird",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2613.4580678616726,
+    "heading": "south-west",
+    "value": 22.040030638059278,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 4,
+    "of": 57
+   },
+   {
+    "deal": 4157,
+    "code": "D4157",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 20,
+    "good": "Gemstones",
+    "origin": "Orurem",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3750.2074820463736,
+    "heading": "south-west",
+    "value": 53.25926640769403,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 5,
+    "of": 57
+   },
+   {
+    "deal": 4161,
+    "code": "D4161",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 14,
+    "good": "Gemstones",
+    "origin": "Ighird",
+    "dest": "Sharnarthi",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4257.278078806796,
+    "heading": "north-west",
+    "value": 39.50207102612147,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 6,
+    "of": 57
+   },
+   {
+    "deal": 4190,
+    "code": "D4190",
+    "trade": "Luxuries",
+    "seller_state": 13,
+    "buyer_state": 20,
+    "good": "Amber",
+    "origin": "Oxbreak",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2997.4356243688476,
+    "heading": "west",
+    "value": 23.751492524894324,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 7,
+    "of": 57
+   },
+   {
+    "deal": 4225,
+    "code": "D4225",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 20,
+    "good": "Jewelry",
+    "origin": "Orurem",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3750.2074820463736,
+    "heading": "south-west",
+    "value": 70.77704831378453,
+    "tier": 3,
+    "income": 8,
+    "split": [
+     5,
+     2,
+     1
+    ],
+    "index": 8,
+    "of": 57
+   },
+   {
+    "deal": 4146,
+    "code": "D4146",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 22,
+    "good": "Wine",
+    "origin": "Orurem",
+    "dest": "Wildgemea",
+    "stops": 7,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4019.1944334072537,
+    "heading": "south",
+    "value": 8.752288541618864,
+    "tier": 1,
+    "income": 7,
+    "split": [
+     4,
+     2,
+     1
+    ],
+    "index": 9,
+    "of": 57
+   },
+   {
+    "deal": 4172,
+    "code": "D4172",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 22,
+    "good": "Incense",
+    "origin": "Ighird",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2423.926873578696,
+    "heading": "south-west",
+    "value": 15.954846144843549,
+    "tier": 2,
+    "income": 7,
+    "split": [
+     4,
+     2,
+     1
+    ],
+    "index": 10,
+    "of": 57
+   },
+   {
+    "deal": 4174,
+    "code": "D4174",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 22,
+    "good": "Silk",
+    "origin": "Sharnarthi",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3469.8877363112706,
+    "heading": "south-east",
+    "value": 12.469169615273117,
+    "tier": 2,
+    "income": 7,
+    "split": [
+     4,
+     2,
+     1
+    ],
+    "index": 11,
+    "of": 57
+   },
+   {
+    "deal": 4179,
+    "code": "D4179",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 22,
+    "good": "Spices",
+    "origin": "Sharnarthi",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3469.8877363112706,
+    "heading": "south-east",
+    "value": 11.171371659449466,
+    "tier": 2,
+    "income": 7,
+    "split": [
+     4,
+     2,
+     1
+    ],
+    "index": 12,
+    "of": 57
+   },
+   {
+    "deal": 4145,
+    "code": "D4145",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 13,
+    "good": "Wine",
+    "origin": "Orurem",
+    "dest": "Oxbreak",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5190.562332409954,
+    "heading": "south-east",
+    "value": 8.672418365755641,
+    "tier": 1,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 13,
+    "of": 57
+   },
+   {
+    "deal": 4162,
+    "code": "D4162",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 3,
+    "good": "Gemstones",
+    "origin": "Deadkeep",
+    "dest": "Cherkeruza",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2149.334882608977,
+    "heading": "north-east",
+    "value": 10.8809961087731,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 14,
+    "of": 57
+   },
+   {
+    "deal": 4168,
+    "code": "D4168",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 17,
+    "good": "Incense",
+    "origin": "Shathug",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5283.495983012143,
+    "heading": "south",
+    "value": 27.819097175594305,
+    "tier": 3,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 15,
+    "of": 57
+   },
+   {
+    "deal": 4175,
+    "code": "D4175",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 22,
+    "good": "Silk",
+    "origin": "Sharnarthi",
+    "dest": "Ighird",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4257.278078806796,
+    "heading": "south-east",
+    "value": 11.274980861111587,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 16,
+    "of": 57
+   },
+   {
+    "deal": 4176,
+    "code": "D4176",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 13,
+    "good": "Silk",
+    "origin": "Sharnarthi",
+    "dest": "Oxbreak",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4641.255635313972,
+    "heading": "south-east",
+    "value": 12.345551366621494,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 17,
+    "of": 57
+   },
+   {
+    "deal": 4180,
+    "code": "D4180",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 22,
+    "good": "Spices",
+    "origin": "Sharnarthi",
+    "dest": "Ighird",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4257.278078806796,
+    "heading": "south-east",
+    "value": 10.012970579268853,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 18,
+    "of": 57
+   },
+   {
+    "deal": 4182,
+    "code": "D4182",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 13,
+    "good": "Spices",
+    "origin": "Sharnarthi",
+    "dest": "Oxbreak",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4641.255635313972,
+    "heading": "south-east",
+    "value": 11.439512337716781,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 19,
+    "of": 57
+   },
+   {
+    "deal": 4199,
+    "code": "D4199",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 20,
+    "good": "Mahogany",
+    "origin": "Ighird",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2613.4580678616726,
+    "heading": "south-west",
+    "value": 9.956508649047718,
+    "tier": 2,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 20,
+    "of": 57
+   },
+   {
+    "deal": 4200,
+    "code": "D4200",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 22,
+    "good": "Mahogany",
+    "origin": "Ighird",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2423.926873578696,
+    "heading": "south-west",
+    "value": 7.299798597546146,
+    "tier": 1,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 21,
+    "of": 57
+   },
+   {
+    "deal": 4224,
+    "code": "D4224",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 3,
+    "good": "Coins",
+    "origin": "Shathug",
+    "dest": "Cherkeruza",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 3392.357164060468,
+    "heading": "south-east",
+    "value": 7.038005141818526,
+    "tier": 1,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 22,
+    "of": 57
+   },
+   {
+    "deal": 4156,
+    "code": "D4156",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Pearls",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 15.800759326517898,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 23,
+    "of": 57
+   },
+   {
+    "deal": 4160,
+    "code": "D4160",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 13,
+    "good": "Gemstones",
+    "origin": "Ighird",
+    "dest": "Oxbreak",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2145.8905615140893,
+    "heading": "south-east",
+    "value": 48.83556201719231,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 24,
+    "of": 57
+   },
+   {
+    "deal": 4165,
+    "code": "D4165",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 4,
+    "good": "Dyes",
+    "origin": "Ighird",
+    "dest": "Orurem",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4806.584775902779,
+    "heading": "west",
+    "value": 1.5366613884956621,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 25,
+    "of": 57
+   },
+   {
+    "deal": 4167,
+    "code": "D4167",
+    "trade": "Luxuries",
+    "seller_state": 2,
+    "buyer_state": 3,
+    "good": "Dyes",
+    "origin": "Dawnband",
+    "dest": "Cherkeruza",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2854.3259799167854,
+    "heading": "east",
+    "value": 0.9073503338345972,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 26,
+    "of": 57
+   },
+   {
+    "deal": 4169,
+    "code": "D4169",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 15,
+    "good": "Incense",
+    "origin": "Shathug",
+    "dest": "Hauls",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "south-west",
+    "value": 21.458612334235077,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 27,
+    "of": 57
+   },
+   {
+    "deal": 4173,
+    "code": "D4173",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Silk",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 14.579970345258198,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 28,
+    "of": 57
+   },
+   {
+    "deal": 4178,
+    "code": "D4178",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Spices",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 12.489607495129228,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 29,
+    "of": 57
+   },
+   {
+    "deal": 4183,
+    "code": "D4183",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 15,
+    "good": "Spices",
+    "origin": "Khatho",
+    "dest": "Hauls",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2695.4003533961577,
+    "heading": "west",
+    "value": 9.686755543151527,
+    "tier": 1,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 30,
+    "of": 57
+   },
+   {
+    "deal": 4185,
+    "code": "D4185",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 2,
+    "good": "Spices",
+    "origin": "Khatho",
+    "dest": "Dawnband",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3704.3196662482846,
+    "heading": "south-west",
+    "value": 12.322924717030746,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 31,
+    "of": 57
+   },
+   {
+    "deal": 4186,
+    "code": "D4186",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 3,
+    "good": "Spices",
+    "origin": "Khatho",
+    "dest": "Cherkeruza",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2529.6823588187617,
+    "heading": "south",
+    "value": 2.855843895623077,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 32,
+    "of": 57
+   },
+   {
+    "deal": 4189,
+    "code": "D4189",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Amber",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 8.441638506863006,
+    "tier": 1,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 33,
+    "of": 57
+   },
+   {
+    "deal": 4192,
+    "code": "D4192",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 14,
+    "good": "Furs",
+    "origin": "Ighird",
+    "dest": "Sharnarthi",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4257.278078806796,
+    "heading": "north-west",
+    "value": 3.729785401146542,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 34,
+    "of": 57
+   },
+   {
+    "deal": 4222,
+    "code": "D4222",
+    "trade": "Luxuries",
+    "seller_state": 15,
+    "buyer_state": 2,
+    "good": "Coins",
+    "origin": "Hauls",
+    "dest": "Dawnband",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1216.9009388526752,
+    "heading": "south-west",
+    "value": 24.34149377439565,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 35,
+    "of": 57
+   },
+   {
+    "deal": 4148,
+    "code": "D4148",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 14,
+    "good": "Wine",
+    "origin": "Orurem",
+    "dest": "Sharnarthi",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "north-west",
+    "value": 6.348319915430559,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 36,
+    "of": 57
+   },
+   {
+    "deal": 4149,
+    "code": "D4149",
+    "trade": "Luxuries",
+    "seller_state": 15,
+    "buyer_state": 6,
+    "good": "Wine",
+    "origin": "Hauls",
+    "dest": "Khatho",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2695.4003533961577,
+    "heading": "east",
+    "value": 2.752342688248282,
+    "tier": 0,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 37,
+    "of": 57
+   },
+   {
+    "deal": 4164,
+    "code": "D4164",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 6,
+    "good": "Gemstones",
+    "origin": "Deadkeep",
+    "dest": "Khatho",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4510.660404322329,
+    "heading": "north-east",
+    "value": 12.87570864160734,
+    "tier": 2,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 38,
+    "of": 57
+   },
+   {
+    "deal": 4177,
+    "code": "D4177",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 4,
+    "good": "Silk",
+    "origin": "Sharnarthi",
+    "dest": "Orurem",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "south-east",
+    "value": 7.300468188154441,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 39,
+    "of": 57
+   },
+   {
+    "deal": 4181,
+    "code": "D4181",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 17,
+    "good": "Spices",
+    "origin": "Khatho",
+    "dest": "Deadkeep",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4510.660404322329,
+    "heading": "south-west",
+    "value": 12.058727118639421,
+    "tier": 2,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 40,
+    "of": 57
+   },
+   {
+    "deal": 4184,
+    "code": "D4184",
+    "trade": "Luxuries",
+    "seller_state": 14,
+    "buyer_state": 4,
+    "good": "Spices",
+    "origin": "Sharnarthi",
+    "dest": "Orurem",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "south-east",
+    "value": 6.154356524295919,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 41,
+    "of": 57
+   },
+   {
+    "deal": 4187,
+    "code": "D4187",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 10,
+    "good": "Spices",
+    "origin": "Khatho",
+    "dest": "Tsatano",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 6521.177851018476,
+    "heading": "south-west",
+    "value": 3.4669553643204334,
+    "tier": 0,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 42,
+    "of": 57
+   },
+   {
+    "deal": 4188,
+    "code": "D4188",
+    "trade": "Luxuries",
+    "seller_state": 6,
+    "buyer_state": 17,
+    "good": "Amber",
+    "origin": "Khatho",
+    "dest": "Deadkeep",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4510.660404322329,
+    "heading": "south-west",
+    "value": 12.97837130829171,
+    "tier": 2,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 43,
+    "of": 57
+   },
+   {
+    "deal": 4203,
+    "code": "D4203",
+    "trade": "Luxuries",
+    "seller_state": 2,
+    "buyer_state": 15,
+    "good": "Mahogany",
+    "origin": "Dawnband",
+    "dest": "Hauls",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1216.9009388526752,
+    "heading": "north-east",
+    "value": 5.872240091478293,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 44,
+    "of": 57
+   },
+   {
+    "deal": 4216,
+    "code": "D4216",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 15,
+    "good": "Tea",
+    "origin": "Deadkeep",
+    "dest": "Hauls",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1457.7489832081744,
+    "heading": "north",
+    "value": 4.155427359542068,
+    "tier": 0,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 45,
+    "of": 57
+   },
+   {
+    "deal": 4230,
+    "code": "D4230",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 14,
+    "good": "Candles",
+    "origin": "Orurem",
+    "dest": "Sharnarthi",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "north-west",
+    "value": 17.236165747305012,
+    "tier": 2,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 46,
+    "of": 57
+   },
+   {
+    "deal": 4147,
+    "code": "D4147",
+    "trade": "Luxuries",
+    "seller_state": 15,
+    "buyer_state": 3,
+    "good": "Wine",
+    "origin": "Hauls",
+    "dest": "Shathug",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "north-east",
+    "value": 4.875260245265611,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 47,
+    "of": 57
+   },
+   {
+    "deal": 4150,
+    "code": "D4150",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 10,
+    "good": "Wine",
+    "origin": "Deadkeep",
+    "dest": "Tsatano",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2010.517446696147,
+    "heading": "south",
+    "value": 1.8285814962728013,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 48,
+    "of": 57
+   },
+   {
+    "deal": 4159,
+    "code": "D4159",
+    "trade": "Luxuries",
+    "seller_state": 4,
+    "buyer_state": 14,
+    "good": "Gemstones",
+    "origin": "Orurem",
+    "dest": "Sharnarthi",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 1876.1890786318984,
+    "heading": "north-west",
+    "value": 5.473444165294541,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 49,
+    "of": 57
+   },
+   {
+    "deal": 4163,
+    "code": "D4163",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 10,
+    "good": "Gemstones",
+    "origin": "Deadkeep",
+    "dest": "Tsatano",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2010.517446696147,
+    "heading": "south",
+    "value": 9.796738503729294,
+    "tier": 2,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 50,
+    "of": 57
+   },
+   {
+    "deal": 4166,
+    "code": "D4166",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 6,
+    "good": "Dyes",
+    "origin": "Shathug",
+    "dest": "Khatho",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1318.6818668995143,
+    "heading": "east",
+    "value": 0.9229142963449729,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 51,
+    "of": 57
+   },
+   {
+    "deal": 4191,
+    "code": "D4191",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 6,
+    "good": "Furs",
+    "origin": "Deadkeep",
+    "dest": "Khatho",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 4510.660404322329,
+    "heading": "north-east",
+    "value": 3.8441633056097744,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 52,
+    "of": 57
+   },
+   {
+    "deal": 4201,
+    "code": "D4201",
+    "trade": "Luxuries",
+    "seller_state": 2,
+    "buyer_state": 17,
+    "good": "Mahogany",
+    "origin": "Dawnband",
+    "dest": "Deadkeep",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2897.8581836633725,
+    "heading": "east",
+    "value": 7.144679829534689,
+    "tier": 1,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 53,
+    "of": 57
+   },
+   {
+    "deal": 4202,
+    "code": "D4202",
+    "trade": "Luxuries",
+    "seller_state": 22,
+    "buyer_state": 13,
+    "good": "Mahogany",
+    "origin": "Ighird",
+    "dest": "Oxbreak",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2145.8905615140893,
+    "heading": "south-east",
+    "value": 4.231619443151973,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 54,
+    "of": 57
+   },
+   {
+    "deal": 4204,
+    "code": "D4204",
+    "trade": "Luxuries",
+    "seller_state": 2,
+    "buyer_state": 3,
+    "good": "Mahogany",
+    "origin": "Dawnband",
+    "dest": "Shathug",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2385.6377993487704,
+    "heading": "north-east",
+    "value": 4.375550854758893,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 55,
+    "of": 57
+   },
+   {
+    "deal": 4215,
+    "code": "D4215",
+    "trade": "Luxuries",
+    "seller_state": 17,
+    "buyer_state": 2,
+    "good": "Tea",
+    "origin": "Deadkeep",
+    "dest": "Dawnband",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2897.8581836633725,
+    "heading": "west",
+    "value": 4.530239177153691,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 56,
+    "of": 57
+   },
+   {
+    "deal": 4223,
+    "code": "D4223",
+    "trade": "Luxuries",
+    "seller_state": 3,
+    "buyer_state": 6,
+    "good": "Coins",
+    "origin": "Shathug",
+    "dest": "Khatho",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1318.6818668995143,
+    "heading": "east",
+    "value": 7.319935160038221,
+    "tier": 1,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 57,
+    "of": 57
+   }
+  ],
+  "Metals & arms": [
+   {
+    "deal": 4142,
+    "code": "D4142",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 20,
+    "good": "Gold",
+    "origin": "Shathug",
+    "dest": "Oim",
+    "stops": 8,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 11509.226680157542,
+    "heading": "west",
+    "value": 19.783454412966044,
+    "tier": 3,
+    "income": 12,
+    "split": [
+     6,
+     4,
+     2
+    ],
+    "index": 1,
+    "of": 11
+   },
+   {
+    "deal": 4138,
+    "code": "D4138",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 22,
+    "good": "Iron",
+    "origin": "Shathug",
+    "dest": "Wildgemea",
+    "stops": 7,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 9928.641371782986,
+    "heading": "west",
+    "value": 38.94945117021966,
+    "tier": 3,
+    "income": 10,
+    "split": [
+     5,
+     3,
+     2
+    ],
+    "index": 2,
+    "of": 11
+   },
+   {
+    "deal": 4137,
+    "code": "D4137",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 17,
+    "good": "Iron",
+    "origin": "Shathug",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5283.495983012143,
+    "heading": "south",
+    "value": 20.099436164319545,
+    "tier": 3,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 3,
+    "of": 11
+   },
+   {
+    "deal": 4139,
+    "code": "D4139",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 15,
+    "good": "Iron",
+    "origin": "Shathug",
+    "dest": "Hauls",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "south-west",
+    "value": 19.833465614758815,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 4,
+    "of": 11
+   },
+   {
+    "deal": 4140,
+    "code": "D4140",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 17,
+    "good": "Silver",
+    "origin": "Shathug",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5283.495983012143,
+    "heading": "south",
+    "value": 11.543210159774233,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 5,
+    "of": 11
+   },
+   {
+    "deal": 4141,
+    "code": "D4141",
+    "trade": "Metals & arms",
+    "seller_state": 3,
+    "buyer_state": 2,
+    "good": "Gold",
+    "origin": "Shathug",
+    "dest": "Dawnband",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2385.6377993487704,
+    "heading": "south-west",
+    "value": 23.018658818948232,
+    "tier": 3,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 6,
+    "of": 11
+   },
+   {
+    "deal": 4198,
+    "code": "D4198",
+    "trade": "Metals & arms",
+    "seller_state": 15,
+    "buyer_state": 17,
+    "good": "Saltpeter",
+    "origin": "Hauls",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1457.7489832081746,
+    "heading": "south",
+    "value": 5.624536127399517,
+    "tier": 1,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 7,
+    "of": 11
+   },
+   {
+    "deal": 4217,
+    "code": "D4217",
+    "trade": "Metals & arms",
+    "seller_state": 22,
+    "buyer_state": 22,
+    "good": "Clay",
+    "origin": "Ighird",
+    "dest": "Wildgemea",
+    "stops": 6,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2423.926873578696,
+    "heading": "south-west",
+    "value": 3.2582812514157746,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 8,
+    "of": 11
+   },
+   {
+    "deal": 4219,
+    "code": "D4219",
+    "trade": "Metals & arms",
+    "seller_state": 15,
+    "buyer_state": 10,
+    "good": "Clay",
+    "origin": "Hauls",
+    "dest": "Tsatano",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3468.266429904322,
+    "heading": "south",
+    "value": 2.2140420741096576,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 9,
+    "of": 11
+   },
+   {
+    "deal": 4218,
+    "code": "D4218",
+    "trade": "Metals & arms",
+    "seller_state": 15,
+    "buyer_state": 17,
+    "good": "Clay",
+    "origin": "Hauls",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1457.7489832081746,
+    "heading": "south",
+    "value": 3.193987838334411,
+    "tier": 0,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 10,
+    "of": 11
+   },
+   {
+    "deal": 4221,
+    "code": "D4221",
+    "trade": "Metals & arms",
+    "seller_state": 6,
+    "buyer_state": 3,
+    "good": "Sails",
+    "origin": "Khatho",
+    "dest": "Shathug",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1318.6818668995143,
+    "heading": "west",
+    "value": 57.516481633829706,
+    "tier": 3,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 11,
+    "of": 11
+   }
+  ],
+  "Building": [
+   {
+    "deal": 4134,
+    "code": "D4134",
+    "trade": "Building",
+    "seller_state": 22,
+    "buyer_state": 20,
+    "good": "Marble",
+    "origin": "Wildgemea",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2794.298594409493,
+    "heading": "west",
+    "value": 11.395174142938869,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 1,
+    "of": 5
+   },
+   {
+    "deal": 4135,
+    "code": "D4135",
+    "trade": "Building",
+    "seller_state": 3,
+    "buyer_state": 17,
+    "good": "Marble",
+    "origin": "Shathug",
+    "dest": "Deadkeep",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 5283.495983012143,
+    "heading": "south",
+    "value": 6.340169151624772,
+    "tier": 1,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 2,
+    "of": 5
+   },
+   {
+    "deal": 4136,
+    "code": "D4136",
+    "trade": "Building",
+    "seller_state": 22,
+    "buyer_state": 20,
+    "good": "Marble",
+    "origin": "Ighird",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 2613.4580678616726,
+    "heading": "south-west",
+    "value": 1.768233771314634,
+    "tier": 0,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 3,
+    "of": 5
+   },
+   {
+    "deal": 4220,
+    "code": "D4220",
+    "trade": "Building",
+    "seller_state": 17,
+    "buyer_state": 15,
+    "good": "Glass",
+    "origin": "Deadkeep",
+    "dest": "Hauls",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1457.7489832081744,
+    "heading": "north",
+    "value": 13.149536464930046,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 4,
+    "of": 5
+   },
+   {
+    "deal": 4205,
+    "code": "D4205",
+    "trade": "Building",
+    "seller_state": 10,
+    "buyer_state": 17,
+    "good": "Whales",
+    "origin": "Tsatano",
+    "dest": "Deadkeep",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2010.517446696147,
+    "heading": "north",
+    "value": 2.070973486732935,
+    "tier": 0,
+    "income": 2,
+    "split": [
+     1,
+     1,
+     0
+    ],
+    "index": 5,
+    "of": 5
+   }
+  ],
+  "Livestock": [
+   {
+    "deal": 4154,
+    "code": "D4154",
+    "trade": "Livestock",
+    "seller_state": 14,
+    "buyer_state": 20,
+    "good": "Elephants",
+    "origin": "Sharnarthi",
+    "dest": "Oim",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3200.9007849503905,
+    "heading": "south",
+    "value": 28.494555993741635,
+    "tier": 3,
+    "income": 6,
+    "split": [
+     3,
+     2,
+     1
+    ],
+    "index": 1,
+    "of": 1
+   }
+  ],
+  "Slaves": [
+   {
+    "deal": 4194,
+    "code": "D4194",
+    "trade": "Slaves",
+    "seller_state": 2,
+    "buyer_state": 20,
+    "good": "Slaves",
+    "origin": "Dawnband",
+    "dest": "Oim",
+    "stops": 8,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 12101.77782453893,
+    "heading": "west",
+    "value": 13.385681092778597,
+    "tier": 2,
+    "income": 9,
+    "split": [
+     5,
+     3,
+     1
+    ],
+    "index": 1,
+    "of": 5
+   },
+   {
+    "deal": 4196,
+    "code": "D4196",
+    "trade": "Slaves",
+    "seller_state": 4,
+    "buyer_state": 20,
+    "good": "Slaves",
+    "origin": "Orurem",
+    "dest": "Oim",
+    "stops": 5,
+    "stops_source": "land-sea",
+    "modes": [
+     "land",
+     "sea"
+    ],
+    "miles": 3750.2074820463736,
+    "heading": "south-west",
+    "value": 6.501466428567451,
+    "tier": 1,
+    "income": 5,
+    "split": [
+     2,
+     2,
+     1
+    ],
+    "index": 2,
+    "of": 5
+   },
+   {
+    "deal": 4195,
+    "code": "D4195",
+    "trade": "Slaves",
+    "seller_state": 3,
+    "buyer_state": 15,
+    "good": "Slaves",
+    "origin": "Cherkeruza",
+    "dest": "Hauls",
+    "stops": 4,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 2015.6386775638248,
+    "heading": "west",
+    "value": 12.322708305321337,
+    "tier": 2,
+    "income": 4,
+    "split": [
+     2,
+     1,
+     1
+    ],
+    "index": 3,
+    "of": 5
+   },
+   {
+    "deal": 4193,
+    "code": "D4193",
+    "trade": "Slaves",
+    "seller_state": 2,
+    "buyer_state": 17,
+    "good": "Slaves",
+    "origin": "Dawnband",
+    "dest": "Deadkeep",
+    "stops": 2,
+    "stops_source": "land-sea",
+    "modes": [
+     "sea"
+    ],
+    "miles": 2897.8581836633725,
+    "heading": "east",
+    "value": 19.651917652672314,
+    "tier": 3,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 4,
+    "of": 5
+   },
+   {
+    "deal": 4197,
+    "code": "D4197",
+    "trade": "Slaves",
+    "seller_state": 3,
+    "buyer_state": 15,
+    "good": "Slaves",
+    "origin": "Shathug",
+    "dest": "Hauls",
+    "stops": 3,
+    "stops_source": "land-sea",
+    "modes": [
+     "land"
+    ],
+    "miles": 1376.718486496644,
+    "heading": "south-west",
+    "value": 9.475805912189477,
+    "tier": 1,
+    "income": 3,
+    "split": [
+     2,
+     1,
+     0
+    ],
+    "index": 5,
+    "of": 5
+   }
+  ]
+ },
+ "decrees": [
+  {
+   "family": "Law",
+   "kind": "league",
+   "title": "The Goldyard league against slavers",
+   "issuer": 21,
+   "issuer_name": "Goldyard",
+   "ruler": "the Emperor of Goldyard",
+   "treasury": "modest",
+   "cause": "Goldyard trades no slaves and presses its allies to close their roads to slavers.",
+   "area_kind": "states",
+   "area_label": "Affected states",
+   "area_text": "Goldyard, Deadfairia, Voh and Bhia: every stop in these states",
+   "on_reveal": "",
+   "edict": "When you settle accounts, discard each Slaves commission whose route passes through the affected area. This is a breach.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Look away",
+     "text": "One of your Slaves routes is spared this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Manumission",
+     "text": "Discard one of your Slaves commissions and gain gold equal to its income. This is not a breach.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Oath of abolition",
+     "text": "Close your Slaves trade for good and open another trade with no overhead. The league becomes law: keep this card face up; its edict lasts the rest of the game.",
+     "shared": false,
+     "gold": 0,
+     "income": 1,
+     "settles": true
+    }
+   ],
+   "lapse": "The league breaks up: no effect.",
+   "routes": 2,
+   "share": 0.021,
+   "deck": "Slaves",
+   "source": "slaves:league",
+   "number": 1,
+   "priority": 0,
+   "area_key": [
+    "states",
+    [
+     9,
+     11,
+     18,
+     21
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "dungeons",
+   "title": "Raiders from the deep",
+   "issuer": 3,
+   "issuer_name": "Mornhe",
+   "ruler": "the Emperor of Mornhe",
+   "treasury": "rich",
+   "cause": "Dungeon near Khatho.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Khatho \u2013 Shathug",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Pay them off",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Hire guards",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Clear the depths",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "It strikes once more before it ends: each player pays 1 gold for each of their routes through the affected area.",
+   "routes": 8,
+   "share": 0.082,
+   "deck": null,
+   "source": "marker:19",
+   "number": 2,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      6,
+      142,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Enterprise",
+   "kind": "portals",
+   "title": "The portal opens for trade",
+   "issuer": 22,
+   "issuer_name": "Argaria",
+   "ruler": "the Emperor of Argaria",
+   "treasury": "rich",
+   "cause": "Wildgemea Portal.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Wildgemea \u2013 Cloudge",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Buy a share",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Partnership",
+     "text": "Your routes through the affected area earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Concession",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The chance passes: no effect.",
+   "routes": 9,
+   "share": 0.093,
+   "deck": null,
+   "source": "marker:44",
+   "number": 3,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      22,
+      310,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Enterprise",
+   "kind": "mines",
+   "title": "Investors wanted for the mine",
+   "issuer": 9,
+   "issuer_name": "Deadfairia",
+   "ruler": "the Council of Deadfairia",
+   "treasury": "rich",
+   "cause": "Mine: Bluszils \u2014 clay mining town.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Bluszils \u2013 Fygdilk",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Buy a share",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Partnership",
+     "text": "Your routes through the affected area earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Concession",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The chance passes: no effect.",
+   "routes": 6,
+   "share": 0.062,
+   "deck": null,
+   "source": "marker:3",
+   "number": 4,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      60,
+      249,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "invasion",
+   "title": "Madasan Invasion",
+   "issuer": 14,
+   "issuer_name": "Sushimimius",
+   "ruler": "the Grand Duke of Sushimimius",
+   "treasury": "poor",
+   "cause": "Madasan Invasion: foreign troops hold the country around the affected stops.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Sharnarthi, Quedior, Veldawada and Chelhazpo",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 2 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Run the lines",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Supply the defenders",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Drive them out",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 6,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The occupation hardens: each player removes one land infrastructure from a station of theirs in the affected area.",
+   "routes": 31,
+   "share": 0.32,
+   "deck": null,
+   "source": "zone:0",
+   "number": 5,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     7,
+     14,
+     40,
+     64
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "sea-monsters",
+   "title": "A monster at sea",
+   "issuer": 1,
+   "issuer_name": "Madas",
+   "ruler": "the Prince of Madas",
+   "treasury": "modest",
+   "cause": "Warton Monster.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Durcojhler \u2013 Bluszils (sea)",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your sea routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Throw a cask overboard",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Sail in convoy",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Claim the bounty",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "It strikes once more before it ends: each player pays 1 gold for each of their sea routes through the affected area.",
+   "routes": 15,
+   "share": 0.155,
+   "deck": null,
+   "source": "marker:22",
+   "number": 6,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      1,
+      60,
+      "sea"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "pirates",
+   "title": "Pirates in the lanes",
+   "issuer": 9,
+   "issuer_name": "Deadfairia",
+   "ruler": "the Council of Deadfairia",
+   "treasury": "rich",
+   "cause": "Pirates near Grugrun.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Ylhaz \u2013 Fenpnolothim (sea)",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your sea routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Pay the toll",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Sail in convoy",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Hunt them down",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "It strikes once more before it ends: each player pays 1 gold for each of their sea routes through the affected area.",
+   "routes": 12,
+   "share": 0.124,
+   "deck": null,
+   "source": "marker:30",
+   "number": 7,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      5,
+      193,
+      "sea"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Enterprise",
+   "kind": "caves",
+   "title": "Cold stores in the caves",
+   "issuer": 8,
+   "issuer_name": "Ladowia",
+   "ruler": "the Council of Ladowia",
+   "treasury": "poor",
+   "cause": "Caves: Dogronere Chasm.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Dradow \u2013 Ebuch",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Buy a share",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Partnership",
+     "text": "Your routes through the affected area earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Concession",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The chance passes: no effect.",
+   "routes": 4,
+   "share": 0.041,
+   "deck": null,
+   "source": "marker:42",
+   "number": 8,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      8,
+      364,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "revolt",
+   "title": "Revolt in the slave pens of Cielb",
+   "issuer": 20,
+   "issuer_name": "Cielb",
+   "ruler": "the King of Cielb",
+   "treasury": "rich",
+   "cause": "Cielb has the busiest slave markets of the world, and the slaves have risen.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Cielb: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 2 gold for each of your Slaves routes through Cielb.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Hire overseers",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Free them",
+     "text": "Discard one of your Slaves commissions and gain 3 gold. This is not a breach.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker a settlement",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The revolt spreads: discard each Slaves commission whose route passes through Cielb. This is a breach.",
+   "routes": 2,
+   "share": 0.021,
+   "deck": "Slaves",
+   "source": "slaves:revolt",
+   "number": 9,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     20
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "disaster",
+   "title": "Loststar Dearth",
+   "issuer": 22,
+   "issuer_name": "Argaria",
+   "ruler": "the Emperor of Argaria",
+   "treasury": "rich",
+   "cause": "Loststar Dearth strikes the affected area.",
+   "area_kind": "links",
+   "area_label": "Affected links",
+   "area_text": "Edwall \u2013 Fenpnolothim; Edwall \u2013 Bearcairn",
+   "on_reveal": "Each player removes one land infrastructure from each of their stations at either end of an affected link (move your expense marker down as usual).",
+   "edict": "The affected links cannot be used.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Relief convoy",
+     "text": "If you hold a Provisions commission, gain 3 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Rebuild your own",
+     "text": "Your routes ignore the closure while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Restore the country",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The damage is repaired: the decree ends with no further effect.",
+   "routes": 9,
+   "share": 0.093,
+   "deck": "Provisions",
+   "source": "zone:6",
+   "number": 10,
+   "priority": 0,
+   "area_key": [
+    "links",
+    [
+     [
+      50,
+      193,
+      "land"
+     ],
+     [
+      50,
+      245,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Faith",
+   "kind": "crusade",
+   "title": "Deholdanese Crusade",
+   "issuer": 2,
+   "issuer_name": "Mondfordia",
+   "ruler": "the Grand Duke of Mondfordia",
+   "treasury": "modest",
+   "cause": "Deholdanese Crusade: a holy army marches through the affected area.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Dawnband",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through the affected area, and gain 2 gold for each of your Metals & arms routes there.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Take the cross",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Supply the host",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Negotiate a truce",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The host marches on: each player pays 1 gold for each of their routes through the affected area.",
+   "routes": 20,
+   "share": 0.206,
+   "deck": "Metals & arms",
+   "source": "zone:4",
+   "number": 11,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     2
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "fault",
+   "title": "Dradean Fault",
+   "issuer": 15,
+   "issuer_name": "Hauls",
+   "ruler": "the ruler of Hauls",
+   "treasury": "modest",
+   "cause": "Dradean Fault strikes the affected area.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Bridkeep and Sprinstar",
+   "on_reveal": "Each player removes one land infrastructure from each of their stations at an affected stop (move your expense marker down as usual).",
+   "edict": "No land link into or out of an affected stop can be used.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Relief convoy",
+     "text": "If you hold a Provisions commission, gain 3 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Rebuild your own",
+     "text": "Your routes ignore the closure while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Restore the country",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The roads are mended: the decree ends with no further effect.",
+   "routes": 3,
+   "share": 0.031,
+   "deck": "Provisions",
+   "source": "zone:9",
+   "number": 12,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     89,
+     345
+    ]
+   ]
+  },
+  {
+   "family": "Court & festival",
+   "kind": "fairs",
+   "title": "The fair is proclaimed",
+   "issuer": 6,
+   "issuer_name": "Taldung",
+   "ruler": "the ruler of Taldung",
+   "treasury": "poor",
+   "cause": "Zizir Fair, near Khatho and Gluth.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Taldung: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your Luxuries routes through Taldung.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Sell at the fair",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Supply the fair",
+     "text": "Your Luxuries routes through Taldung earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Patron of the fair",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The fair ends: no effect.",
+   "routes": 11,
+   "share": 0.113,
+   "deck": "Luxuries",
+   "source": "marker:39",
+   "number": 13,
+   "priority": 3,
+   "area_key": [
+    "state",
+    [
+     6
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "rebels",
+   "title": "Hauls Rebels",
+   "issuer": 8,
+   "issuer_name": "Ladowia",
+   "ruler": "the Council of Ladowia",
+   "treasury": "poor",
+   "cause": "Hauls Rebels hold the roads of the affected area.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Dradow",
+   "on_reveal": "Metals & arms commissions routed through the affected area go to the bottom of their deck (not a breach).",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Pay them off",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Hire guards",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Put down the revolt",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 6,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The rebels take the roads: each player removes one land infrastructure from a station of theirs in the affected area.",
+   "routes": 9,
+   "share": 0.093,
+   "deck": "Metals & arms",
+   "source": "zone:1",
+   "number": 14,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     8
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Madas-Sushimimiusian War",
+   "issuer": 1,
+   "issuer_name": "Madas",
+   "ruler": "the Prince of Madas",
+   "treasury": "modest",
+   "cause": "Madas-Sushimimiusian War, begun 1034 PE: Madas attacks Sushimimius.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Madas: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Madas, and gain 2 gold for each of your Metals & arms routes through Madas.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Madas.",
+   "routes": 24,
+   "share": 0.247,
+   "deck": "Metals & arms",
+   "source": "campaign:Madas-Sushimimiusian War",
+   "number": 15,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     1
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "flood",
+   "title": "Gluth Flood",
+   "issuer": 3,
+   "issuer_name": "Mornhe",
+   "ruler": "the Emperor of Mornhe",
+   "treasury": "rich",
+   "cause": "Gluth Flood strikes the affected area.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Gluth, Stigkere and Khatho",
+   "on_reveal": "Each player removes one land infrastructure from each of their stations at an affected stop (move your expense marker down as usual).",
+   "edict": "No land link into or out of an affected stop can be used.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Relief convoy",
+     "text": "If you hold a Provisions commission, gain 3 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Rebuild your own",
+     "text": "Your routes ignore the closure while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Restore the country",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The waters recede: the decree ends with no further effect.",
+   "routes": 7,
+   "share": 0.072,
+   "deck": "Provisions",
+   "source": "zone:10",
+   "number": 16,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     3,
+     6,
+     24
+    ]
+   ]
+  },
+  {
+   "family": "Enterprise",
+   "kind": "hot-springs",
+   "title": "The baths reopen",
+   "issuer": 15,
+   "issuer_name": "Hauls",
+   "ruler": "the ruler of Hauls",
+   "treasury": "modest",
+   "cause": "Beryndrith Hot Springs.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Dradow \u2013 Hauls",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Buy a share",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Partnership",
+     "text": "Your routes through the affected area earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Concession",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The chance passes: no effect.",
+   "routes": 7,
+   "share": 0.072,
+   "deck": null,
+   "source": "marker:1",
+   "number": 17,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      8,
+      15,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Court & festival",
+   "kind": "circuses",
+   "title": "The circus is proclaimed",
+   "issuer": 14,
+   "issuer_name": "Sushimimius",
+   "ruler": "the Grand Duke of Sushimimius",
+   "treasury": "poor",
+   "cause": "Travelling Magical Circus, near Orurem and Quedior.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Sushimimius: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your Provisions routes through Sushimimius.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Sell at the circus",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Supply the circus",
+     "text": "Your Provisions routes through Sushimimius earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Patron of the circus",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The circus ends: no effect.",
+   "routes": 5,
+   "share": 0.052,
+   "deck": "Provisions",
+   "source": "marker:37",
+   "number": 18,
+   "priority": 3,
+   "area_key": [
+    "state",
+    [
+     14
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "disturbed-burials",
+   "title": "Graves disturbed",
+   "issuer": 1,
+   "issuer_name": "Madas",
+   "ruler": "the Prince of Madas",
+   "treasury": "modest",
+   "cause": "Disturbed Burial.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Durcojhler \u2013 Sharnarthi (sea)",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Pay the priests",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Travel by day",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Lay them to rest",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "It strikes once more before it ends: each player pays 1 gold for each of their routes through the affected area.",
+   "routes": 16,
+   "share": 0.165,
+   "deck": null,
+   "source": "marker:48",
+   "number": 19,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      1,
+      14,
+      "sea"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "eruption",
+   "title": "Blandford Eruption",
+   "issuer": 15,
+   "issuer_name": "Hauls",
+   "ruler": "the ruler of Hauls",
+   "treasury": "modest",
+   "cause": "Blandford Eruption strikes the affected area.",
+   "area_kind": "links",
+   "area_label": "Affected links",
+   "area_text": "Dradow \u2013 Hauls; Dradow \u2013 Ebuch",
+   "on_reveal": "Each player removes one land infrastructure from each of their stations at either end of an affected link (move your expense marker down as usual).",
+   "edict": "The affected links cannot be used.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Relief convoy",
+     "text": "If you hold a Provisions commission, gain 3 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Rebuild your own",
+     "text": "Your routes ignore the closure while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Restore the country",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The ash settles: the decree ends with no further effect.",
+   "routes": 9,
+   "share": 0.093,
+   "deck": "Provisions",
+   "source": "zone:7",
+   "number": 20,
+   "priority": 0,
+   "area_key": [
+    "links",
+    [
+     [
+      8,
+      15,
+      "land"
+     ],
+     [
+      8,
+      364,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Faith",
+   "kind": "proselytism",
+   "title": "Dawnband Proselytism",
+   "issuer": 16,
+   "issuer_name": "Newdenia",
+   "ruler": "the King of Newdenia",
+   "treasury": "rich",
+   "cause": "Dawnband Proselytism: missionaries ask a tithe of every caravan.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Dawnband, Thorgade, Sprinstar and Curmide",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Carry missionaries",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Convert",
+     "text": "Ignore the tithe while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Patron of the mission",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The mission moves on: no effect.",
+   "routes": 20,
+   "share": 0.206,
+   "deck": null,
+   "source": "zone:2",
+   "number": 21,
+   "priority": 1,
+   "area_key": [
+    "stops",
+    [
+     2,
+     16,
+     23,
+     345
+    ]
+   ]
+  },
+  {
+   "family": "Enterprise",
+   "kind": "portals",
+   "title": "The portal opens for trade",
+   "issuer": 20,
+   "issuer_name": "Cielb",
+   "ruler": "the King of Cielb",
+   "treasury": "rich",
+   "cause": "Oim Portal.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Oim \u2013 Bluszils",
+   "on_reveal": "",
+   "edict": "When you settle accounts, gain 1 gold for each of your routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Buy a share",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Partnership",
+     "text": "Your routes through the affected area earn 2 gold each, not 1, while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Concession",
+     "text": "The decree ends. Keep this card.",
+     "shared": false,
+     "gold": 0,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The chance passes: no effect.",
+   "routes": 18,
+   "share": 0.186,
+   "deck": null,
+   "source": "marker:45",
+   "number": 22,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      20,
+      60,
+      "land"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Mornhe-Thornterian War",
+   "issuer": 17,
+   "issuer_name": "Thornter",
+   "ruler": "the King of Thornter",
+   "treasury": "rich",
+   "cause": "Mornhe-Thornterian War, begun 1035 PE: Thornter defends against Mornhe.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Thornter: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Thornter, and gain 2 gold for each of your Metals & arms routes through Thornter.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Thornter.",
+   "routes": 23,
+   "share": 0.237,
+   "deck": "Metals & arms",
+   "source": "campaign:Mornhe-Thornterian War",
+   "number": 23,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     17
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Newdenia-Thornterian War",
+   "issuer": 16,
+   "issuer_name": "Newdenia",
+   "ruler": "the King of Newdenia",
+   "treasury": "rich",
+   "cause": "Newdenia-Thornterian War, begun 1032 PE: Newdenia attacks Thornter.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Newdenia: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Newdenia, and gain 2 gold for each of your Metals & arms routes through Newdenia.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Newdenia.",
+   "routes": 31,
+   "share": 0.32,
+   "deck": "Metals & arms",
+   "source": "campaign:Newdenia-Thornterian War",
+   "number": 24,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     16
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Madas-Sushimimiusian War",
+   "issuer": 14,
+   "issuer_name": "Sushimimius",
+   "ruler": "the Grand Duke of Sushimimius",
+   "treasury": "poor",
+   "cause": "Madas-Sushimimiusian War, begun 1034 PE: Sushimimius defends against Madas.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Sushimimius: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Sushimimius, and gain 2 gold for each of your Metals & arms routes through Sushimimius.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 6,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Sushimimius.",
+   "routes": 23,
+   "share": 0.237,
+   "deck": "Metals & arms",
+   "source": "campaign:Madas-Sushimimiusian War",
+   "number": 25,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     14
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "tsunami",
+   "title": "Craftrean Tsunami",
+   "issuer": 10,
+   "issuer_name": "Bayaneria",
+   "ruler": "the Khan of Bayaneria",
+   "treasury": "poor",
+   "cause": "Craftrean Tsunami strikes the affected area.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Tsatano \u2013 Deadkeep (sea)",
+   "on_reveal": "Each player removes one sea infrastructure from each of their stations at either end of an affected link (move your expense marker down as usual).",
+   "edict": "The affected links cannot be used.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Relief convoy",
+     "text": "If you hold a Provisions commission, gain 3 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Rebuild your own",
+     "text": "Your routes ignore the closure while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Restore the country",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 6,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The coast is cleared: the decree ends with no further effect.",
+   "routes": 6,
+   "share": 0.062,
+   "deck": "Provisions",
+   "source": "zone:12",
+   "number": 26,
+   "priority": 0,
+   "area_key": [
+    "links",
+    [
+     [
+      10,
+      63,
+      "sea"
+     ]
+    ]
+   ]
+  },
+  {
+   "family": "Disaster",
+   "kind": "disease",
+   "title": "Savage Cholera",
+   "issuer": 21,
+   "issuer_name": "Goldyard",
+   "ruler": "the Emperor of Goldyard",
+   "treasury": "modest",
+   "cause": "Savage Cholera: the affected area is under quarantine.",
+   "area_kind": "stops",
+   "area_label": "Affected stops",
+   "area_text": "Crowgbutumn, Knigh and Oxbreak",
+   "on_reveal": "",
+   "edict": "No Provisions or Livestock route may pass through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Carry physicians",
+     "text": "Gain 2 gold.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Clean papers",
+     "text": "Your routes ignore the quarantine while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Fund the hospitals",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The sickness burns out: no effect.",
+   "routes": 3,
+   "share": 0.031,
+   "deck": "Provisions",
+   "source": "zone:5",
+   "number": 27,
+   "priority": 0,
+   "area_key": [
+    "stops",
+    [
+     13,
+     21,
+     352
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Smal-Neneldgian War",
+   "issuer": 13,
+   "issuer_name": "Neneldgia",
+   "ruler": "the Grand Duke of Neneldgia",
+   "treasury": "modest",
+   "cause": "Smal-Neneldgian War, begun 1029 PE: Neneldgia defends against Smal.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Neneldgia: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Neneldgia, and gain 2 gold for each of your Metals & arms routes through Neneldgia.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Neneldgia.",
+   "routes": 13,
+   "share": 0.134,
+   "deck": "Metals & arms",
+   "source": "campaign:Smal-Neneldgian War",
+   "number": 28,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     13
+    ]
+   ]
+  },
+  {
+   "family": "War",
+   "kind": "war",
+   "title": "The Mornhe-Thornterian War",
+   "issuer": 3,
+   "issuer_name": "Mornhe",
+   "ruler": "the Emperor of Mornhe",
+   "treasury": "rich",
+   "cause": "Mornhe-Thornterian War, begun 1035 PE: Mornhe attacks Thornter.",
+   "area_kind": "state",
+   "area_label": "Affected state",
+   "area_text": "Mornhe: every stop in the state",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your routes through Mornhe, and gain 2 gold for each of your Metals & arms routes through Mornhe.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Safe-conduct",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Army contractor",
+     "text": "Ignore the payment while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Broker the peace",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 2,
+     "income": 3,
+     "settles": true
+    }
+   ],
+   "lapse": "The war drags on: each player pays 1 gold for each of their routes through Mornhe.",
+   "routes": 38,
+   "share": 0.392,
+   "deck": "Metals & arms",
+   "source": "campaign:Mornhe-Thornterian War",
+   "number": 29,
+   "priority": 0,
+   "area_key": [
+    "state",
+    [
+     3
+    ]
+   ]
+  },
+  {
+   "family": "Disorder",
+   "kind": "pirates",
+   "title": "Pirates in the lanes",
+   "issuer": 21,
+   "issuer_name": "Goldyard",
+   "ruler": "the Emperor of Goldyard",
+   "treasury": "modest",
+   "cause": "Pirates near Oxbreak.",
+   "area_kind": "links",
+   "area_label": "Affected link",
+   "area_text": "Oxbreak \u2013 Crowgbutumn (sea)",
+   "on_reveal": "",
+   "edict": "When you settle accounts, pay 1 gold for each of your sea routes through the affected area.",
+   "petitions": [
+    {
+     "stars": 1,
+     "title": "Pay the toll",
+     "text": "Ignore this edict this round.",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 3,
+     "title": "Sail in convoy",
+     "text": "Ignore this edict while this decree stands (put a token of yours on this card).",
+     "shared": false,
+     "gold": 0,
+     "income": 0,
+     "settles": false
+    },
+    {
+     "stars": 5,
+     "title": "Hunt them down",
+     "text": "The decree ends. Keep this card.",
+     "shared": true,
+     "gold": 4,
+     "income": 2,
+     "settles": true
+    }
+   ],
+   "lapse": "It strikes once more before it ends: each player pays 1 gold for each of their sea routes through the affected area.",
+   "routes": 8,
+   "share": 0.082,
+   "deck": null,
+   "source": "marker:31",
+   "number": 30,
+   "priority": 3,
+   "area_key": [
+    "links",
+    [
+     [
+      13,
+      352,
+      "sea"
+     ]
+    ]
+   ]
+  }
+ ],
+ "stops": [
+  {
+   "burg": 14,
+   "cell": 1025,
+   "x": 96.81,
+   "y": 368.48,
+   "name": "Sharnarthi",
+   "state": 14,
+   "population": 43.714,
+   "market": 1,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 6,
+   "cell": 549,
+   "x": 1708.86,
+   "y": 272.83,
+   "name": "Khatho",
+   "state": 6,
+   "population": 44.558,
+   "market": 2,
+   "neutral": true,
+   "air": false,
+   "roles": [
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 13,
+   "cell": 3048,
+   "x": 509.92,
+   "y": 689.32,
+   "name": "Oxbreak",
+   "state": 13,
+   "population": 43.606,
+   "market": 3,
+   "neutral": true,
+   "air": false,
+   "roles": [
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 2,
+   "cell": 1841,
+   "x": 1260.17,
+   "y": 491.42,
+   "name": "Dawnband",
+   "state": 2,
+   "population": 27.413,
+   "market": 4,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 4,
+   "cell": 1812,
+   "x": 224.83,
+   "y": 477.83,
+   "name": "Orurem",
+   "state": 4,
+   "population": 51.599,
+   "market": 5,
+   "neutral": true,
+   "air": false,
+   "roles": [
+    "capital",
+    "market"
+   ]
+  },
+  {
+   "burg": 20,
+   "cell": 2754,
+   "x": 103.2,
+   "y": 643.17,
+   "name": "Oim",
+   "state": 20,
+   "population": 16.322,
+   "market": 6,
+   "neutral": false,
+   "air": true,
+   "roles": [
+    "air-request",
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 22,
+   "cell": 3180,
+   "x": 297.65,
+   "y": 706.89,
+   "name": "Wildgemea",
+   "state": 22,
+   "population": 16.239,
+   "market": 7,
+   "neutral": false,
+   "air": true,
+   "roles": [
+    "air-request",
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 142,
+   "cell": 191,
+   "x": 1504.54,
+   "y": 228.23,
+   "name": "Shathug",
+   "state": 3,
+   "population": 21.331,
+   "market": 8,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 63,
+   "cell": 2342,
+   "x": 1441.55,
+   "y": 560.4,
+   "name": "Deadkeep",
+   "state": 17,
+   "population": 18.814,
+   "market": 9,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 10,
+   "cell": 3463,
+   "x": 1403.16,
+   "y": 769.43,
+   "name": "Tsatano",
+   "state": 10,
+   "population": 13.34,
+   "market": 10,
+   "neutral": false,
+   "air": true,
+   "roles": [
+    "air-request",
+    "capital",
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 15,
+   "cell": 1155,
+   "x": 1404.23,
+   "y": 375.39,
+   "name": "Hauls",
+   "state": 15,
+   "population": 4.508,
+   "market": 11,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "market"
+   ]
+  },
+  {
+   "burg": 316,
+   "cell": 2088,
+   "x": 411.14,
+   "y": 510.74,
+   "name": "Ighird",
+   "state": 22,
+   "population": 7.058,
+   "market": 12,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "market",
+    "port"
+   ]
+  },
+  {
+   "burg": 348,
+   "cell": 1699,
+   "x": 1656.06,
+   "y": 453.56,
+   "name": "Cherkeruza",
+   "state": 3,
+   "population": 3.781,
+   "market": 13,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "market"
+   ]
+  },
+  {
+   "burg": 1,
+   "cell": 1713,
+   "x": 105.11,
+   "y": 453.38,
+   "name": "Durcojhler",
+   "state": 1,
+   "population": 40.968,
+   "market": null,
+   "neutral": false,
+   "air": true,
+   "roles": [
+    "air-request",
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 3,
+   "cell": 1477,
+   "x": 1505.67,
+   "y": 423.14,
+   "name": "Stigkere",
+   "state": 3,
+   "population": 5.101,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 5,
+   "cell": 1823,
+   "x": 307.45,
+   "y": 486.73,
+   "name": "Ylhaz",
+   "state": 5,
+   "population": 4.712,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 7,
+   "cell": 864,
+   "x": 181.67,
+   "y": 332.36,
+   "name": "Chelhazpo",
+   "state": 7,
+   "population": 4.233,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 8,
+   "cell": 1764,
+   "x": 1431.72,
+   "y": 462.9,
+   "name": "Dradow",
+   "state": 8,
+   "population": 8.117,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital"
+   ]
+  },
+  {
+   "burg": 9,
+   "cell": 2769,
+   "x": 271.51,
+   "y": 643.62,
+   "name": "Audrock",
+   "state": 9,
+   "population": 7.247,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 11,
+   "cell": 3552,
+   "x": 251.6,
+   "y": 791.55,
+   "name": "Froi",
+   "state": 11,
+   "population": 13.014,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 12,
+   "cell": 3580,
+   "x": 498.24,
+   "y": 797.89,
+   "name": "Smal",
+   "state": 12,
+   "population": 28.686,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 16,
+   "cell": 2259,
+   "x": 1328.42,
+   "y": 544.03,
+   "name": "Curmide",
+   "state": 16,
+   "population": 41.578,
+   "market": null,
+   "neutral": true,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 17,
+   "cell": 2339,
+   "x": 1408.37,
+   "y": 558.7,
+   "name": "Direme",
+   "state": 17,
+   "population": 15.563,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital"
+   ]
+  },
+  {
+   "burg": 18,
+   "cell": 3405,
+   "x": 130.31,
+   "y": 764.48,
+   "name": "Bhia",
+   "state": 18,
+   "population": 4.513,
+   "market": null,
+   "neutral": true,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 19,
+   "cell": 2738,
+   "x": 1344.73,
+   "y": 628.15,
+   "name": "Nulbuluk",
+   "state": 19,
+   "population": 7.261,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital"
+   ]
+  },
+  {
+   "burg": 21,
+   "cell": 3058,
+   "x": 591.01,
+   "y": 683.99,
+   "name": "Knigh",
+   "state": 21,
+   "population": 18.251,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "capital",
+    "port"
+   ]
+  },
+  {
+   "burg": 245,
+   "cell": 2876,
+   "x": 475.42,
+   "y": 653.78,
+   "name": "Bearcairn",
+   "state": 22,
+   "population": 0.869,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "fort"
+   ]
+  },
+  {
+   "burg": 364,
+   "cell": 1770,
+   "x": 1512.75,
+   "y": 462.52,
+   "name": "Ebuch",
+   "state": 3,
+   "population": 0.984,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "fort"
+   ]
+  },
+  {
+   "burg": 40,
+   "cell": 1617,
+   "x": 135.12,
+   "y": 443.62,
+   "name": "Quedior",
+   "state": 1,
+   "population": 44.006,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 23,
+   "cell": 2112,
+   "x": 1292.18,
+   "y": 523.61,
+   "name": "Thorgade",
+   "state": 16,
+   "population": 35.255,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 60,
+   "cell": 2851,
+   "x": 192.84,
+   "y": 642.34,
+   "name": "Bluszils",
+   "state": 9,
+   "population": 33.557,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 162,
+   "cell": 2404,
+   "x": 1283.67,
+   "y": 568.36,
+   "name": "Zanarg",
+   "state": 16,
+   "population": 24.858,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 26,
+   "cell": 828,
+   "x": 1386.01,
+   "y": 306.44,
+   "name": "Dirtshield",
+   "state": 16,
+   "population": 20.171,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 310,
+   "cell": 3023,
+   "x": 266.16,
+   "y": 682.02,
+   "name": "Cloudge",
+   "state": 22,
+   "population": 19.848,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 309,
+   "cell": 1719,
+   "x": 182.1,
+   "y": 462.06,
+   "name": "Natarvugauth",
+   "state": 4,
+   "population": 19.018,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 248,
+   "cell": 2254,
+   "x": 1257.23,
+   "y": 548.5,
+   "name": "Gundushund",
+   "state": 16,
+   "population": 18.756,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 89,
+   "cell": 1759,
+   "x": 1359.73,
+   "y": 462.11,
+   "name": "Bridkeep",
+   "state": 16,
+   "population": 17.658,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 193,
+   "cell": 2301,
+   "x": 259.87,
+   "y": 561.61,
+   "name": "Fenpnolothim",
+   "state": 9,
+   "population": 17.477,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 24,
+   "cell": 1386,
+   "x": 1542.9,
+   "y": 410.64,
+   "name": "Gluth",
+   "state": 3,
+   "population": 17.437,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 335,
+   "cell": 2154,
+   "x": 311.74,
+   "y": 528.04,
+   "name": "Grugrun",
+   "state": 9,
+   "population": 16.258,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 186,
+   "cell": 1329,
+   "x": 100,
+   "y": 414.1,
+   "name": "Aghagos",
+   "state": 1,
+   "population": 15.78,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 345,
+   "cell": 1366,
+   "x": 1311.93,
+   "y": 412.15,
+   "name": "Sprinstar",
+   "state": 16,
+   "population": 15.532,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  },
+  {
+   "burg": 249,
+   "cell": 3014,
+   "x": 221.31,
+   "y": 686.77,
+   "name": "Fygdilk",
+   "state": 9,
+   "population": 15.521,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 352,
+   "cell": 2885,
+   "x": 554.84,
+   "y": 660.58,
+   "name": "Crowgbutumn",
+   "state": 21,
+   "population": 15.178,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 227,
+   "cell": 3030,
+   "x": 335.77,
+   "y": 689.69,
+   "name": "Doglen",
+   "state": 22,
+   "population": 15.001,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 50,
+   "cell": 2870,
+   "x": 412.89,
+   "y": 652.72,
+   "name": "Edwall",
+   "state": 22,
+   "population": 14.794,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city",
+    "port"
+   ]
+  },
+  {
+   "burg": 64,
+   "cell": 1105,
+   "x": 133.44,
+   "y": 369.15,
+   "name": "Veldawada",
+   "state": 14,
+   "population": 14.751,
+   "market": null,
+   "neutral": false,
+   "air": false,
+   "roles": [
+    "city"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "a": 14,
+   "b": 64,
+   "mode": "land",
+   "miles": 236
+  },
+  {
+   "a": 24,
+   "b": 3,
+   "mode": "land",
+   "miles": 207
+  },
+  {
+   "a": 3,
+   "b": 364,
+   "mode": "land",
+   "miles": 227
+  },
+  {
+   "a": 309,
+   "b": 4,
+   "mode": "land",
+   "miles": 283
+  },
+  {
+   "a": 248,
+   "b": 162,
+   "mode": "land",
+   "miles": 281
+  },
+  {
+   "a": 17,
+   "b": 63,
+   "mode": "land",
+   "miles": 230
+  },
+  {
+   "a": 310,
+   "b": 22,
+   "mode": "land",
+   "miles": 237
+  },
+  {
+   "a": 186,
+   "b": 40,
+   "mode": "land",
+   "miles": 285
+  },
+  {
+   "a": 352,
+   "b": 21,
+   "mode": "land",
+   "miles": 237
+  },
+  {
+   "a": 16,
+   "b": 162,
+   "mode": "land",
+   "miles": 341
+  },
+  {
+   "a": 227,
+   "b": 22,
+   "mode": "land",
+   "miles": 252
+  },
+  {
+   "a": 14,
+   "b": 186,
+   "mode": "land",
+   "miles": 269
+  },
+  {
+   "a": 2,
+   "b": 248,
+   "mode": "land",
+   "miles": 387
+  },
+  {
+   "a": 40,
+   "b": 309,
+   "mode": "land",
+   "miles": 306
+  },
+  {
+   "a": 335,
+   "b": 193,
+   "mode": "land",
+   "miles": 335
+  },
+  {
+   "a": 60,
+   "b": 249,
+   "mode": "land",
+   "miles": 325
+  },
+  {
+   "a": 9,
+   "b": 249,
+   "mode": "land",
+   "miles": 394
+  },
+  {
+   "a": 9,
+   "b": 310,
+   "mode": "land",
+   "miles": 327
+  },
+  {
+   "a": 89,
+   "b": 8,
+   "mode": "land",
+   "miles": 449
+  },
+  {
+   "a": 26,
+   "b": 15,
+   "mode": "land",
+   "miles": 480
+  },
+  {
+   "a": 345,
+   "b": 89,
+   "mode": "land",
+   "miles": 450
+  },
+  {
+   "a": 16,
+   "b": 17,
+   "mode": "land",
+   "miles": 450
+  },
+  {
+   "a": 64,
+   "b": 40,
+   "mode": "land",
+   "miles": 422
+  },
+  {
+   "a": 89,
+   "b": 16,
+   "mode": "land",
+   "miles": 490
+  },
+  {
+   "a": 17,
+   "b": 19,
+   "mode": "land",
+   "miles": 563
+  },
+  {
+   "a": 162,
+   "b": 19,
+   "mode": "land",
+   "miles": 481
+  },
+  {
+   "a": 50,
+   "b": 245,
+   "mode": "land",
+   "miles": 453
+  },
+  {
+   "a": 13,
+   "b": 21,
+   "mode": "land",
+   "miles": 470
+  },
+  {
+   "a": 8,
+   "b": 364,
+   "mode": "land",
+   "miles": 458
+  },
+  {
+   "a": 8,
+   "b": 17,
+   "mode": "land",
+   "miles": 565
+  },
+  {
+   "a": 5,
+   "b": 335,
+   "mode": "land",
+   "miles": 466
+  },
+  {
+   "a": 7,
+   "b": 64,
+   "mode": "land",
+   "miles": 463
+  },
+  {
+   "a": 20,
+   "b": 60,
+   "mode": "land",
+   "miles": 561
+  },
+  {
+   "a": 193,
+   "b": 60,
+   "mode": "land",
+   "miles": 636
+  },
+  {
+   "a": 193,
+   "b": 9,
+   "mode": "land",
+   "miles": 532
+  },
+  {
+   "a": 249,
+   "b": 11,
+   "mode": "land",
+   "miles": 676
+  },
+  {
+   "a": 9,
+   "b": 227,
+   "mode": "land",
+   "miles": 648
+  },
+  {
+   "a": 345,
+   "b": 2,
+   "mode": "land",
+   "miles": 602
+  },
+  {
+   "a": 89,
+   "b": 17,
+   "mode": "land",
+   "miles": 603
+  },
+  {
+   "a": 15,
+   "b": 345,
+   "mode": "land",
+   "miles": 615
+  },
+  {
+   "a": 249,
+   "b": 18,
+   "mode": "land",
+   "miles": 732
+  },
+  {
+   "a": 15,
+   "b": 8,
+   "mode": "land",
+   "miles": 662
+  },
+  {
+   "a": 60,
+   "b": 18,
+   "mode": "land",
+   "miles": 816
+  },
+  {
+   "a": 18,
+   "b": 11,
+   "mode": "land",
+   "miles": 709
+  },
+  {
+   "a": 13,
+   "b": 12,
+   "mode": "land",
+   "miles": 713
+  },
+  {
+   "a": 5,
+   "b": 316,
+   "mode": "land",
+   "miles": 710
+  },
+  {
+   "a": 7,
+   "b": 4,
+   "mode": "land",
+   "miles": 952
+  },
+  {
+   "a": 9,
+   "b": 50,
+   "mode": "land",
+   "miles": 938
+  },
+  {
+   "a": 40,
+   "b": 4,
+   "mode": "land",
+   "miles": 945
+  },
+  {
+   "a": 348,
+   "b": 364,
+   "mode": "land",
+   "miles": 896
+  },
+  {
+   "a": 142,
+   "b": 26,
+   "mode": "land",
+   "miles": 897
+  },
+  {
+   "a": 193,
+   "b": 50,
+   "mode": "land",
+   "miles": 1162
+  },
+  {
+   "a": 6,
+   "b": 24,
+   "mode": "land",
+   "miles": 1200
+  },
+  {
+   "a": 142,
+   "b": 6,
+   "mode": "land",
+   "miles": 1319
+  },
+  {
+   "a": 5,
+   "b": 193,
+   "mode": "land",
+   "miles": 1454
+  },
+  {
+   "a": 364,
+   "b": 19,
+   "mode": "land",
+   "miles": 1702
+  },
+  {
+   "a": 40,
+   "b": 1,
+   "mode": "sea",
+   "miles": 158
+  },
+  {
+   "a": 2,
+   "b": 23,
+   "mode": "sea",
+   "miles": 245
+  },
+  {
+   "a": 23,
+   "b": 16,
+   "mode": "sea",
+   "miles": 215
+  },
+  {
+   "a": 227,
+   "b": 22,
+   "mode": "sea",
+   "miles": 270
+  },
+  {
+   "a": 249,
+   "b": 310,
+   "mode": "sea",
+   "miles": 269
+  },
+  {
+   "a": 9,
+   "b": 310,
+   "mode": "sea",
+   "miles": 238
+  },
+  {
+   "a": 24,
+   "b": 3,
+   "mode": "sea",
+   "miles": 314
+  },
+  {
+   "a": 50,
+   "b": 227,
+   "mode": "sea",
+   "miles": 526
+  },
+  {
+   "a": 14,
+   "b": 1,
+   "mode": "sea",
+   "miles": 554
+  },
+  {
+   "a": 310,
+   "b": 22,
+   "mode": "sea",
+   "miles": 511
+  },
+  {
+   "a": 352,
+   "b": 13,
+   "mode": "sea",
+   "miles": 577
+  },
+  {
+   "a": 50,
+   "b": 13,
+   "mode": "sea",
+   "miles": 639
+  },
+  {
+   "a": 5,
+   "b": 193,
+   "mode": "sea",
+   "miles": 707
+  },
+  {
+   "a": 193,
+   "b": 60,
+   "mode": "sea",
+   "miles": 832
+  },
+  {
+   "a": 22,
+   "b": 11,
+   "mode": "sea",
+   "miles": 915
+  },
+  {
+   "a": 7,
+   "b": 14,
+   "mode": "sea",
+   "miles": 924
+  },
+  {
+   "a": 142,
+   "b": 26,
+   "mode": "sea",
+   "miles": 1061
+  },
+  {
+   "a": 20,
+   "b": 18,
+   "mode": "sea",
+   "miles": 1170
+  },
+  {
+   "a": 352,
+   "b": 21,
+   "mode": "sea",
+   "miles": 1196
+  },
+  {
+   "a": 142,
+   "b": 6,
+   "mode": "sea",
+   "miles": 1379
+  },
+  {
+   "a": 26,
+   "b": 2,
+   "mode": "sea",
+   "miles": 1489
+  },
+  {
+   "a": 316,
+   "b": 352,
+   "mode": "sea",
+   "miles": 1569
+  },
+  {
+   "a": 5,
+   "b": 316,
+   "mode": "sea",
+   "miles": 1608
+  },
+  {
+   "a": 21,
+   "b": 12,
+   "mode": "sea",
+   "miles": 1657
+  },
+  {
+   "a": 20,
+   "b": 60,
+   "mode": "sea",
+   "miles": 1774
+  },
+  {
+   "a": 1,
+   "b": 60,
+   "mode": "sea",
+   "miles": 2086
+  },
+  {
+   "a": 18,
+   "b": 11,
+   "mode": "sea",
+   "miles": 1998
+  },
+  {
+   "a": 63,
+   "b": 10,
+   "mode": "sea",
+   "miles": 2011
+  },
+  {
+   "a": 6,
+   "b": 24,
+   "mode": "sea",
+   "miles": 2189
+  },
+  {
+   "a": 1,
+   "b": 193,
+   "mode": "sea",
+   "miles": 2287
+  },
+  {
+   "a": 2,
+   "b": 63,
+   "mode": "sea",
+   "miles": 2898
+  },
+  {
+   "a": 24,
+   "b": 63,
+   "mode": "sea",
+   "miles": 3311
+  },
+  {
+   "a": 26,
+   "b": 352,
+   "mode": "sea",
+   "miles": 7038
+  }
+ ],
+ "stars": [
+  {
+   "marker": 0,
+   "name": "Blandford Volcano",
+   "type": "volcanoes",
+   "mode": "air",
+   "x": 1442.0,
+   "y": 431.5
+  },
+  {
+   "marker": 1,
+   "name": "Beryndrith Hot Springs",
+   "type": "hot-springs",
+   "mode": "land",
+   "x": 1414.6,
+   "y": 402.5
+  },
+  {
+   "marker": 2,
+   "name": "Faymoutht Healing Spring",
+   "type": "water-sources",
+   "mode": "land",
+   "x": 1376.1,
+   "y": 546.6
+  },
+  {
+   "marker": 3,
+   "name": "Bluszils \u2014 clay mining town",
+   "type": "mines",
+   "mode": "land",
+   "x": 199.0,
+   "y": 647.5
+  },
+  {
+   "marker": 4,
+   "name": "Hildgazi \u2014 tin mining town",
+   "type": "mines",
+   "mode": "land",
+   "x": 1434.4,
+   "y": 249.7
+  },
+  {
+   "marker": 5,
+   "name": "Ancairnzeg \u2014 clay mining town",
+   "type": "mines",
+   "mode": "sea",
+   "x": 472.4,
+   "y": 587.2
+  },
+  {
+   "marker": 6,
+   "name": "Shagaald \u2014 clay mining town",
+   "type": "mines",
+   "mode": "sea",
+   "x": 135.7,
+   "y": 590.6
+  },
+  {
+   "marker": 7,
+   "name": "Thorgade Bridge",
+   "type": "bridges",
+   "mode": "sea",
+   "x": 1298.3,
+   "y": 528.8
+  },
+  {
+   "marker": 8,
+   "name": "The Blue Rook",
+   "type": "inns",
+   "mode": "land",
+   "x": 204.2,
+   "y": 724.3
+  },
+  {
+   "marker": 9,
+   "name": "The Bright Rat",
+   "type": "inns",
+   "mode": "land",
+   "x": 568.2,
+   "y": 665.1
+  },
+  {
+   "marker": 10,
+   "name": "The Pink Buffalo",
+   "type": "inns",
+   "mode": "land",
+   "x": 1340.1,
+   "y": 522.8
+  },
+  {
+   "marker": 11,
+   "name": "The Light Wolf",
+   "type": "inns",
+   "mode": "land",
+   "x": 102.9,
+   "y": 373.6
+  },
+  {
+   "marker": 12,
+   "name": "The Yellow Narwhal",
+   "type": "inns",
+   "mode": "land",
+   "x": 575.8,
+   "y": 693.2
+  },
+  {
+   "marker": 13,
+   "name": "The Dark Ibis",
+   "type": "inns",
+   "mode": "land",
+   "x": 132.0,
+   "y": 436.3
+  },
+  {
+   "marker": 14,
+   "name": "The Brown Panther",
+   "type": "inns",
+   "mode": "land",
+   "x": 280.4,
+   "y": 651.0
+  },
+  {
+   "marker": 15,
+   "name": "Rrharrandhell Waterfall",
+   "type": "waterfalls",
+   "mode": "land",
+   "x": 1411.7,
+   "y": 378.3
+  },
+  {
+   "marker": 16,
+   "name": "Misthgrones Battlefield",
+   "type": "battlefields",
+   "mode": "land",
+   "x": 1334.5,
+   "y": 549.2
+  },
+  {
+   "marker": 17,
+   "name": "Dungeon",
+   "type": "dungeons",
+   "mode": "sea",
+   "x": 117.0,
+   "y": 811.3
+  },
+  {
+   "marker": 18,
+   "name": "Dungeon",
+   "type": "dungeons",
+   "mode": "sea",
+   "x": 605.3,
+   "y": 714.9
+  },
+  {
+   "marker": 19,
+   "name": "Dungeon",
+   "type": "dungeons",
+   "mode": "land",
+   "x": 1610.4,
+   "y": 281.1
+  },
+  {
+   "marker": 20,
+   "name": "Akhnud Monster",
+   "type": "lake-monsters",
+   "mode": "land",
+   "x": 1414.6,
+   "y": 410.5
+  },
+  {
+   "marker": 21,
+   "name": "Atfield Monster",
+   "type": "sea-monsters",
+   "mode": "sea",
+   "x": 519.4,
+   "y": 778.2
+  },
+  {
+   "marker": 22,
+   "name": "Warton Monster",
+   "type": "sea-monsters",
+   "mode": "sea",
+   "x": 45.0,
+   "y": 506.4
+  },
+  {
+   "marker": 23,
+   "name": "Khahourg Dragon",
+   "type": "hill-monsters",
+   "mode": "air",
+   "x": 1538.2,
+   "y": 303.3
+  },
+  {
+   "marker": 24,
+   "name": "Legzozir Forest",
+   "type": "sacred-forests",
+   "mode": "land",
+   "x": 1406.6,
+   "y": 410.1
+  },
+  {
+   "marker": 25,
+   "name": "Sprinhold Pinery",
+   "type": "sacred-pineries",
+   "mode": "air",
+   "x": 441.3,
+   "y": 794.3
+  },
+  {
+   "marker": 26,
+   "name": "Bugausthagith Rooks",
+   "type": "brigands",
+   "mode": "land",
+   "x": 1416.3,
+   "y": 384.9
+  },
+  {
+   "marker": 27,
+   "name": "Vorkerad Owls",
+   "type": "brigands",
+   "mode": "land",
+   "x": 1635.7,
+   "y": 327.5
+  },
+  {
+   "marker": 28,
+   "name": "Prononinardia Hares",
+   "type": "brigands",
+   "mode": "land",
+   "x": 313.6,
+   "y": 491.9
+  },
+  {
+   "marker": 29,
+   "name": "Pirates",
+   "type": "pirates",
+   "mode": "sea",
+   "x": 1359.4,
+   "y": 650.8
+  },
+  {
+   "marker": 30,
+   "name": "Pirates",
+   "type": "pirates",
+   "mode": "sea",
+   "x": 305.2,
+   "y": 518.3
+  },
+  {
+   "marker": 31,
+   "name": "Pirates",
+   "type": "pirates",
+   "mode": "sea",
+   "x": 505.1,
+   "y": 661.3
+  },
+  {
+   "marker": 32,
+   "name": "Sios Obelisk",
+   "type": "statues",
+   "mode": "land",
+   "x": 152.7,
+   "y": 756.6
+  },
+  {
+   "marker": 33,
+   "name": "Monarmaliotaar Pillar",
+   "type": "statues",
+   "mode": "land",
+   "x": 199.0,
+   "y": 464.0
+  },
+  {
+   "marker": 34,
+   "name": "Ruined Temple",
+   "type": "ruins",
+   "mode": "air",
+   "x": 427.4,
+   "y": 808.5
+  },
+  {
+   "marker": 35,
+   "name": "Ruined Castle",
+   "type": "ruins",
+   "mode": "sea",
+   "x": 503.0,
+   "y": 597.3
+  },
+  {
+   "marker": 36,
+   "name": "Gler Collection",
+   "type": "libraries",
+   "mode": "sea",
+   "x": 71.3,
+   "y": 699.9
+  },
+  {
+   "marker": 37,
+   "name": "Travelling Magical Circus",
+   "type": "circuses",
+   "mode": "land",
+   "x": 154.2,
+   "y": 413.3
+  },
+  {
+   "marker": 38,
+   "name": "Khatho Joust",
+   "type": "jousts",
+   "mode": "land",
+   "x": 1715.0,
+   "y": 278.0
+  },
+  {
+   "marker": 39,
+   "name": "Zizir Fair",
+   "type": "fairs",
+   "mode": "land",
+   "x": 1684.8,
+   "y": 283.8
+  },
+  {
+   "marker": 40,
+   "name": "Minor Jetty",
+   "type": "canoes",
+   "mode": "land",
+   "x": 1625.2,
+   "y": 335.4
+  },
+  {
+   "marker": 41,
+   "name": "Frogs migration",
+   "type": "migration",
+   "mode": "air",
+   "x": 319.1,
+   "y": 913.1
+  },
+  {
+   "marker": 42,
+   "name": "Dogronere Chasm",
+   "type": "caves",
+   "mode": "land",
+   "x": 1466.9,
+   "y": 458.7
+  },
+  {
+   "marker": 43,
+   "name": "Tsatano Portal",
+   "type": "portals",
+   "mode": "sea",
+   "x": 1409.3,
+   "y": 774.6
+  },
+  {
+   "marker": 44,
+   "name": "Wildgemea Portal",
+   "type": "portals",
+   "mode": "land",
+   "x": 303.8,
+   "y": 712.0
+  },
+  {
+   "marker": 45,
+   "name": "Oim Portal",
+   "type": "portals",
+   "mode": "land",
+   "x": 109.3,
+   "y": 648.3
+  },
+  {
+   "marker": 46,
+   "name": "Durcojhler Portal",
+   "type": "portals",
+   "mode": "sea",
+   "x": 111.2,
+   "y": 458.5
+  },
+  {
+   "marker": 47,
+   "name": "Cosmic Rift",
+   "type": "rifts",
+   "mode": "sea",
+   "x": 64.4,
+   "y": 610.5
+  },
+  {
+   "marker": 48,
+   "name": "Disturbed Burial",
+   "type": "disturbed-burials",
+   "mode": "sea",
+   "x": 99.1,
+   "y": 448.1
+  },
+  {
+   "marker": 49,
+   "name": "Dusthtown Necropolis",
+   "type": "necropolises",
+   "mode": "air",
+   "x": 372.6,
+   "y": 845.6
+  },
+  {
+   "marker": 50,
+   "name": "Random encounter",
+   "type": "encounters",
+   "mode": "land",
+   "x": 354.6,
+   "y": 513.6
+  },
+  {
+   "marker": 51,
+   "name": "Random encounter",
+   "type": "encounters",
+   "mode": "sea",
+   "x": 1401.3,
+   "y": 777.3
+  },
+  {
+   "marker": 52,
+   "name": "Random encounter",
+   "type": "encounters",
+   "mode": "sea",
+   "x": 56.6,
+   "y": 608.8
+  },
+  {
+   "marker": 53,
+   "name": "Random encounter",
+   "type": "encounters",
+   "mode": "sea",
+   "x": 133.3,
+   "y": 583.0
+  }
+ ]
+}

@@ -1,0 +1,150 @@
+component,deck,file,count,note
+board,,board/Persia_board,1,47 stops
+commission back,Provisions,commissions/Provisions/Provisions_back,1,
+commission,Provisions,commissions/Provisions/Provisions_001_D4226,1,"Cheese Orurem to Wildgemea, 7 stops, income 10"
+commission,Provisions,commissions/Provisions/Provisions_002_D4144,1,"Game Ighird to Oim, 5 stops, income 8"
+commission,Provisions,commissions/Provisions/Provisions_003_D4208,1,"Sugarcane Sharnarthi to Wildgemea, 6 stops, income 6"
+commission,Provisions,commissions/Provisions/Provisions_004_D4228,1,"Cheese Hauls to Oxbreak, 4 stops, income 6"
+commission,Provisions,commissions/Provisions/Provisions_005_D4229,1,"Cheese Dawnband to Ighird, 4 stops, income 6"
+commission,Provisions,commissions/Provisions/Provisions_006_D4211,1,"Sugarcane Sharnarthi to Oxbreak, 5 stops, income 5"
+commission,Provisions,commissions/Provisions/Provisions_007_D4152,1,"Honey Cherkeruza to Khatho, 5 stops, income 4"
+commission,Provisions,commissions/Provisions/Provisions_008_D4206,1,"Sugarcane Sharnarthi to Oim, 4 stops, income 4"
+commission,Provisions,commissions/Provisions/Provisions_009_D4207,1,"Sugarcane Shathug to Deadkeep, 4 stops, income 4"
+commission,Provisions,commissions/Provisions/Provisions_010_D4214,1,"Sugarcane Shathug to Tsatano, 5 stops, income 4"
+commission,Provisions,commissions/Provisions/Provisions_011_D4227,1,"Cheese Hauls to Shathug, 3 stops, income 4"
+commission,Provisions,commissions/Provisions/Provisions_012_D4143,1,"Grain Hauls to Khatho, 4 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_013_D4151,1,"Honey Orurem to Sharnarthi, 3 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_014_D4153,1,"Honey Dawnband to Shathug, 3 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_015_D4209,1,"Sugarcane Shathug to Dawnband, 3 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_016_D4210,1,"Sugarcane Shathug to Hauls, 3 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_017_D4212,1,"Sugarcane Sharnarthi to Orurem, 3 stops, income 3"
+commission,Provisions,commissions/Provisions/Provisions_018_D4213,1,"Sugarcane Shathug to Khatho, 2 stops, income 2"
+commission back,Luxuries,commissions/Luxuries/Luxuries_back,1,
+commission,Luxuries,commissions/Luxuries/Luxuries_001_D4170,1,"Incense Shathug to Oim, 8 stops, income 12"
+commission,Luxuries,commissions/Luxuries/Luxuries_002_D4171,1,"Incense Dawnband to Oim, 8 stops, income 12"
+commission,Luxuries,commissions/Luxuries/Luxuries_003_D4158,1,"Gemstones Orurem to Wildgemea, 7 stops, income 10"
+commission,Luxuries,commissions/Luxuries/Luxuries_004_D4155,1,"Pearls Ighird to Oim, 5 stops, income 8"
+commission,Luxuries,commissions/Luxuries/Luxuries_005_D4157,1,"Gemstones Orurem to Oim, 5 stops, income 8"
+commission,Luxuries,commissions/Luxuries/Luxuries_006_D4161,1,"Gemstones Ighird to Sharnarthi, 5 stops, income 8"
+commission,Luxuries,commissions/Luxuries/Luxuries_007_D4190,1,"Amber Oxbreak to Oim, 5 stops, income 8"
+commission,Luxuries,commissions/Luxuries/Luxuries_008_D4225,1,"Jewelry Orurem to Oim, 5 stops, income 8"
+commission,Luxuries,commissions/Luxuries/Luxuries_009_D4146,1,"Wine Orurem to Wildgemea, 7 stops, income 7"
+commission,Luxuries,commissions/Luxuries/Luxuries_010_D4172,1,"Incense Ighird to Wildgemea, 6 stops, income 7"
+commission,Luxuries,commissions/Luxuries/Luxuries_011_D4174,1,"Silk Sharnarthi to Wildgemea, 6 stops, income 7"
+commission,Luxuries,commissions/Luxuries/Luxuries_012_D4179,1,"Spices Sharnarthi to Wildgemea, 6 stops, income 7"
+commission,Luxuries,commissions/Luxuries/Luxuries_013_D4145,1,"Wine Orurem to Oxbreak, 6 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_014_D4162,1,"Gemstones Deadkeep to Cherkeruza, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_015_D4168,1,"Incense Shathug to Deadkeep, 4 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_016_D4175,1,"Silk Sharnarthi to Ighird, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_017_D4176,1,"Silk Sharnarthi to Oxbreak, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_018_D4180,1,"Spices Sharnarthi to Ighird, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_019_D4182,1,"Spices Sharnarthi to Oxbreak, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_020_D4199,1,"Mahogany Ighird to Oim, 5 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_021_D4200,1,"Mahogany Ighird to Wildgemea, 6 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_022_D4224,1,"Coins Shathug to Cherkeruza, 6 stops, income 6"
+commission,Luxuries,commissions/Luxuries/Luxuries_023_D4156,1,"Pearls Sharnarthi to Oim, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_024_D4160,1,"Gemstones Ighird to Oxbreak, 3 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_025_D4165,1,"Dyes Ighird to Orurem, 6 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_026_D4167,1,"Dyes Dawnband to Cherkeruza, 6 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_027_D4169,1,"Incense Shathug to Hauls, 3 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_028_D4173,1,"Silk Sharnarthi to Oim, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_029_D4178,1,"Spices Sharnarthi to Oim, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_030_D4183,1,"Spices Khatho to Hauls, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_031_D4185,1,"Spices Khatho to Dawnband, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_032_D4186,1,"Spices Khatho to Cherkeruza, 5 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_033_D4189,1,"Amber Sharnarthi to Oim, 4 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_034_D4192,1,"Furs Ighird to Sharnarthi, 5 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_035_D4222,1,"Coins Hauls to Dawnband, 3 stops, income 4"
+commission,Luxuries,commissions/Luxuries/Luxuries_036_D4148,1,"Wine Orurem to Sharnarthi, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_037_D4149,1,"Wine Hauls to Khatho, 4 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_038_D4164,1,"Gemstones Deadkeep to Khatho, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_039_D4177,1,"Silk Sharnarthi to Orurem, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_040_D4181,1,"Spices Khatho to Deadkeep, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_041_D4184,1,"Spices Sharnarthi to Orurem, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_042_D4187,1,"Spices Khatho to Tsatano, 4 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_043_D4188,1,"Amber Khatho to Deadkeep, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_044_D4203,1,"Mahogany Dawnband to Hauls, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_045_D4216,1,"Tea Deadkeep to Hauls, 4 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_046_D4230,1,"Candles Orurem to Sharnarthi, 3 stops, income 3"
+commission,Luxuries,commissions/Luxuries/Luxuries_047_D4147,1,"Wine Hauls to Shathug, 3 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_048_D4150,1,"Wine Deadkeep to Tsatano, 2 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_049_D4159,1,"Gemstones Orurem to Sharnarthi, 3 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_050_D4163,1,"Gemstones Deadkeep to Tsatano, 2 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_051_D4166,1,"Dyes Shathug to Khatho, 2 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_052_D4191,1,"Furs Deadkeep to Khatho, 3 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_053_D4201,1,"Mahogany Dawnband to Deadkeep, 2 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_054_D4202,1,"Mahogany Ighird to Oxbreak, 3 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_055_D4204,1,"Mahogany Dawnband to Shathug, 3 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_056_D4215,1,"Tea Deadkeep to Dawnband, 2 stops, income 2"
+commission,Luxuries,commissions/Luxuries/Luxuries_057_D4223,1,"Coins Shathug to Khatho, 2 stops, income 2"
+commission back,Metals & arms,commissions/Metals_arms/Metals_arms_back,1,
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_001_D4142,1,"Gold Shathug to Oim, 8 stops, income 12"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_002_D4138,1,"Iron Shathug to Wildgemea, 7 stops, income 10"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_003_D4137,1,"Iron Shathug to Deadkeep, 4 stops, income 6"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_004_D4139,1,"Iron Shathug to Hauls, 3 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_005_D4140,1,"Silver Shathug to Deadkeep, 4 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_006_D4141,1,"Gold Shathug to Dawnband, 3 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_007_D4198,1,"Saltpeter Hauls to Deadkeep, 4 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_008_D4217,1,"Clay Ighird to Wildgemea, 6 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_009_D4219,1,"Clay Hauls to Tsatano, 5 stops, income 4"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_010_D4218,1,"Clay Hauls to Deadkeep, 4 stops, income 3"
+commission,Metals & arms,commissions/Metals_arms/Metals_arms_011_D4221,1,"Sails Khatho to Shathug, 2 stops, income 3"
+commission back,Building,commissions/Building/Building_back,1,
+commission,Building,commissions/Building/Building_001_D4134,1,"Marble Wildgemea to Oim, 4 stops, income 4"
+commission,Building,commissions/Building/Building_002_D4135,1,"Marble Shathug to Deadkeep, 4 stops, income 4"
+commission,Building,commissions/Building/Building_003_D4136,1,"Marble Ighird to Oim, 5 stops, income 4"
+commission,Building,commissions/Building/Building_004_D4220,1,"Glass Deadkeep to Hauls, 4 stops, income 4"
+commission,Building,commissions/Building/Building_005_D4205,1,"Whales Tsatano to Deadkeep, 2 stops, income 2"
+commission back,Livestock,commissions/Livestock/Livestock_back,1,
+commission,Livestock,commissions/Livestock/Livestock_001_D4154,1,"Elephants Sharnarthi to Oim, 4 stops, income 6"
+commission back,Slaves,commissions/Slaves/Slaves_back,1,
+commission,Slaves,commissions/Slaves/Slaves_001_D4194,1,"Slaves Dawnband to Oim, 8 stops, income 9"
+commission,Slaves,commissions/Slaves/Slaves_002_D4196,1,"Slaves Orurem to Oim, 5 stops, income 5"
+commission,Slaves,commissions/Slaves/Slaves_003_D4195,1,"Slaves Cherkeruza to Hauls, 4 stops, income 4"
+commission,Slaves,commissions/Slaves/Slaves_004_D4193,1,"Slaves Dawnband to Deadkeep, 2 stops, income 3"
+commission,Slaves,commissions/Slaves/Slaves_005_D4197,1,"Slaves Shathug to Hauls, 3 stops, income 3"
+decree back,decrees,decrees/decree_back,1,
+decree,decrees,decrees/decree_001_league,1,"Law: The Goldyard league against slavers (Goldyard; affected states Goldyard, Deadfairia, Voh and Bhia: every stop in these states; 2 routes)"
+decree,decrees,decrees/decree_002_dungeons,1,Disorder: Raiders from the deep (Mornhe; affected link Khatho – Shathug; 8 routes)
+decree,decrees,decrees/decree_003_portals,1,Enterprise: The portal opens for trade (Argaria; affected link Wildgemea – Cloudge; 9 routes)
+decree,decrees,decrees/decree_004_mines,1,Enterprise: Investors wanted for the mine (Deadfairia; affected link Bluszils – Fygdilk; 6 routes)
+decree,decrees,decrees/decree_005_invasion,1,"War: Madasan Invasion (Sushimimius; affected stops Sharnarthi, Quedior, Veldawada and Chelhazpo; 31 routes)"
+decree,decrees,decrees/decree_006_sea_monsters,1,Disorder: A monster at sea (Madas; affected link Durcojhler – Bluszils (sea); 15 routes)
+decree,decrees,decrees/decree_007_pirates,1,Disorder: Pirates in the lanes (Deadfairia; affected link Ylhaz – Fenpnolothim (sea); 12 routes)
+decree,decrees,decrees/decree_008_caves,1,Enterprise: Cold stores in the caves (Ladowia; affected link Dradow – Ebuch; 4 routes)
+decree,decrees,decrees/decree_009_revolt,1,Disorder: Revolt in the slave pens of Cielb (Cielb; affected state Cielb: every stop in the state; 2 routes)
+decree,decrees,decrees/decree_010_disaster,1,Disaster: Loststar Dearth (Argaria; affected links Edwall – Fenpnolothim; Edwall – Bearcairn; 9 routes)
+decree,decrees,decrees/decree_011_crusade,1,Faith: Deholdanese Crusade (Mondfordia; affected stops Dawnband; 20 routes)
+decree,decrees,decrees/decree_012_fault,1,Disaster: Dradean Fault (Hauls; affected stops Bridkeep and Sprinstar; 3 routes)
+decree,decrees,decrees/decree_013_fairs,1,Court & festival: The fair is proclaimed (Taldung; affected state Taldung: every stop in the state; 11 routes)
+decree,decrees,decrees/decree_014_rebels,1,Disorder: Hauls Rebels (Ladowia; affected stops Dradow; 9 routes)
+decree,decrees,decrees/decree_015_war,1,War: The Madas-Sushimimiusian War (Madas; affected state Madas: every stop in the state; 24 routes)
+decree,decrees,decrees/decree_016_flood,1,"Disaster: Gluth Flood (Mornhe; affected stops Gluth, Stigkere and Khatho; 7 routes)"
+decree,decrees,decrees/decree_017_hot_springs,1,Enterprise: The baths reopen (Hauls; affected link Dradow – Hauls; 7 routes)
+decree,decrees,decrees/decree_018_circuses,1,Court & festival: The circus is proclaimed (Sushimimius; affected state Sushimimius: every stop in the state; 5 routes)
+decree,decrees,decrees/decree_019_disturbed_burials,1,Disorder: Graves disturbed (Madas; affected link Durcojhler – Sharnarthi (sea); 16 routes)
+decree,decrees,decrees/decree_020_eruption,1,Disaster: Blandford Eruption (Hauls; affected links Dradow – Hauls; Dradow – Ebuch; 9 routes)
+decree,decrees,decrees/decree_021_proselytism,1,"Faith: Dawnband Proselytism (Newdenia; affected stops Dawnband, Thorgade, Sprinstar and Curmide; 20 routes)"
+decree,decrees,decrees/decree_022_portals,1,Enterprise: The portal opens for trade (Cielb; affected link Oim – Bluszils; 18 routes)
+decree,decrees,decrees/decree_023_war,1,War: The Mornhe-Thornterian War (Thornter; affected state Thornter: every stop in the state; 23 routes)
+decree,decrees,decrees/decree_024_war,1,War: The Newdenia-Thornterian War (Newdenia; affected state Newdenia: every stop in the state; 31 routes)
+decree,decrees,decrees/decree_025_war,1,War: The Madas-Sushimimiusian War (Sushimimius; affected state Sushimimius: every stop in the state; 23 routes)
+decree,decrees,decrees/decree_026_tsunami,1,Disaster: Craftrean Tsunami (Bayaneria; affected link Tsatano – Deadkeep (sea); 6 routes)
+decree,decrees,decrees/decree_027_disease,1,"Disaster: Savage Cholera (Goldyard; affected stops Crowgbutumn, Knigh and Oxbreak; 3 routes)"
+decree,decrees,decrees/decree_028_war,1,War: The Smal-Neneldgian War (Neneldgia; affected state Neneldgia: every stop in the state; 13 routes)
+decree,decrees,decrees/decree_029_war,1,War: The Mornhe-Thornterian War (Mornhe; affected state Mornhe: every stop in the state; 38 routes)
+decree,decrees,decrees/decree_030_pirates,1,Disorder: Pirates in the lanes (Goldyard; affected link Oxbreak – Crowgbutumn (sea); 8 routes)
+reference,reference,reference/reading_a_decree,6,one per player
+anatomy,,reference/decree_anatomy,1,for the rules: decree 10
+infrastructure back,infrastructure,infrastructure/infrastructure_back,1,
+infrastructure,infrastructure,infrastructure/land,50,expense +1
+infrastructure,infrastructure,infrastructure/sea,25,expense +2
+infrastructure,infrastructure,infrastructure/air,10,expense +5
+infrastructure,infrastructure,infrastructure/wild,10,any one type
+budget board,,budget/house_1_Wildgemea,1,"Wildgemea, Argaria, Sky charter, home trades Provisions and Metals & arms, patron of Disaster decrees"
+budget board,,budget/house_2_Oim,1,"Oim, Cielb, Shipwrights' charter, home trades Provisions and Metals & arms, patron of Disorder decrees"
+budget board,,budget/house_3_Oxbreak,1,"Oxbreak, Neneldgia, Carters' charter, home trades Provisions and Metals & arms, patron of Faith decrees"
+budget board,,budget/house_4_Sharnarthi,1,"Sharnarthi, Sushimimius, Shipwrights' charter, home trades Luxuries and Building, patron of Court & festival decrees"
+budget board,,budget/house_5_Deadkeep,1,"Deadkeep, Thornter, Carters' charter, home trades Luxuries and Building, patron of War decrees"
+budget board,,budget/house_6_Shathug,1,"Shathug, Mornhe, Shipwrights' charter, home trades Luxuries and Building, patron of Enterprise decrees"
+token,,tokens/plus50_marker,12,"two per player, one for each lane"

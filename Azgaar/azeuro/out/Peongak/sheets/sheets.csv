@@ -1,0 +1,32 @@
+sheet,set,columns,rows,cards,card_width,card_height,sheet_width,sheet_height,order
+commissions_Provisions.png,commissions_Provisions,5,4,18,700,500,3500,2000,Provisions_001_D4226 Provisions_002_D4144 Provisions_003_D4208 Provisions_004_D4228 Provisions_005_D4229 Provisions_006_D4211 Provisions_007_D4152 Provisions_008_D4206 Provisions_009_D4207 Provisions_010_D4214 Provisions_011_D4227 Provisions_012_D4143 Provisions_013_D4151 Provisions_014_D4153 Provisions_015_D4209 Provisions_016_D4210 Provisions_017_D4212 Provisions_018_D4213
+commissions_Luxuries_1.png,commissions_Luxuries,5,8,40,700,500,3500,4000,Luxuries_001_D4170 Luxuries_002_D4171 Luxuries_003_D4158 Luxuries_004_D4155 Luxuries_005_D4157 Luxuries_006_D4161 Luxuries_007_D4190 Luxuries_008_D4225 Luxuries_009_D4146 Luxuries_010_D4172 Luxuries_011_D4174 Luxuries_012_D4179 Luxuries_013_D4145 Luxuries_014_D4162 Luxuries_015_D4168 Luxuries_016_D4175 Luxuries_017_D4176 Luxuries_018_D4180 Luxuries_019_D4182 Luxuries_020_D4199 Luxuries_021_D4200 Luxuries_022_D4224 Luxuries_023_D4156 Luxuries_024_D4160 Luxuries_025_D4165 Luxuries_026_D4167 Luxuries_027_D4169 Luxuries_028_D4173 Luxuries_029_D4178 Luxuries_030_D4183 Luxuries_031_D4185 Luxuries_032_D4186 Luxuries_033_D4189 Luxuries_034_D4192 Luxuries_035_D4222 Luxuries_036_D4148 Luxuries_037_D4149 Luxuries_038_D4164 Luxuries_039_D4177 Luxuries_040_D4181
+commissions_Luxuries_2.png,commissions_Luxuries,5,4,17,700,500,3500,2000,Luxuries_041_D4184 Luxuries_042_D4187 Luxuries_043_D4188 Luxuries_044_D4203 Luxuries_045_D4216 Luxuries_046_D4230 Luxuries_047_D4147 Luxuries_048_D4150 Luxuries_049_D4159 Luxuries_050_D4163 Luxuries_051_D4166 Luxuries_052_D4191 Luxuries_053_D4201 Luxuries_054_D4202 Luxuries_055_D4204 Luxuries_056_D4215 Luxuries_057_D4223
+commissions_Metals_arms.png,commissions_Metals_arms,5,3,11,700,500,3500,1500,Metals_arms_001_D4142 Metals_arms_002_D4138 Metals_arms_003_D4137 Metals_arms_004_D4139 Metals_arms_005_D4140 Metals_arms_006_D4141 Metals_arms_007_D4198 Metals_arms_008_D4217 Metals_arms_009_D4219 Metals_arms_010_D4218 Metals_arms_011_D4221
+commissions_Building.png,commissions_Building,5,1,5,700,500,3500,500,Building_001_D4134 Building_002_D4135 Building_003_D4136 Building_004_D4220 Building_005_D4205
+commissions_Livestock.png,commissions_Livestock,1,1,1,700,500,700,500,Livestock_001_D4154
+commissions_Slaves.png,commissions_Slaves,5,1,5,700,500,3500,500,Slaves_001_D4194 Slaves_002_D4196 Slaves_003_D4195 Slaves_004_D4193 Slaves_005_D4197
+decrees_1.png,decrees,7,4,28,550,950,3850,3800,decree_001_league decree_002_dungeons decree_003_portals decree_004_mines decree_005_invasion decree_006_sea_monsters decree_007_pirates decree_008_caves decree_009_revolt decree_010_disaster decree_011_crusade decree_012_fault decree_013_fairs decree_014_rebels decree_015_war decree_016_flood decree_017_hot_springs decree_018_circuses decree_019_disturbed_burials decree_020_eruption decree_021_proselytism decree_022_portals decree_023_war decree_024_war decree_025_war decree_026_tsunami decree_027_disease decree_028_war
+decrees_2.png,decrees,7,1,2,550,950,3850,950,decree_029_war decree_030_pirates
+reference.png,reference,6,1,6,550,950,3300,950,reading_a_decree reading_a_decree reading_a_decree reading_a_decree reading_a_decree reading_a_decree
+infrastructure_1.png,infrastructure,8,5,40,500,700,4000,3500,land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land land
+infrastructure_2.png,infrastructure,8,5,40,500,700,4000,3500,land land land land land land land land land land sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea sea air air air air air
+infrastructure_3.png,infrastructure,8,2,15,500,700,4000,1400,air air air air air wild wild wild wild wild wild wild wild wild wild
+infrastructure_faces.png,infrastructure_faces,4,1,4,500,700,2000,700,land sea air wild
+tokens_plus50.png,tokens_plus50,12,1,12,150,150,1800,150,plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker plus50_marker
+Persia_board.png,Persia_board,1,1,1,4096,2239,4096,2239,Persia_board
+commissions_Provisions_back.png,commissions_Provisions_back,1,1,1,700,500,700,500,Provisions_back
+commissions_Luxuries_back.png,commissions_Luxuries_back,1,1,1,700,500,700,500,Luxuries_back
+commissions_Metals_arms_back.png,commissions_Metals_arms_back,1,1,1,700,500,700,500,Metals_arms_back
+commissions_Building_back.png,commissions_Building_back,1,1,1,700,500,700,500,Building_back
+commissions_Livestock_back.png,commissions_Livestock_back,1,1,1,700,500,700,500,Livestock_back
+commissions_Slaves_back.png,commissions_Slaves_back,1,1,1,700,500,700,500,Slaves_back
+decree_back.png,decree_back,1,1,1,550,950,550,950,decree_back
+decree_anatomy.png,decree_anatomy,1,1,1,3688,2394,3688,2394,decree_anatomy
+infrastructure_back.png,infrastructure_back,1,1,1,500,700,500,700,infrastructure_back
+budget_house_1_Wildgemea.png,budget_house_1_Wildgemea,1,1,1,3509,2481,3509,2481,house_1_Wildgemea
+budget_house_2_Oim.png,budget_house_2_Oim,1,1,1,3509,2481,3509,2481,house_2_Oim
+budget_house_3_Oxbreak.png,budget_house_3_Oxbreak,1,1,1,3509,2481,3509,2481,house_3_Oxbreak
+budget_house_4_Sharnarthi.png,budget_house_4_Sharnarthi,1,1,1,3509,2481,3509,2481,house_4_Sharnarthi
+budget_house_5_Deadkeep.png,budget_house_5_Deadkeep,1,1,1,3509,2481,3509,2481,house_5_Deadkeep
+budget_house_6_Shathug.png,budget_house_6_Shathug,1,1,1,3509,2481,3509,2481,house_6_Shathug
