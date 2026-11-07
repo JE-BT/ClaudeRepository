@@ -1,10 +1,10 @@
 """Card data built from the map and the network (no drawing here).
 
 Commissions
-  One per market-to-market deal, filed in the seller state's deck (export) and again in the buyer
-  state's deck (import); a deal inside one state is filed once (domestic). Decks smaller than
-  `min_deck` are padded with numbered copies. Players may never hold two active commissions with
-  the same deal code, so a copy is only a second chance to draw that deal.
+  One card per market-to-market deal, filed in the deck of its trade (goods.py): Provisions,
+  Luxuries, Metals & arms, Building, Livestock, Slaves. Every deal appears once, so active
+  commissions are unique by construction. Deals with a market in unclaimed land are kept and
+  show "Free lands" as that side's state.
 
 Income
   income = round(k * stops * tier), clamped to [lo, hi]
@@ -13,28 +13,41 @@ Income
          distance divided by the median link length, plus one
   tier:  the deal's value (units x price) by quartile among all market deals:
          small 1.0, standard 1.25, large 1.5, major 2.0
-  split: most / second / third stations = about 55 / 30 / 15 percent; ties go to the declaring player
+  split: most / second / third stations = about 55 / 30 / 15 percent; ties go to the controller,
+         neutral stations always lose ties
+
+Houses
+  One per player colour, rooted in the richest exporting market of a different state. A house has
+  two home trades (cheaper to open), an infrastructure charter, and the patronage of one decree
+  family (its petitions to decrees of that family cost one star less). Patronages are dealt so that
+  no two houses share one, matching each house to the families its home state issues most.
 """
 from __future__ import annotations
 
 import math
-import random
 import statistics
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 
-from . import events as ev
+from .goods import TRADES, trade_of
 from .network import Network
 
 TIERS = [("Small contract", 1.0), ("Standard contract", 1.25), ("Large contract", 1.5), ("Major contract", 2.0)]
 
 
 @dataclass
+class Route:
+    """The reference route of a deal: the one its income is computed from."""
+    stops: list  # burg ids, origin first
+    links: list  # (a, b, mode) keys; None for an air hop
+    source: str  # land-sea | air | distance
+
+
+@dataclass
 class Commission:
     deal: int
     code: str
-    state: int  # deck owner
-    role: str  # export | import | domestic
+    trade: str
     seller_state: int
     buyer_state: int
     good: dict
@@ -49,7 +62,6 @@ class Commission:
     tier: int
     income: int
     split: tuple
-    copy: int = 1
     index: int = 0
     of: int = 0
 
@@ -61,81 +73,86 @@ def heading(dx: float, dy: float) -> str:
 
 
 def split_income(income: int) -> tuple[int, int, int]:
-    third = max(1, round(income * 0.15)) if income >= 3 else 0
-    second = max(1, round(income * 0.30)) if income >= 2 else 0
+    third = round(income * 0.15)
+    second = round(income * 0.30)
     return income - second - third, second, third
 
 
-def build_commissions(net: Network, k: float = 0.75, lo: int = 2, hi: int = 20, min_deck: int = 6,
-                      min_value: float = 0.0, max_per_state: int | None = None,
-                      neutral_deck: bool = False) -> tuple[dict[int, list[Commission]], dict]:
+def market_deals(net: Network) -> list[dict]:
+    return [d for d in net.m.data["deals"] if d.get("sellerType") == "market" and d.get("buyerType") == "market"
+            and d.get("seller") in net.markets and d.get("buyer") in net.markets]
+
+
+def build_routes(net: Network) -> dict[int, Route]:
+    routes = {}
+    for d in market_deals(net):
+        a = net.markets[d["seller"]]["centerBurgId"]
+        b = net.markets[d["buyer"]]["centerBurgId"]
+        p, source = net.path(a, b), "land-sea"
+        if p is None:
+            p, source = net.path(a, b, use_air=True), "air"
+        if p is None:
+            routes[d["i"]] = Route([a, b], [], "distance")
+        else:
+            routes[d["i"]] = Route(p[0], [(ln.a, ln.b, ln.mode) if ln else None for ln in p[1]], source)
+    return routes
+
+
+def build_commissions(net: Network, routes: dict[int, Route], k: float = 0.75, lo: int = 2, hi: int = 20,
+                      min_value: float = 0.0, max_per_trade: int | None = None,
+                      slaves: bool = True) -> tuple[dict[str, list[Commission]], dict]:
     m = net.m
     goods = {g["i"]: g for g in m.live("goods")}
-    states = {s["i"]: s for s in m.live("states")}
     mi = m.mi_per_px
-    deals = [d for d in m.data["deals"] if d.get("sellerType") == "market" and d.get("buyerType") == "market"
-             and d.get("seller") in net.markets and d.get("buyer") in net.markets]
+    deals = market_deals(net)
     values = sorted(d["units"] * d["price"] for d in deals)
     q = [values[int(len(values) * f)] for f in (0.25, 0.5, 0.75)] if values else [0, 0, 0]
     hop_len = statistics.median([ln.length for ln in net.links.values()]) if net.links else 50.0
-    decks: dict[int, list[Commission]] = defaultdict(list)
+    decks: dict[str, list[Commission]] = defaultdict(list)
     skipped = 0
     for d in deals:
         value = d["units"] * d["price"]
         if value < min_value:
             skipped += 1
             continue
-        a = net.markets[d["seller"]]["centerBurgId"]
-        b = net.markets[d["buyer"]]["centerBurgId"]
+        good = goods.get(d["good"], {"name": f"good {d['good']}", "tags": []})
+        if not slaves and trade_of(good) == "Slaves":
+            continue
+        r = routes[d["i"]]
+        a, b = r.stops[0], r.stops[-1]
         sa, sb = net.stops[a], net.stops[b]
-        p = net.path(a, b)
-        source = "land-sea"
-        if p is None:
-            p = net.path(a, b, use_air=True)
-            source = "air"
-        if p is not None:
-            stops = len(p[0])
-            modes = sorted({ln.mode if ln else "air" for ln in p[1]})
-            miles = sum((ln.length if ln else math.hypot(net.stops[x].x - net.stops[y].x, net.stops[x].y - net.stops[y].y))
-                        for ln, x, y in zip(p[1], p[0], p[0][1:])) * mi
-        else:
+        if r.source == "distance":
             straight = math.hypot(sa.x - sb.x, sa.y - sb.y)
-            stops = int(straight / hop_len) + 1
-            modes, miles, source = [], straight * mi, "distance"
+            stops, modes, miles = int(straight / hop_len) + 1, [], straight * mi
+        else:
+            stops = len(r.stops)
+            modes = sorted({key[2] if key else "air" for key in r.links})
+            miles = 0.0
+            for key, x, y in zip(r.links, r.stops, r.stops[1:]):
+                miles += net.links[key].length if key else math.hypot(net.stops[x].x - net.stops[y].x,
+                                                                       net.stops[x].y - net.stops[y].y)
+            miles *= mi
         tier = sum(value >= t for t in q)
         income = max(lo, min(hi, round(k * stops * TIERS[tier][1])))
-        st_s, st_b = sa.state, sb.state
-        files = [(st_s, "export"), (st_b, "import")] if st_s != st_b else [(st_s, "domestic")]
-        for owner, role in files:
-            if owner == 0 and not neutral_deck:
-                continue
-            decks[owner].append(Commission(
-                d["i"], f"D{d['i']}", owner, role, st_s, st_b, goods.get(d["good"], {"name": f"good {d['good']}"}),
-                sa.name, sb.name, stops, source, modes, miles, heading(sb.x - sa.x, sb.y - sa.y), value, tier,
-                income, split_income(income)))
+        trade = trade_of(good)
+        decks[trade].append(Commission(d["i"], f"D{d['i']}", trade, sa.state, sb.state, good, sa.name, sb.name, stops,
+                                       r.source, modes, miles, heading(sb.x - sa.x, sb.y - sa.y), value, tier, income,
+                                       split_income(income)))
     trimmed = {}
-    for owner, cards in decks.items():
+    for trade, cards in decks.items():
         cards.sort(key=lambda c: (-c.value, c.deal))
-        if max_per_state and len(cards) > max_per_state:
-            trimmed[states[owner]["name"]] = len(cards) - max_per_state
-            del cards[max_per_state:]
+        if max_per_trade and len(cards) > max_per_trade:
+            trimmed[trade] = len(cards) - max_per_trade
+            del cards[max_per_trade:]
         cards.sort(key=lambda c: (-c.income, c.deal))
-        base = list(cards)
-        copy = 2
-        while len(cards) < min_deck and base:
-            for c in base:
-                if len(cards) >= min_deck:
-                    break
-                cards.append(Commission(**{**c.__dict__, "copy": copy}))
-            copy += 1
         for i, c in enumerate(cards, 1):
             c.index, c.of = i, len(cards)
-    stats = {"deals": len(deals), "skipped_below_min_value": skipped, "trimmed_by_max_per_state": trimmed, "value_quartiles": [round(x, 2) for x in q],
-             "decks": {states[s]["name"]: len(c) for s, c in sorted(decks.items())},
-             "income": dict(sorted(Counter(c.income for cs in decks.values() for c in cs if c.copy == 1).items())),
-             "no_states": [s["name"] for i, s in states.items() if i and i not in decks],
-             "neutral_deck": neutral_deck}
-    return dict(decks), stats
+    ordered = {t: decks[t] for t in TRADES if t in decks}
+    stats = {"deals": len(deals), "skipped_below_min_value": skipped, "trimmed_by_max_per_trade": trimmed,
+             "value_quartiles": [round(x, 2) for x in q], "decks": {t: len(c) for t, c in ordered.items()},
+             "income": dict(sorted(Counter(c.income for cs in ordered.values() for c in cs).items())),
+             "free_lands": sum(1 for cs in ordered.values() for c in cs if not c.seller_state or not c.buyer_state)}
+    return ordered, stats
 
 
 # ---------------------------------------------------------------------------------- houses
@@ -147,21 +164,25 @@ class House:
     state: int
     state_name: str
     state_full: str
-    goods: list
+    home_trades: list
     charter: tuple  # (title, text)
-    favour: str
-    notes: list = field(default_factory=list)
+    patron: tuple = ("", "", "")  # (family, title, text)
+    exports: dict = field(default_factory=dict)  # trade -> export value of the home market
 
 
 def build_houses(net: Network, colours: list[str]) -> list[House]:
-    """One merchant house per player colour, rooted in a market town of a different state."""
+    """One merchant house per player colour, rooted in a market town of a different state.
+
+    Home trades are the market's two largest export trades, never Slaves (that trade always carries
+    its overhead), with no trade given to more than ceil(2 x players / 5) houses so the table differs.
+    """
     m = net.m
     goods = {g["i"]: g for g in m.live("goods")}
     states = {s["i"]: s for s in m.live("states")}
     exports: dict[int, Counter] = defaultdict(Counter)
     for d in m.data["deals"]:
-        if d.get("sellerType") == "market":
-            exports[d["seller"]][d["good"]] += d["units"] * d["price"]
+        if d.get("sellerType") == "market" and d["good"] in goods:
+            exports[d["seller"]][trade_of(goods[d["good"]])] += d["units"] * d["price"]
     ranked = sorted(net.markets, key=lambda i: -sum(exports[i].values()))
     ranked = [i for i in ranked if net.markets[i]["centerBurgId"] in net.stops
               and net.stops[net.markets[i]["centerBurgId"]].state]
@@ -176,109 +197,60 @@ def build_houses(net: Network, colours: list[str]) -> list[House]:
             break
         if i not in picked:
             picked.append(i)
+    cap = math.ceil(2 * len(colours) / 5)
+    used = Counter()
+    homes = {}
+    for i in picked:
+        pref = [t for t, _ in exports[i].most_common() if t != "Slaves"]
+        pref += [t for t in sorted(TRADES[:5], key=lambda t: used[t]) if t not in pref]
+        chosen = [t for t in pref if used[t] < cap][:2]
+        chosen += [t for t in pref if t not in chosen][: 2 - len(chosen)]
+        chosen.sort(key=TRADES.index)
+        for t in chosen:
+            used[t] += 1
+        homes[i] = chosen
     houses, charters = [], Counter()
     for colour, i in zip(colours, picked):
         stop = net.stops[net.markets[i]["centerBurgId"]]
         st = states.get(stop.state, {"name": "the free towns", "fullName": "the free towns"})
-        top = [goods[g]["name"] for g, _ in exports[i].most_common(2) if g in goods] or ["local goods"]
         has_sea = any(ln.mode == "sea" for _, ln in net.nbr[stop.burg])
         options = []
         if stop.air:
-            options.append(("Sky charter", "Air infrastructure moves your expense marker 4, not 5."))
+            options.append(("Sky charter", "Air infrastructure: +4 expense, not +5."))
         if has_sea:
-            options.append(("Shipwrights' charter", "Sea infrastructure moves your expense marker 1, not 2."))
-        options.append(("Carters' charter", f"Land infrastructure in {st['name']} moves your expense marker 0, not 1."))
+            options.append(("Shipwrights' charter", "Sea infrastructure: +1 expense, not +2."))
+        options.append(("Carters' charter", f"Land infrastructure in {st['name']}: +0 expense, not +1."))
         charter = min(options, key=lambda o: charters[o[0]])
         charters[charter[0]] += 1
-        houses.append(House(colour, i, stop.name, stop.state, st["name"], st.get("fullName") or st["name"], top, charter,
-                            f"When you draw commissions from {st['name']}, draw one extra card."))
+        houses.append(House(colour, i, stop.name, stop.state, st["name"], st.get("fullName") or st["name"],
+                            homes[i], charter, ("", "", ""), {t: round(v, 1) for t, v in exports[i].most_common()}))
     return houses
 
 
-# ---------------------------------------------------------------------------------- events
-@dataclass
-class EventText:
-    colour: str
-    polarity: int
-    title: str
-    kind: str  # marker type label or "Generic"
-    text: str
-    source: str  # marker:<i> | generic
+PATRONS = {"War": "Army purveyors", "Disaster": "Relief brokers", "Disorder": "Caravan guards",
+           "Faith": "Pilgrim carriers", "Enterprise": "Investors", "Court & festival": "Court suppliers"}
 
 
-@dataclass
-class EventCard:
-    number: int
-    land: EventText
-    sea: EventText
-    air: EventText
+def assign_patrons(houses: list[House], by_state: dict, deck_families: dict) -> None:
+    """Give each house the patronage of one decree family, all different while families last.
 
-
-def build_events(net: Network, size: int | None = None, seed: int = 1) -> tuple[list[EventCard], dict]:
-    rng = random.Random(seed)
-    pools: dict[str, list[EventText]] = {"land": [], "sea": [], "air": []}
-    spares: dict[str, list[EventText]] = {"land": [], "sea": [], "air": []}
-    counts = {c: Counter() for c in pools}
-    for star in net.stars:
-        mk = star.marker
-        mtype = mk.get("type", "")
-        if mtype in ev.SKIP_TYPES:
-            continue
-        near = min(net.stops.values(), key=lambda s: (s.x - mk["x"]) ** 2 + (s.y - mk["y"]) ** 2).name
-        title, name = ev.names_for(mk, near)
-        for colour, variants in ev.texts_for(mtype).items():
-            target = ev.POSITIVE_SHARE[colour]
-            c = counts[colour]
-            share = c[+1] / max(1, c[+1] + c[-1])
-            pol = +1 if (share < target or (share == target and rng.random() < target)) else -1
-            if pol not in variants:
-                pol = -pol
-            c[pol] += 1
-            pools[colour].append(EventText(colour, pol, title, ev.label_of(mtype),
-                                           ev.render(variants[pol], name, near), f"marker:{mk['i']}"))
-            if -pol in variants:
-                spares[colour].append(EventText(colour, -pol, title, ev.label_of(mtype),
-                                                ev.render(variants[-pol], name, near), f"marker:{mk['i']}"))
-    marker_sizes = {c: len(p) for c, p in pools.items()}
-    n = size or max(30, max(marker_sizes.values()))  # default: every marker text is used
-    set_aside = {}
-    generic_used = Counter()
-    for colour in pools:
-        target = ev.POSITIVE_SHARE[colour]
-        pool = pools[colour]
-        rng.shuffle(pool)
-        if len(pool) > n:  # keep the best-balanced subset
-            pos = [e for e in pool if e.polarity > 0]
-            neg = [e for e in pool if e.polarity < 0]
-            want = round(n * target)
-            keep = pos[:want] + neg[:n - want]
-            keep += [e for e in pool if e not in keep][: n - len(keep)]
-            set_aside[colour] = len(pool) - len(keep)
-            pool[:] = keep
-        spare = spares[colour]
-        rng.shuffle(spare)
-        generic = list(ev.GENERIC[colour])
-        rng.shuffle(generic)
-        g = 0
-        while len(pool) < n:
-            share = sum(e.polarity > 0 for e in pool) / max(1, len(pool))
-            want = +1 if share < target else -1
-            pick = next((e for e in spare if e.polarity == want), None)
-            if pick is not None:
-                spare.remove(pick)
-                pool.append(pick)
-                continue
-            cands = sorted([x for x in generic if x[0] == want] or generic, key=lambda x: generic_used[x[1]])
-            pol, title, text = cands[0]
-            generic_used[title] += 1
-            pool.append(EventText(colour, pol, title, "Anywhere", text, "generic"))
-            g += 1
-        rng.shuffle(pool)
-    cards = [EventCard(i + 1, pools["land"][i], pools["sea"][i], pools["air"][i]) for i in range(n)]
-    stats = {"cards": n, "marker_texts": marker_sizes, "set_aside": set_aside,
-             "positive_share": {c: round(sum(e.polarity > 0 for e in pools[c]) / n, 2) for c in pools},
-             "generic_uses": dict(generic_used)}
-    return cards, stats
+    by_state: state id -> {family: candidate decrees that state issues}; deck_families: family -> cards
+    in the decree deck. A house scores a family by its home state's candidates in it, plus a quarter
+    of that family's cards in the deck, and the deal maximises the total.
+    """
+    from itertools import permutations
+    fams = [f for f in PATRONS if deck_families.get(f)] or list(PATRONS)
+    def score(h, f):
+        return by_state.get(h.state, {}).get(f, 0) + 0.25 * deck_families.get(f, 0)
+    best, best_s = None, -1.0
+    k = min(len(houses), len(fams))
+    for perm in permutations(fams, k):
+        sc = sum(score(h, f) for h, f in zip(houses, perm))
+        if sc > best_s:
+            best, best_s = perm, sc
+    for n, h in enumerate(houses):
+        f = best[n] if n < k else max(fams, key=lambda f: score(h, f))
+        h.patron = (f, PATRONS[f], f"Your petitions to {f} decrees cost one star less (never below one).")
 
 
 # ---------------------------------------------------------------------------------- infrastructure

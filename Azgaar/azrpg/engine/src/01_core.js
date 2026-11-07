@@ -136,7 +136,9 @@ AZ.World = class {
       else if (/grass|steppe|prairie|meadow/.test(n)) k = "meadow";
       const base = AZ.GROUNDS[k] || AZ.GROUNDS.grass;
       const col = k === "water" ? U.hex2rgb(b.color) : U.mix(base, U.hex2rgb(b.color), k === "snow" ? 0.15 : 0.28);
-      const icons = Object.entries(b.icons || {}).filter(([, v]) => (v.weight || 0) > 0).map(([t, v]) => [t, v.weight]);
+      // newer maps store {icon: {weight}}; older ones (Lania, 1.153) a list of names, repeated for weight
+      const icons = Array.isArray(b.icons) ? Object.entries(b.icons.reduce((a, t) => ((a[t] = (a[t] || 0) + 1), a), {}))
+        : Object.entries(b.icons || {}).filter(([, v]) => (v.weight || 0) > 0).map(([t, v]) => [t, v.weight]);
       return { kind: k, col, icons, density: b.iconsDensity || 0 };
     });
     this.relief = P.world.relief || [

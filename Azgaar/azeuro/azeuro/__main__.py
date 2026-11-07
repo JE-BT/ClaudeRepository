@@ -14,6 +14,15 @@ from pathlib import Path
 from .build import DEFAULT_COLOURS, PARTS, build
 
 
+def _freight(spec):
+    if not spec:
+        return None
+    vals = [float(x) for x in spec.split(",")]
+    if len(vals) != 3:
+        raise SystemExit("--freight takes three numbers: land,sea,air")
+    return dict(zip(("land", "sea", "air"), vals))
+
+
 def main(argv=None):
     here = Path(__file__).resolve().parent
     ap = argparse.ArgumentParser(prog="azeuro", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -41,15 +50,32 @@ def main(argv=None):
     g.add_argument("--income-k", type=float, default=0.75, help="income = k x stops x value tier")
     g.add_argument("--income-min", type=int, default=2)
     g.add_argument("--income-max", type=int, default=20)
-    g.add_argument("--min-deck", type=int, default=6, help="pad smaller state decks with copies")
     g.add_argument("--min-value", type=float, default=0.0, help="drop deals worth less (units x price)")
-    g.add_argument("--max-per-state", type=int, help="keep only the N most valuable deals in each deck")
-    g.add_argument("--neutral-deck", action="store_true", help="also make a deck for unclaimed land")
-    g = ap.add_argument_group("events, houses, infrastructure")
-    g.add_argument("--events", type=int, help="event deck size (default: the largest colour pool, so every marker text is used; at least 30)")
+    g.add_argument("--max-per-trade", type=int, help="keep only the N most valuable deals in each trade deck")
+    g.add_argument("--no-slaves", action="store_true", help="leave out the slave trade: no Slaves deck, no slave "
+                                                           "decrees, five trades on the budget boards")
+    g.add_argument("--freight", help="print freight per cargo pip on cards and boards, as land,sea,air (e.g. 0,1,2); "
+                                     "off by default")
+    g = ap.add_argument_group("decrees")
+    g.add_argument("--decrees", type=int, default=30, help="decree deck size")
     g.add_argument("--seed", type=int, default=1)
+    g = ap.add_argument_group("houses and budget boards")
     g.add_argument("--players", type=int, default=6)
     g.add_argument("--colours", help="comma list of player colours (hex)")
+    g.add_argument("--goal", type=int, default=50, help="income that ends the game (marked dark on the track)")
+    g.add_argument("--start-gold", type=int, default=10)
+    g.add_argument("--stations", type=int, default=20, help="stations per player, in rows of five")
+    g.add_argument("--overhead", type=int, default=30, help="cost of opening a trade")
+    g.add_argument("--home-overhead", type=int, default=20, help="cost of opening one of the house's two home trades")
+    g.add_argument("--overhead-mode", choices=["gold", "expense"], default="gold",
+                   help="gold: pay N gold each time you open the trade; expense: +N on the expense track while open")
+    g.add_argument("--debt-rounds", type=int, default=3,
+                   help="rounds in a row a player may end below 0 gold; one more and they are out")
+    g.add_argument("--petitions", choices=["turn", "round"], default="turn",
+                   help="turn: spend stars in the turn you gain them; round: spend them at the start of the next "
+                        "round, with decrees and accounts")
+    g.add_argument("--draw", type=int, default=3, help="commission cards drawn at the start of a round (keep one)")
+    g = ap.add_argument_group("infrastructure")
     g.add_argument("--infra-land", type=int, default=50, help="land cards; sea and air follow cost (50/2, 50/5)")
     g.add_argument("--wild-share", type=float, default=0.12)
     a = ap.parse_args(argv)
@@ -60,10 +86,12 @@ def main(argv=None):
             "board_width": a.board_width, "jobs": a.jobs, "palette": not a.full_colour, "sheets": not a.no_sheets,
             "sheet_dpi": a.sheet_dpi, "sheet_max": a.sheet_max, "spacing": a.spacing, "neutral": a.neutral, "air": a.air,
             "air_overlap": a.air_overlap, "remote": a.remote, "income_k": a.income_k, "income_min": a.income_min,
-            "income_max": a.income_max, "min_deck": a.min_deck, "min_value": a.min_value,
-            "max_per_state": a.max_per_state, "neutral_deck": a.neutral_deck, "events": a.events, "seed": a.seed,
-            "players": a.players, "colours": a.colours.split(",") if a.colours else DEFAULT_COLOURS,
-            "infra_land": a.infra_land, "wild_share": a.wild_share}
+            "income_max": a.income_max, "min_value": a.min_value, "max_per_trade": a.max_per_trade,
+            "freight": _freight(a.freight), "decrees": a.decrees, "seed": a.seed, "players": a.players,
+            "colours": a.colours.split(",") if a.colours else DEFAULT_COLOURS, "goal": a.goal,
+            "start_gold": a.start_gold, "stations": a.stations, "overhead": a.overhead, "home_overhead": a.home_overhead,
+            "overhead_mode": a.overhead_mode, "draw": a.draw, "debt_rounds": a.debt_rounds, "petitions": a.petitions,
+            "slaves": not a.no_slaves, "infra_land": a.infra_land, "wild_share": a.wild_share}
     if a.command == "info":
         opts["only"] = []
         opts["formats"] = []
@@ -73,7 +101,9 @@ def main(argv=None):
     print(f"  neutral: {', '.join(n['neutral'])}")
     print(f"  air:     {', '.join(n['air'])}")
     print(f"  decks:   {json.dumps(c['decks'])}")
-    print(f"  events:  {s['events']['cards']} cards, positive share {s['events']['positive_share']}")
+    d = s["decrees"]
+    print(f"  decrees: {d['cards']} cards, " + ", ".join(f"{k} {v}" for k, v in d["families"].items()))
+    print("  houses:  " + "; ".join(f"{h['town']} ({' + '.join(h['home_trades'])}; {h['patron']})" for h in s["houses"]))
     print(f"  infrastructure: {s['infrastructure']}")
     if a.command == "build":
         print(f"  written to {a.out / s['world']}")

@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------------------------
 // The game. The map's journey is the plan: a line of checkpoints with par times and the things
-// the plan expects done at each (book passage, give alms, rest, anchor). It does not drive play.
+// the plan expects done at each (book passage, give alms, rest, anchor); the player chooses how to meet them.
 // The traveller decides how to get from one checkpoint to the next: on foot, in a boat they hire
 // or own (they steer; the crew calls for stops), or as a passenger on a ship they book (the
 // captain steers, keeps his own itinerary and does not wait).

@@ -7,7 +7,7 @@ function loadEngine() {
   const src = fs.readdirSync(path.join(ROOT, "engine/src")).filter(f => f.endsWith(".js")).sort()
     .map(f => fs.readFileSync(path.join(ROOT, "engine/src", f), "utf8")).join("\n");
   vm.runInThisContext(src, { filename: "engine.js" });
-  globalThis.AZ.CONTENT = JSON.parse(fs.readFileSync(path.join(ROOT, "azrpg/data/descriptions_azork.json"), "utf8"));
+  globalThis.AZ.CONTENT = JSON.parse(fs.readFileSync(path.join(ROOT, "azrpg/data/descriptions.json"), "utf8"));
   return globalThis.AZ;
 }
 async function loadWorld(htmlPath) {

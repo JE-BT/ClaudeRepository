@@ -6,13 +6,15 @@ most `max_px` (default 4096) on each side. Each card is rasterised from its SVG 
 cell size (`dpi`, default 200), so nothing is resampled twice.
 
 Sheets made, per build:
-  commissions_<State>_N   every front of that state's deck, in deck order
-  events_N                every event front
+  commissions_<Trade>_N   every front of that trade's deck, in deck order
+  decrees_N               every decree front, in number order
+  reference               the decree reference card, one per copy
   infrastructure_N        the infrastructure deck with every copy laid out (counts from the manifest)
   infrastructure_faces    the four faces once each
   tokens_plus50           one +50 marker per copy
   *_back                  each deck's back as a single image of the same cell size
   <World>_board           the board scaled to fit max_px
+  decree_anatomy          the annotated decree for the rules, scaled to fit max_px
   budget_house_N_<Town>   each budget board scaled to fit max_px
 A sheets.csv lists every sheet with its columns, rows, card count, cell size and card order.
 """
@@ -65,8 +67,10 @@ def build_sheets(root: Path, manifest: list[dict], dpi: int = 200, max_px: int =
         name = Path(row["file"]).name
         if comp == "commission":
             groups.setdefault(f"commissions_{_slug(deck)}", []).append((svg, name))
-        elif comp == "event":
-            groups.setdefault("events", []).append((svg, name))
+        elif comp == "decree":
+            groups.setdefault("decrees", []).append((svg, name))
+        elif comp == "reference":
+            groups.setdefault("reference", []).extend([(svg, name)] * int(row["count"]))
         elif comp == "infrastructure":
             groups.setdefault("infrastructure", []).extend([(svg, name)] * int(row["count"]))
             groups.setdefault("infrastructure_faces", []).append((svg, name))
@@ -74,8 +78,10 @@ def build_sheets(root: Path, manifest: list[dict], dpi: int = 200, max_px: int =
             groups.setdefault("tokens_plus50", []).extend([(svg, name)] * int(row["count"]))
         elif comp == "commission back":
             singles.append((f"commissions_{_slug(deck)}_back", svg, None))
-        elif comp in ("event back", "infrastructure back"):
+        elif comp in ("decree back", "infrastructure back"):
             singles.append((name, svg, None))
+        elif comp == "anatomy":
+            singles.append((name, svg, max_px))
         elif comp == "board":
             singles.append((f"{_slug(world)}_board" if world else "board", svg, max_px))
         elif comp == "budget board":

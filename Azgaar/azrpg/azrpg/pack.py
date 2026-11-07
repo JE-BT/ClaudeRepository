@@ -318,7 +318,8 @@ class PackBuilder:
                 body += b"\0"
             meta["rasters"][name] = {"offset": len(body), "length": len(data), "type": kind, "encoding": enc}
             body += data
-        js = json.dumps(meta, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+        # some maps carry broken surrogate pairs in notes (e.g. a split ancient-script glyph): replace them
+        js = json.dumps(meta, separators=(",", ":"), ensure_ascii=False).encode("utf-8", "replace")
         raw = b"AZRP" + struct.pack("<I", len(js)) + js + bytes(body)
         return gzip.compress(raw, 9)
 
