@@ -23,6 +23,18 @@ def _freight(spec):
     return dict(zip(("land", "sea", "air"), vals))
 
 
+def _decree_count(spec):
+    if str(spec).strip().lower() == "max":
+        return None
+    try:
+        n = int(spec)
+    except ValueError:
+        raise argparse.ArgumentTypeError("--decrees takes a number or max")
+    if n < 1:
+        raise argparse.ArgumentTypeError("--decrees must be at least 1")
+    return n
+
+
 def main(argv=None):
     here = Path(__file__).resolve().parent
     ap = argparse.ArgumentParser(prog="azeuro", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -46,6 +58,9 @@ def main(argv=None):
     g.add_argument("--air", type=int, help="number of air sites when the map names none (default: states/2 + 2, 4-7)")
     g.add_argument("--air-overlap", type=int, default=1, help="air sites that may also be neutral stations")
     g.add_argument("--remote", type=float, default=0.015, help="marker distance beyond which a star is remote (air), x map width")
+    g.add_argument("--sea-style", choices=["offset", "geo"], default="offset",
+                   help="how sea links are drawn: offset (own line per link, side by side where they share "
+                        "water; default) or geo (the shared paths as they are, as on older boards)")
     g = ap.add_argument_group("commissions")
     g.add_argument("--income-k", type=float, default=0.75, help="income = k x stops x value tier")
     g.add_argument("--income-min", type=int, default=2)
@@ -57,7 +72,8 @@ def main(argv=None):
     g.add_argument("--freight", help="print freight per cargo pip on cards and boards, as land,sea,air (e.g. 0,1,2); "
                                      "off by default")
     g = ap.add_argument_group("decrees")
-    g.add_argument("--decrees", type=int, default=30, help="decree deck size")
+    g.add_argument("--decrees", type=_decree_count, default=30,
+                   help="decree deck size (default 30), or max for every decree the world can give")
     g.add_argument("--seed", type=int, default=1)
     g = ap.add_argument_group("houses and budget boards")
     g.add_argument("--players", type=int, default=6)
@@ -85,7 +101,7 @@ def main(argv=None):
             "only": [p.strip() for p in a.only.split(",")] if a.only else None, "dpi": a.dpi,
             "board_width": a.board_width, "jobs": a.jobs, "palette": not a.full_colour, "sheets": not a.no_sheets,
             "sheet_dpi": a.sheet_dpi, "sheet_max": a.sheet_max, "spacing": a.spacing, "neutral": a.neutral, "air": a.air,
-            "air_overlap": a.air_overlap, "remote": a.remote, "income_k": a.income_k, "income_min": a.income_min,
+            "air_overlap": a.air_overlap, "remote": a.remote, "sea_style": a.sea_style, "income_k": a.income_k, "income_min": a.income_min,
             "income_max": a.income_max, "min_value": a.min_value, "max_per_trade": a.max_per_trade,
             "freight": _freight(a.freight), "decrees": a.decrees, "seed": a.seed, "players": a.players,
             "colours": a.colours.split(",") if a.colours else DEFAULT_COLOURS, "goal": a.goal,

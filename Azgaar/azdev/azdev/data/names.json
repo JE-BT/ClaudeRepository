@@ -1,0 +1,133 @@
+{
+ "_about": "Names the tool writes into the map. eras: new names for the eras from 40 up (the Generator keeps the levels and colours; only names change). Below 40 the default archaeological names stay, since the default goods' tiers are anchored to them. titles: state form names by basin and government. Listed names keep the state's government (Monarchy, Republic, Union, Theocracy, Anarchy); a name the Generator does not list keeps it too. 'large' is used for the largest states (tier 4+).",
+ "eras": {
+  "40": "Divergence",
+  "45": "Florescence",
+  "50": "Wide Coupling",
+  "60": "Deep Repertoire",
+  "70": "Second Florescence",
+  "80": "Saturation",
+  "90": "Second Horizon",
+  "100": "Third Horizon"
+ },
+ "tribal": {
+  "Monarchy": [
+   "Tribe",
+   "Chiefdom",
+   "Paramount Chiefdom"
+  ],
+  "NomadicMonarchy": "Horde",
+  "Republic": "Tribal Council",
+  "Union": "Clans Union",
+  "Theocracy": "Shamanate"
+ },
+ "untribal": {
+  "Monarchy": [
+   "Principality",
+   "Kingdom",
+   "Empire"
+  ],
+  "Republic": "Republic",
+  "Union": "Confederation",
+  "Theocracy": "Theocracy",
+  "Anarchy": "Community"
+ },
+ "titles": {
+  "Grain tribute": {
+   "Monarchy": "Kingdom",
+   "large": "Empire",
+   "Republic": "Chancellery",
+   "Union": "United Provinces",
+   "Theocracy": "Patriarchate",
+   "Anarchy": "Commune"
+  },
+  "Mobile pastoral confederacy": {
+   "Monarchy": "Khanate",
+   "large": "Khaganate",
+   "Republic": "Diarchy",
+   "Union": "United Hordes",
+   "Theocracy": "Imamah",
+   "Anarchy": "Free Territory"
+  },
+  "Maritime exchange, reciprocal": {
+   "Monarchy": "Paramount Chiefdom",
+   "large": "Paramount Chiefdom",
+   "Republic": "City-state",
+   "Union": "League",
+   "Theocracy": "See",
+   "Anarchy": "Council"
+  },
+  "Maritime exchange, extractive": {
+   "Monarchy": "Dominion",
+   "large": "Viceroyalty",
+   "Republic": "Trade Company",
+   "Union": "Conglomerate",
+   "Theocracy": "Exarchate",
+   "Anarchy": "Free Territory"
+  },
+  "Seasonal ceremonial aggregation": {
+   "Monarchy": "Principality",
+   "large": "Heptarchy",
+   "Republic": "Triumvirate",
+   "Union": "Confederacy",
+   "Theocracy": "Thearchy",
+   "Anarchy": "Council"
+  },
+  "Escape agriculture": {
+   "Monarchy": "Chiefdom",
+   "large": "Marches",
+   "Republic": "Tetrarchy",
+   "Union": "United Tribes",
+   "Theocracy": "Brotherhood",
+   "Anarchy": "Free Territory"
+  },
+  "Fossil-industrial": {
+   "Monarchy": "Kingdom",
+   "large": "Empire",
+   "Republic": "Federation",
+   "Union": "Union",
+   "Theocracy": "Holy State",
+   "Anarchy": "Commune"
+  },
+  "Agro-ecological commons": {
+   "Monarchy": "Grand Duchy",
+   "large": "Dominion",
+   "Republic": "Republic",
+   "Union": "Commonwealth",
+   "Theocracy": "Diocese",
+   "Anarchy": "Community"
+  },
+  "Mercantile credit": {
+   "Monarchy": "Principality",
+   "large": "Grand Duchy",
+   "Republic": "Most Serene Republic",
+   "Union": "League",
+   "Theocracy": "Bishopric",
+   "Anarchy": "Commune"
+  },
+  "Forager commons": {
+   "Monarchy": "Chiefdom",
+   "large": "Paramount Chiefdom",
+   "Republic": "Moot",
+   "Union": "United Tribes",
+   "Theocracy": "Shamanate",
+   "Anarchy": "Tribes"
+  },
+  "Metal and fuel workings": {
+   "Monarchy": "Principality",
+   "large": "Kingdom",
+   "Republic": "Free City",
+   "Union": "Conglomerate",
+   "Theocracy": "Divine Principality",
+   "Anarchy": "Commune"
+  },
+  "Forest foraging and crafts": {
+   "Monarchy": "Chiefdom",
+   "large": "Marches",
+   "Republic": "Moot",
+   "Union": "United Tribes",
+   "Theocracy": "Brotherhood",
+   "Anarchy": "Free Territory"
+  }
+ }
+}

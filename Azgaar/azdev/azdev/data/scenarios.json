@@ -1,0 +1,281 @@
+{
+ "_about": "The scenario ensemble (spec Table 'The starting scenario ensemble'). Each scenario is a rival account of how practices couple. Shared settings sit in 'base'; a scenario overrides them. J: extra coupling added to every pair from the first list to the second and back. w: what counts as mobilisable capacity. ranges: continuous parameters drawn per run (uniform; 'log' draws in log space). base.J holds rivalries every scenario shares: institutions that claim the same authority or the same surplus crowd each other out (an assumption, listed in the README).",
+ "base": {
+  "chi": 0.06,
+  "zeta": 1.0,
+  "alpha_neg": 0.0,
+  "coord_cost": 1.0,
+  "w": {
+   "arms": 1.0,
+   "org": 0.6,
+   "ritual": 0.3,
+   "credit": 0.3,
+   "ships": 0.5,
+   "allies": 0.4
+  },
+  "J": [
+   [
+    [
+     "office",
+     "registers",
+     "army",
+     "storage"
+    ],
+    [
+     "assembly",
+     "league",
+     "aggregation"
+    ],
+    -0.25
+   ],
+   [
+    [
+     "lineage"
+    ],
+    [
+     "assembly"
+    ],
+    -0.15
+   ],
+   [
+    [
+     "markets",
+     "banking",
+     "minting",
+     "papermoney"
+    ],
+    [
+     "exchange",
+     "feasting",
+     "shellvalues"
+    ],
+    -0.15
+   ],
+   [
+    [
+     "office",
+     "registers",
+     "army"
+    ],
+    [
+     "office",
+     "registers",
+     "army"
+    ],
+    0.15
+   ],
+   [
+    [
+     "assembly",
+     "league",
+     "aggregation"
+    ],
+    [
+     "assembly",
+     "league",
+     "aggregation"
+    ],
+    0.15
+   ]
+  ],
+  "boserup": false,
+  "worldsystem": false
+ },
+ "ranges": {
+  "nu0": [
+   0.003,
+   0.01,
+   "log"
+  ],
+  "nu_m": [
+   0.004,
+   0.03,
+   "log"
+  ],
+  "kappa0": [
+   0.002,
+   0.015
+  ],
+  "mu": [
+   0.08,
+   0.25
+  ],
+  "delta0": [
+   0.003,
+   0.02,
+   "log"
+  ],
+  "eta": [
+   0.03,
+   0.12
+  ],
+  "theta": [
+   0.2,
+   0.6
+  ],
+  "z0": [
+   0.1,
+   0.25
+  ],
+  "z1": [
+   0.25,
+   0.5
+  ],
+  "sigma": [
+   0.01,
+   0.03
+  ],
+  "trade": [
+   0.03,
+   0.1
+  ],
+  "J_scale": [
+   0.6,
+   1.2
+  ]
+ },
+ "scenarios": [
+  {
+   "id": "S1",
+   "name": "Appropriability",
+   "source": "Scott 2017; Mayshar, Moav and Pascali 2022",
+   "claim": "Legible, storable staples produce states",
+   "chi": 0.125,
+   "J": [
+    [
+     [
+      "storage",
+      "writing",
+      "office",
+      "registers",
+      "cereal",
+      "irrigation",
+      "plough"
+     ],
+     [
+      "storage",
+      "writing",
+      "office",
+      "registers",
+      "army"
+     ],
+     0.35
+    ]
+   ]
+  },
+  {
+   "id": "S2",
+   "name": "Circumscription",
+   "source": "Carneiro 1970",
+   "claim": "Hierarchy forms where exit is blocked",
+   "zeta": 4.0,
+   "chi": 0.09
+  },
+  {
+   "id": "S3",
+   "name": "Freedom and refusal",
+   "source": "Graeber and Wengrow 2021",
+   "claim": "Societies switch forms and reject neighbours' ways",
+   "alpha_neg": 0.35,
+   "coord_cost": 0.5,
+   "J": [
+    [
+     [
+      "aggregation",
+      "assembly",
+      "league"
+     ],
+     [
+      "aggregation",
+      "assembly",
+      "league",
+      "feasting"
+     ],
+     0.25
+    ]
+   ]
+  },
+  {
+   "id": "S4",
+   "name": "Warfare and scale",
+   "source": "Turchin et al. 2013",
+   "claim": "Military competition selects for large cooperative groups",
+   "w": {
+    "arms": 2.0,
+    "org": 1.0,
+    "ritual": 0.2,
+    "credit": 0.2,
+    "ships": 0.6,
+    "allies": 0.6
+   },
+   "J": [
+    [
+     [
+      "army",
+      "raiding",
+      "riding",
+      "cannon",
+      "gunpowder",
+      "bows"
+     ],
+     [
+      "office",
+      "lineage",
+      "league",
+      "relays"
+     ],
+     0.3
+    ]
+   ]
+  },
+  {
+   "id": "S5",
+   "name": "Commons",
+   "source": "Ostrom 1990",
+   "claim": "Shared resources are governed stably under known conditions",
+   "J": [
+    [
+     [
+      "assembly",
+      "league"
+     ],
+     [
+      "aggregation",
+      "fishing",
+      "forage",
+      "pastoral",
+      "garden",
+      "seafarming",
+      "agroforestry",
+      "rangelands",
+      "oceancommons"
+     ],
+     0.3
+    ]
+   ]
+  },
+  {
+   "id": "S6",
+   "name": "Population pressure",
+   "source": "Boserup 1965",
+   "claim": "Crowding induces intensification",
+   "boserup": true
+  },
+  {
+   "id": "S7",
+   "name": "World-system",
+   "source": "Wallerstein 1974",
+   "claim": "Exchange between unequal partners entrenches cores and peripheries",
+   "worldsystem": true,
+   "w": {
+    "arms": 0.6,
+    "org": 0.5,
+    "ritual": 0.1,
+    "credit": 2.0,
+    "ships": 1.5,
+    "allies": 0.3
+   },
+   "chi": 0.08
+  }
+ ]
+}
