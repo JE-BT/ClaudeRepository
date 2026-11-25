@@ -89,7 +89,7 @@ def build(world: str, roots: list[Path], out: Path, opts: dict) -> dict:
         return files
 
     if "board" in parts:
-        emit(Board(net, geo).render(), f"board/{slug(m.name)}_board", "board", "", 1,
+        emit(Board(net, geo, opts.get("sea_style", "offset")).render(), f"board/{slug(m.name)}_board", "board", "", 1,
              f"{len(net.stops)} stops", width=opts["board_width"])
     if "commissions" in parts:
         for trade, cs in deck.items():

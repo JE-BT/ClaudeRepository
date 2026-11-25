@@ -1,0 +1,364 @@
+{
+ "_about": "Stocks: anything that accumulates and can be drawn down. pi = [storability, transportability, legibility, divisibility, excludability, renewability], each 0-1 (spec Table 'Properties of goods'). need: per-person norm (food group shares one need of 1.0). group: subsistence group whose shortfall is stress. derived: computed each step, not produced or traded. Edit freely: this file is where commitment N8 bites. yield_scale multiplies every practice's yield and use of the stock: crafts, valuables and knowledge are needed in small amounts beside food.",
+ "stocks": {
+  "grain": {
+   "name": "Stored grain",
+   "pi": [
+    0.9,
+    0.35,
+    0.9,
+    0.8,
+    0.5,
+    0.6
+   ],
+   "group": "food",
+   "src": "Scott 2017; Mayshar et al. 2022: storable, countable cereal"
+  },
+  "roots": {
+   "name": "Roots and gardens",
+   "pi": [
+    0.2,
+    0.2,
+    0.2,
+    0.4,
+    0.3,
+    0.8
+   ],
+   "group": "food",
+   "src": "Scott 2009: tubers stay in the ground, illegible"
+  },
+  "herds": {
+   "name": "Herds",
+   "pi": [
+    0.6,
+    0.6,
+    0.7,
+    0.5,
+    0.6,
+    0.6
+   ],
+   "group": "food",
+   "src": "mobile wealth; counted, walk themselves"
+  },
+  "catch": {
+   "name": "Fish and sea food",
+   "pi": [
+    0.25,
+    0.3,
+    0.3,
+    0.6,
+    0.2,
+    0.7
+   ],
+   "group": "food",
+   "src": "Testart 1982: unstorable unless processed"
+  },
+  "wild": {
+   "name": "Wild food",
+   "pi": [
+    0.3,
+    0.5,
+    0.2,
+    0.5,
+    0.2,
+    0.6
+   ],
+   "group": "food",
+   "src": "game, honey, forage"
+  },
+  "orchard": {
+   "name": "Tree crops",
+   "pi": [
+    0.6,
+    0.5,
+    0.7,
+    0.6,
+    0.7,
+    0.7
+   ],
+   "group": "food",
+   "src": "olives, vines, dates, fruit: fixed, visible"
+  },
+  "stores": {
+   "name": "Preserved food",
+   "pi": [
+    0.85,
+    0.6,
+    0.7,
+    0.8,
+    0.5,
+    0.5
+   ],
+   "group": "food",
+   "src": "salted, smoked, fermented, cheese"
+  },
+  "wood": {
+   "name": "Wood",
+   "pi": [
+    0.7,
+    0.15,
+    0.6,
+    0.6,
+    0.4,
+    0.4
+   ],
+   "group": "warmth",
+   "src": "bulky; firewood is the main warmth, so wood is counted with fuel",
+   "wear": 0.1
+  },
+  "stone": {
+   "name": "Stone and clay",
+   "pi": [
+    1.0,
+    0.05,
+    0.8,
+    0.4,
+    0.4,
+    0.0
+   ],
+   "group": "shelter",
+   "src": "",
+   "wear": 0.02
+  },
+  "fibre": {
+   "name": "Fibre and cloth",
+   "pi": [
+    0.7,
+    0.6,
+    0.5,
+    0.7,
+    0.5,
+    0.6
+   ],
+   "group": "cloth",
+   "src": "",
+   "wear": 0.1
+  },
+  "metal": {
+   "name": "Metal",
+   "pi": [
+    0.95,
+    0.35,
+    0.8,
+    0.6,
+    0.7,
+    0.0
+   ],
+   "group": null,
+   "src": "",
+   "wear": 0.06,
+   "yield_scale": 0.25
+  },
+  "fuel": {
+   "name": "Fuel",
+   "pi": [
+    0.8,
+    0.3,
+    0.7,
+    0.8,
+    0.6,
+    0.1
+   ],
+   "group": "warmth",
+   "src": "charcoal, coal, oil",
+   "wear": 0.1
+  },
+  "wares": {
+   "name": "Wares and tools",
+   "pi": [
+    0.8,
+    0.45,
+    0.6,
+    0.7,
+    0.6,
+    0.3
+   ],
+   "group": "shelter",
+   "src": "ceramics, glass, tools, machines",
+   "wear": 0.08
+  },
+  "luxury": {
+   "name": "Luxuries",
+   "pi": [
+    0.85,
+    0.9,
+    0.6,
+    0.8,
+    0.7,
+    0.4
+   ],
+   "group": null,
+   "src": "high value per weight",
+   "wear": 0.1,
+   "yield_scale": 0.25
+  },
+  "coin": {
+   "name": "Money and credit",
+   "pi": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.8,
+    0.0
+   ],
+   "group": null,
+   "src": "",
+   "wear": 0.06,
+   "yield_scale": 0.25
+  },
+  "arms": {
+   "name": "Arms",
+   "pi": [
+    0.8,
+    0.5,
+    0.6,
+    0.6,
+    0.8,
+    0.2
+   ],
+   "group": null,
+   "src": "",
+   "wear": 0.08,
+   "yield_scale": 0.25
+  },
+  "captives": {
+   "name": "Bound labour",
+   "pi": [
+    0.5,
+    0.5,
+    0.7,
+    0.6,
+    0.7,
+    0.2
+   ],
+   "group": null,
+   "src": "captured people; household and plantation labour",
+   "wear": 0.08,
+   "yield_scale": 0.25
+  },
+  "records": {
+   "name": "Records",
+   "pi": [
+    0.85,
+    0.8,
+    1.0,
+    0.6,
+    0.6,
+    0.3
+   ],
+   "group": null,
+   "src": "writing, ledgers, print",
+   "wear": 0.05,
+   "yield_scale": 0.25
+  },
+  "ritual": {
+   "name": "Ritual knowledge",
+   "pi": [
+    0.9,
+    0.6,
+    0.2,
+    0.3,
+    0.9,
+    1.0
+   ],
+   "group": null,
+   "src": "excludable: the base of ritual monopoly",
+   "wear": 0.05,
+   "yield_scale": 0.25
+  },
+  "seaknow": {
+   "name": "Sea knowledge",
+   "pi": [
+    0.8,
+    0.6,
+    0.2,
+    0.3,
+    0.7,
+    1.0
+   ],
+   "group": null,
+   "src": "wayfinding, star paths",
+   "wear": 0.05,
+   "yield_scale": 0.25
+  },
+  "bonds": {
+   "name": "Obligations and alliances",
+   "pi": [
+    0.6,
+    0.7,
+    0.3,
+    0.3,
+    0.4,
+    0.8
+   ],
+   "group": null,
+   "src": "relational stock (N8)",
+   "wear": 0.08,
+   "yield_scale": 0.25
+  },
+  "prestige": {
+   "name": "Prestige",
+   "pi": [
+    0.5,
+    0.5,
+    0.5,
+    0.2,
+    0.8,
+    0.5
+   ],
+   "group": null,
+   "src": "",
+   "wear": 0.12,
+   "yield_scale": 0.25
+  },
+  "formal": {
+   "name": "Formal knowledge",
+   "pi": [
+    0.9,
+    0.8,
+    0.9,
+    0.7,
+    0.6,
+    1.0
+   ],
+   "group": null,
+   "src": "codified, teachable",
+   "wear": 0.03,
+   "yield_scale": 0.25
+  },
+  "health": {
+   "name": "Health",
+   "derived": true,
+   "src": "diet breadth, remedies, minus crowding and epidemic zones"
+  },
+  "leisure": {
+   "name": "Free time",
+   "derived": true,
+   "src": "labour not spent"
+  },
+  "ecology": {
+   "name": "Land and sea in good heart",
+   "derived": true,
+   "src": "dynamic soil, forest, pasture, fishery, game against their baselines"
+  }
+ },
+ "needs": {
+  "_about": "Per person per step. food is shared by the food group; warmth and cloth rise with cold.",
+  "food": 1.0,
+  "warmth": [
+   0.15,
+   0.6
+  ],
+  "shelter": 0.2,
+  "cloth": [
+   0.1,
+   0.3
+  ],
+  "norm": 0.08
+ },
+ "decay": {
+  "_about": "Share of a stock lost per step = max(base * (1 - storability), wear). wear is use and wear-out: tools break, cloth tears, prestige fades. Storage practices halve the loss of grain and stores.",
+  "base": 0.45
+ }
+}

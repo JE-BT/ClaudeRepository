@@ -1,0 +1,136 @@
+{
+ "_about": "Names for the basins the run finds. Basins are found by clustering how communities differ from the rest of their world in the same run (what a whole run shares is the theory's institutional layer, reported per scenario). A cluster takes the name whose hint words best match the practices it holds more of than its world. The first seven are the spec's stylised basins (Table 'Stylised basins'); the rest are additions for the extended catalogue. 'tags' are practice hint words with weights. 'attends', 'ignores' and 'capture' are the spec's reading, shown as expectations to compare with what the run found.",
+ "basins": [
+  {
+   "name": "Grain tribute",
+   "tags": {
+    "grain": 1.0,
+    "tribute": 1.2
+   },
+   "attends": "stored surplus, territory, inheritance, monuments",
+   "ignores": "autonomy of labourers; diet breadth and health; soil salt",
+   "capture": "tax, forced labour, household capture"
+  },
+  {
+   "name": "Mobile pastoral confederacy",
+   "tags": {
+    "pastoral": 1.5,
+    "war": 0.2
+   },
+   "attends": "herd size, honour, alliances, freedom of movement",
+   "ignores": "pasture condition as herds grow; captives and clients",
+   "capture": "raiding; protection payments"
+  },
+  {
+   "name": "Maritime exchange, reciprocal",
+   "tags": {
+    "maritime": 1.2,
+    "exchange": 1.0,
+    "commons": 0.3
+   },
+   "attends": "relationships, obligations, prestige, sea knowledge",
+   "ignores": "island ecologies; hardening of rank",
+   "capture": "rank and ritual monopoly"
+  },
+  {
+   "name": "Maritime exchange, extractive",
+   "tags": {
+    "maritime": 1.0,
+    "extractive": 1.2,
+    "credit": 0.8
+   },
+   "attends": "cargo value, credit, ships",
+   "ignores": "source societies; crews and bound labour; long-run supply",
+   "capture": "debt, enslavement, displacement",
+   "extractive": true
+  },
+  {
+   "name": "Seasonal ceremonial aggregation",
+   "tags": {
+    "ceremonial": 1.5,
+    "forage": 0.4,
+    "commons": 0.2
+   },
+   "attends": "ritual knowledge, alliance, timing, equality norms",
+   "ignores": "buffering against multi-year failure; the uninitiated",
+   "capture": "graded access to knowledge"
+  },
+  {
+   "name": "Escape agriculture",
+   "tags": {
+    "escape": 1.5,
+    "agroeco": 0.2
+   },
+   "attends": "autonomy, mobility, flexible kinship",
+   "ignores": "accumulation; large-scale coordination",
+   "capture": "feud and captive-taking within"
+  },
+  {
+   "name": "Fossil-industrial",
+   "tags": {
+    "industrial": 1.6
+   },
+   "attends": "throughput, measured output, lifespan, formal knowledge",
+   "ignores": "atmospheric and biotic sinks; free time; supply peripheries; variety of ways of living",
+   "capture": "debt, wage dependence, distant displacement, organised violence"
+  },
+  {
+   "name": "Agro-ecological commons",
+   "tags": {
+    "agroeco": 1.5,
+    "commons": 0.6
+   },
+   "attends": "soil, diet breadth, seed, shared rules",
+   "ignores": "reach; capacity for large mobilisation; outsiders' claims",
+   "capture": "exclusion of outsiders; elders' control of seed and land",
+   "addition": true
+  },
+  {
+   "name": "Mercantile credit",
+   "tags": {
+    "credit": 1.4,
+    "craft": 0.5,
+    "knowledge": 0.4
+   },
+   "attends": "coin, credit, workshops, records",
+   "ignores": "debtors; the countryside that feeds the towns",
+   "capture": "debt and rent",
+   "addition": true
+  },
+  {
+   "name": "Forager commons",
+   "tags": {
+    "forage": 1.4,
+    "commons": 0.6
+   },
+   "attends": "range, sharing, seasonal knowledge",
+   "ignores": "storage; defence against organised neighbours",
+   "capture": "little from outside; elders and initiates within",
+   "addition": true
+  },
+  {
+   "name": "Metal and fuel workings",
+   "tags": {
+    "industrial": 1.0,
+    "craft": 0.8,
+    "war": 0.8
+   },
+   "attends": "ore, fuel, tools and arms",
+   "ignores": "the land around the workings; the health of those who work them",
+   "capture": "debt and tribute in labour; displacement around the pits",
+   "addition": true
+  },
+  {
+   "name": "Forest foraging and crafts",
+   "tags": {
+    "forage": 1.0,
+    "craft": 0.8,
+    "escape": 0.3
+   },
+   "attends": "wood, game, wares, range",
+   "ignores": "storage against bad years; large-scale coordination",
+   "capture": "little from outside; feud within",
+   "addition": true
+  }
+ ]
+}

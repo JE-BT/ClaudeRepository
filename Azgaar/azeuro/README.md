@@ -89,10 +89,28 @@ half the number of states, 3 to 6).
 has fewer than two, the largest stops spread at least 12% of the map width apart (default:
 states / 2 + 2, 4 to 7), sharing at most `--air-overlap` (default 1) with the neutral stations.
 
-**Favour stars.** Each marker is snapped to the nearest link and marked with a gold star. Markers
-further than `--remote` (x map width, default 0.015) from every link stay where they are and can
-be access by flying a route between air infrastructures that passes nearby. Campaign markers 
-(type `party`) are left out.
+**Favour stars.** Every marker (except campaign markers, type `party`) becomes a gold favour star that
+belongs to one thing on the board, and the drawing makes clear which:
+
+    on a stop    marker in a stop's own cell (or on its symbol): docked on the stop symbol as a badge;
+                 any route through the stop takes it
+    on a line    marker within `--remote` (x map width, default 0.015) of a link: drawn on that link's
+                 line; any route using the link takes it. Its place along the link does not matter,
+                 so it slides along its own line to a clear spot: never on a stop symbol, never on
+                 another star, never where another line passes close
+    tethered     a line star whose line has no clear spot left (a very short link): just beside the
+                 line, on a short tether to it
+    numbered     stars that still have no spot of their own (several at one stop, or more on a short
+                 link than fit): one star with a number, counting as that many
+    remote       further than `--remote` from every link: stays near the marker, clear of lines and
+                 symbols, and is taken by an air route that passes nearby
+
+**Sea lines.** A sea link runs from one stop to the next; a voyage calls at every stop where its
+lines meet. Two links from the same port often share water before they part, which on older boards
+looked like a fork at sea with a short branch into the port. Now each link keeps its own line: where
+links share a channel they run side by side, in an order that never crosses, and they meet only at
+their stops. A line that passes a stop it does not serve bows around the stop symbol.
+`--sea-style geo` draws the shared paths as they are, as on older boards.
 
 **Commissions.** One card per market-to-market deal, filed by trade: Provisions, Luxuries, Metals &
 arms, Building, Livestock and Slaves (`goods.py` groups Azgaar's goods by their unit and tags, so
@@ -123,7 +141,10 @@ when the decree lapses. Sources:
 
 A closure is only used where most affected routes have a land or sea detour; at a chokepoint the
 same decree charges a levy. Sources that touch fewer than about 1% of routes are dropped, and the
-deck (`--decrees`, default 30) is balanced across families and states.
+deck (`--decrees`, default 30) is balanced across families and states. `--decrees max` takes every
+decree the world can give instead (still one per affected area and at most two of each kind, but
+without the state and family balance): about 15 to 50 cards on the worlds in this repository. Small
+worlds may give fewer than 30 even by default; the build report says how many.
 
 Money on decrees is always marked: a gold coin is gold, once; a yellow chip moves the income track; a
 red chip moves the expense track. Gold appears in a petition only when its benefit is shared by
@@ -151,8 +172,8 @@ plus wilds at `--wild-share` (12%) of the deck.
 ## Options
 
 Run `python -m azeuro --help` for the full list: network (`--spacing --neutral --air --air-overlap
---remote`), commissions (`--income-k --income-min --income-max --min-value --max-per-trade
---no-slaves --freight`), decrees (`--decrees --seed`), houses and budget boards (`--players
+--remote --sea-style`), commissions (`--income-k --income-min --income-max --min-value --max-per-trade
+--no-slaves --freight`), decrees (`--decrees N|max --seed`), houses and budget boards (`--players
 --colours --goal --start-gold --stations --overhead --home-overhead --overhead-mode --debt-rounds
 --petitions --draw`), infrastructure (`--infra-land --wild-share`) and output (`--formats --dpi
 --board-width --only --jobs --full-colour --no-sheets --sheet-dpi --sheet-max`).

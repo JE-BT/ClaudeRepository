@@ -7,6 +7,11 @@ Stops (the filter)
   decile by population). Candidates are taken largest first and kept only if they are at least
   `spacing` x map width from every stop already kept, which keeps the board readable.
 
+Stars
+  Every marker becomes a favour star that belongs to something on the board: the stop whose own
+  cell it is in (or whose symbol it sits on), else the nearest link within `remote` x map width,
+  else nothing (a remote star, reached by air).
+
 Links
   Azgaar's route graph (cell -> neighbour -> route) is split by mode: searoutes are sea, roads and
   trails are land. Each mode is contracted with a network Voronoi: every route cell belongs to its
@@ -54,8 +59,9 @@ class Star:
     marker: dict
     x: float
     y: float
-    mode: str  # land | sea | air (air = remote from every link)
+    mode: str  # land | sea (on a link), stop (in a stop's own cell), air (remote from every link)
     link: tuple | None  # (a, b, mode) of the link it sits on
+    stop: int | None = None  # burg id of the stop it belongs to
 
 
 class Network:
@@ -332,11 +338,17 @@ class Network:
         for key, ln in self.links.items():
             for p, q in zip(ln.points, ln.points[1:]):
                 segs.append((p, q, key))
-        placed: list[tuple[float, float]] = [(s.x, s.y) for s in self.stops.values()]
+        cell_stop = {s.cell: s for s in self.stops.values()}
         for mk in self.m.live("markers"):
             if mk.get("type") in skip_types:
                 continue
             px, py = mk["x"], mk["y"]
+            at = cell_stop.get(mk.get("cell"))
+            if at is None:  # a marker drawn on a stop's symbol counts as in the stop
+                at = next((s for s in self.stops.values() if math.hypot(s.x - px, s.y - py) < 6.0), None)
+            if at is not None:
+                self.stars.append(Star(mk, at.x, at.y, "stop", None, at.burg))
+                continue
             best = (math.inf, None, None)
             for p, q, key in segs:
                 dx, dy = q[0] - p[0], q[1] - p[1]
@@ -351,16 +363,7 @@ class Network:
                 star = Star(mk, x, y, best[2][2], best[2])
             else:
                 star = Star(mk, px, py, "air", None)
-            # nudge off stops and other stars
-            for _ in range(6):
-                close = [(ox, oy) for ox, oy in placed if math.hypot(star.x - ox, star.y - oy) < 7]
-                if not close:
-                    break
-                ox, oy = close[0]
-                ang = math.atan2(star.y - oy, star.x - ox) if (star.x, star.y) != (ox, oy) else 0.7
-                star.x, star.y = ox + 8 * math.cos(ang), oy + 8 * math.sin(ang)
-            placed.append((star.x, star.y))
-            self.stars.append(star)
+            self.stars.append(star)  # where it is drawn is the board's business (starplace.py)
 
     # ------------------------------------------------------------------ paths
     def path(self, a: int, b: int, use_air: bool = False):

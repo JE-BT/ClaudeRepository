@@ -3,16 +3,20 @@
 Layers, bottom to top: sea, coastal shallows, land, biome tint (Cells GeoJSON), lakes, ice, relief
 (grid heights), rivers, history zones (Cells GeoJSON), state territory bands, state and sea names,
 land and sea links, favour stars, stops, stop names. Everything comes from the .map except the
-biome and zone shapes, which need the Cells export.
+biome and zone shapes, which need the Cells export. How sea links are drawn (`sea_style`) is set out
+in seaways.py, and where stars go in starplace.py.
 """
 from __future__ import annotations
 
 import math
 import re
+import sys
 
+from . import seaways
 from .geo import CellGeo, geom_to_path
 from .network import Network
-from .svgkit import (AIR, COIN, INK, LAND, MUTED, PANEL, PAPER, SEA, esc, icon, star, text, text_width)
+from .starplace import STAR_R, obstacles, place
+from .svgkit import (COIN, INK, LAND, MUTED, PANEL, PAPER, SEA, esc, icon, star, text, text_width)
 
 OCEAN = "#BCD3E0"
 SHALLOW = "#D3E3EC"
@@ -70,8 +74,14 @@ def _darken(hexcol: str, amount: float = 0.55) -> str:
     return f"#{mix(r, ir):02x}{mix(g, ig):02x}{mix(b, ib):02x}"
 
 
+SEA_STYLES = ("offset", "geo")
+
+
 class Board:
-    def __init__(self, net: Network, geo: CellGeo | None):
+    def __init__(self, net: Network, geo: CellGeo | None, sea_style: str = "offset"):
+        if sea_style not in SEA_STYLES:
+            raise ValueError(f"sea style must be one of {', '.join(SEA_STYLES)}")
+        self.sea_style = sea_style
         self.net, self.m, self.geo = net, net.m, geo
         self.W, self.H = net.width, net.height
         self.svg = self.m.svg
@@ -217,7 +227,7 @@ class Board:
         """A spot for a state's name: near its pole, clear of stops, stars and links."""
         if not self.geo:
             return x, y
-        pts = [(s.x, s.y, 12) for s in self.net.stops.values()] + [(t.x, t.y, 8) for t in self.net.stars]
+        pts = [(s.x, s.y, 12) for s in self.net.stops.values()] + [(t.x, t.y, 8) for t in self.marks]
         link_pts = [p for ln in self.net.links.values() for p in ln.points[::2]]
         cands = [(x, y)] + [self.geo.centroid(c) for c, p in self.geo.props.items()
                             if p.get("state") == sid and p.get("type") == "island"][::3]
@@ -300,10 +310,27 @@ class Board:
         return "".join(out)
 
     # ------------------------------------------------------------------ network
+    def _prepare(self):
+        """Drawn geometry of every link, then where every favour star goes."""
+        sys.setrecursionlimit(max(sys.getrecursionlimit(), 20000))
+        stops = list(self.net.stops.values())
+        obs = obstacles(stops)
+        land = {k: ln for k, ln in self.net.links.items() if k[2] == "land"}
+        sea = {k: ln for k, ln in self.net.links.items() if k[2] == "sea"}
+        geom = {k: seaways.densify(_chaikin(list(ln.points))) for k, ln in land.items()}
+        if self.sea_style == "geo":
+            geom.update({k: seaways.densify(_chaikin(list(ln.points))) for k, ln in sea.items()})
+        else:
+            for k, pts in seaways.offset_paths(sea, gap=3.0).items():
+                pts = seaways.chaikin(pts, 3)  # round the cell-to-cell corners before densifying
+                geom[k] = seaways.bypass(seaways.densify(pts, 2.0), k[:2], obs)
+        self.geom = geom
+        self.marks = place(self.net.stars, geom, stops)
+
     def _links(self) -> str:
         casing, lines = [], []
-        for ln in self.net.links.values():
-            d = _poly(_chaikin(list(ln.points)))
+        for key, ln in self.net.links.items():
+            d = _poly(self.geom[key])
             if ln.mode == "land":
                 casing.append(f'<path d="{d}" stroke="{PANEL}" stroke-width="3.6"/>')
                 lines.append(f'<path d="{d}" stroke="{LAND}" stroke-width="1.8"/>')
@@ -313,11 +340,28 @@ class Board:
         g = 'fill="none" stroke-linecap="round" stroke-linejoin="round"'
         return f'<g {g}>{"".join(casing)}</g><g {g}>{"".join(lines)}</g>'
 
+    @staticmethod
+    def star_mark(x, y, count=1, r=None) -> str:
+        """A gold favour star on a pale casing; a number inside when it stands for several stars."""
+        r = r or (STAR_R if count == 1 else STAR_R + 1.4)
+        out = star(x, y, r, PANEL, PANEL, 2.6) + star(x, y, r, COIN, INK, 0.9)
+        if count > 1:
+            out += text(x, y + r * 0.42, str(count), r * 1.05, family="Barlow Condensed", weight=700,
+                        anchor="middle")
+        return out
+
     def _stars(self) -> str:
         out = []
-        for s in self.net.stars:
-            fill = {"land": LAND, "sea": SEA, "air": AIR}[s.mode]
-            out.append(star(s.x, s.y, 5.2, fill, INK, 0.9))
+        for m in self.marks:
+            if m.anchor:  # tether from the star's rim to its line
+                ax, ay = m.anchor
+                d = math.hypot(m.x - ax, m.y - ay) or 1.0
+                ex, ey = m.x + (ax - m.x) / d * (m.r * 0.55), m.y + (ay - m.y) / d * (m.r * 0.55)
+                out.append(f'<line x1="{ex:.1f}" y1="{ey:.1f}" x2="{ax:.1f}" y2="{ay:.1f}" stroke="{PANEL}" '
+                           f'stroke-width="2.4" stroke-linecap="round"/><line x1="{ex:.1f}" y1="{ey:.1f}" '
+                           f'x2="{ax:.1f}" y2="{ay:.1f}" stroke="{INK}" stroke-width="0.9" stroke-linecap="round"/>'
+                           f'<circle cx="{ax:.1f}" cy="{ay:.1f}" r="1.3" fill="{INK}"/>')
+            out.append(self.star_mark(m.x, m.y, m.count))
         return "".join(out)
 
     def _stop_mark(self, s) -> str:
@@ -366,8 +410,8 @@ class Board:
         for s in self.net.stops.values():
             r = 9 if ("capital" in s.roles or s.neutral) else 7
             boxes.append((s.x - r, s.y - r, s.x + r, s.y + r))
-        for st in self.net.stars:
-            boxes.append((st.x - 5, st.y - 5, st.x + 5, st.y + 5))
+        for st in self.marks:
+            boxes.append((st.x - st.r, st.y - st.r, st.x + st.r, st.y + st.r))
         out = []
         ranked = sorted(self.net.stops.values(),
                         key=lambda s: (-("capital" in s.roles), -("market" in s.roles), -s.population))
@@ -456,11 +500,30 @@ class Board:
         # stars
         x = 900
         L.append(text(x, 32, "Favour stars", 17, family="Barlow Condensed", weight=700))
-        for k, (label, fill) in enumerate((("On a land route", LAND), ("On a sea route", SEA),
-                                           ("Remote: read by air", "#FFFFFF"))):
-            cy = 58 + k * 30
-            L.append(star(x + 14, cy, 9, fill, INK, 1.4))
-            L.append(text(x + 32, cy + 5, label, 13, weight=500))
+        k = 1.7  # legend symbols at 1.7 x board size; rows only for the kinds this board has
+        kinds = {m.kind for m in self.marks}
+        rows = [("On a line: for routes on it", lambda cx, cy: self.star_mark(cx, cy, 1, STAR_R * k), INK)]
+        if "stop" in kinds:
+            rows.append(("On a stop: for routes via it",
+                         lambda cx, cy: f'<circle cx="{cx - 2.4 * k:.1f}" cy="{cy - 2.4 * k:.1f}" r="{4.8 * k:.1f}" '
+                                        f'fill="{PANEL}" stroke="{INK}" stroke-width="{1.4 * k:.1f}"/>'
+                                        + self.star_mark(cx + 4 * k, cy + 4 * k, 1, STAR_R * 0.82 * k), INK))
+        if any(m.anchor for m in self.marks):
+            rows.append(("On a tether: for its line",
+                         lambda cx, cy: f'<line x1="{cx - 14}" y1="{cy + 5.5 * k:.1f}" x2="{cx + 14}" y2="{cy + 5.5 * k:.1f}" '
+                                        f'stroke="{LAND}" stroke-width="3"/><line x1="{cx}" y1="{cy + 2 * k:.1f}" x2="{cx}" '
+                                        f'y2="{cy + 5.5 * k:.1f}" stroke="{INK}" stroke-width="1.4"/>'
+                                        + self.star_mark(cx, cy - 2 * k, 1, STAR_R * 0.8 * k), INK))
+        if any(m.count > 1 for m in self.marks):
+            rows.append(("A number: that many stars", lambda cx, cy: self.star_mark(cx, cy, 2, (STAR_R + 1.4) * k), INK))
+        if "remote" in kinds:
+            rows.append(("Off the lines: by air nearby", lambda cx, cy: self.star_mark(cx, cy, 1, STAR_R * k), MUTED))
+        step = 30 if len(rows) <= 4 else 24
+        k = 1.7 if len(rows) <= 4 else 1.3  # the symbols read k when drawn
+        for i, (label, draw, col) in enumerate(rows):
+            cy = 58 + i * step
+            L.append(draw(x + 14, cy))
+            L.append(text(x + 36, cy + 5, label, 13, weight=500, fill=col))
         # decks
         x = 1110
         L.append(text(x, 32, "States (decree issuers)", 17, family="Barlow Condensed", weight=700))
@@ -496,6 +559,7 @@ class Board:
         x0, y0, x1, y1 = self.crop_box() if crop else (0, 0, self.W, self.H)
         cw, ch = x1 - x0, y1 - y0
         self.view = (x0, y0, x1, y1)
+        self._prepare()
         legend_h = 175 * cw / 1863.0
         bodies, state_labels = self._states()
         zones, zone_labels = self._zones()

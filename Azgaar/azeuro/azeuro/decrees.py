@@ -529,6 +529,11 @@ class DecreeBuilder:
                 links = [key]
                 deals_all = self.using_links(links)
                 stops = set(key[:2])
+            elif star.stop is not None:  # a star in a stop: the stop is the affected area
+                site = net.stops[star.stop]
+                area = ("stops", "Affected stop", site.name, (site.burg,), {site.burg})
+                links, stops = [], {site.burg}
+                deals_all = self.through_stops(stops)
             else:  # remote star: only near an air site does it touch play
                 if not air_sites:
                     continue
@@ -698,7 +703,9 @@ class DecreeBuilder:
                      f"breach.", hit, "Slaves", "slaves:revolt", 0)
 
     # ---------------------------------------------------------------- selection
-    def build(self, n: int = 30) -> tuple[list[Decree], dict]:
+    def build(self, n: int | None = 30) -> tuple[list[Decree], dict]:
+        """n cards (default 30), or every card the world can give when n is None ("max"): then only the
+        one-card-per-area rule and the two-per-kind cap apply, not the state and family balance."""
         self.wars()
         self.tariffs()
         self.theocracies()
@@ -718,8 +725,12 @@ class DecreeBuilder:
                 seen.add(k)
                 uniq.append(d)
         n_states = len([i for i in self.states if i])
-        per_state = max(3, math.ceil(1.6 * n / max(1, n_states)))
-        per_family = math.ceil(0.3 * n)
+        if n is None:  # max: as many as the world can give
+            n = len(uniq)
+            per_state = per_family = len(uniq)
+        else:
+            per_state = max(3, math.ceil(1.6 * n / max(1, n_states)))
+            per_family = math.ceil(0.3 * n)
         per_type = 2
         chosen: list[Decree] = []
         cnt_s, cnt_f, cnt_t, cnt_deck = Counter(), Counter(), Counter(), Counter()
@@ -771,5 +782,5 @@ class DecreeBuilder:
         return chosen, stats
 
 
-def build_decrees(net: Network, routes: dict, commissions: dict, n: int = 30, seed: int = 1):
+def build_decrees(net: Network, routes: dict, commissions: dict, n: int | None = 30, seed: int = 1):
     return DecreeBuilder(net, routes, commissions, seed).build(n)
