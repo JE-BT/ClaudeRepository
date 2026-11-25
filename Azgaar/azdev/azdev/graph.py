@@ -4,14 +4,18 @@ A .map stores the grid points and the pack's per-cell arrays, but not the pack's
 neighbours. The Generator rebuilds them on every load from the grid: deep ocean is dropped and
 coastal cells are split. This port does the same, then checks the result against the file: the
 cell count must equal the length of the saved pack arrays, and every burg must sit in its cell.
+
+The split points of a coastal grid cell are numbered in the order of that cell's neighbours, so the
+neighbours must come out in the Generator's order, not just as the right set. They are taken from
+an exact port of the Generator's triangulation (delaunator.py), never from scipy or Qhull.
 """
 from __future__ import annotations
 
 import math
 
 import numpy as np
-from scipy.spatial import Delaunay
 
+from .delaunator import Delaunator, voronoi_cells
 from .mapfile import AzgaarMap, MapFormatError
 
 SEA_LEVEL = 20
@@ -21,9 +25,17 @@ HEX_SIDE = math.sqrt(2 / SQRT3)
 
 
 def js_round(v: float, d: int = 0) -> float:
-    """Math.round(v * 10^d) / 10^d: halves round up, unlike Python's round."""
+    """Math.round(v * 10^d) / 10^d: halves round up, unlike Python's round.
+
+    floor(t + 0.5) is wrong just below a half (0.49999999999999994 + 0.5 rounds to 1.0); the
+    fractional part t - floor(t) is exact, so comparing it with 0.5 matches Math.round.
+    """
     m = 10 ** d
-    return math.floor(v * m + 0.5) / m
+    t = v * m
+    r = math.floor(t)
+    if t - r >= 0.5:
+        r += 1
+    return r / m
 
 
 def neighbor_distance(sampling: str, spacing: float) -> float:
@@ -40,20 +52,12 @@ def neighbor_distance(sampling: str, spacing: float) -> float:
 
 
 def voronoi_neighbors(points: np.ndarray, boundary: np.ndarray) -> tuple[list[np.ndarray], np.ndarray]:
-    """Neighbours among real points, and the near-border flag (a neighbour is a boundary pseudo-point)."""
+    """Neighbours among real points, in the Generator's order, and the near-border flag (a neighbour
+    is a boundary pseudo-point, or the cell is on the hull). Same as calculateVoronoi in voronoi.ts."""
     n = len(points)
-    allp = np.vstack([points, boundary]) if len(boundary) else points
-    tri = Delaunay(allp)
-    indptr, indices = tri.vertex_neighbor_vertices
-    nbrs: list[np.ndarray] = []
-    border = np.zeros(n, dtype=np.uint8)
-    for i in range(n):
-        around = indices[indptr[i]:indptr[i + 1]]
-        real = around[around < n]
-        nbrs.append(real)
-        if len(real) < len(around):
-            border[i] = 1
-    return nbrs, border
+    allp = [(float(x), float(y)) for x, y in points] + [(float(x), float(y)) for x, y in boundary]
+    cells, border = voronoi_cells(Delaunator.from_points(allp), n)
+    return [np.asarray(c, dtype=np.int64) for c in cells], np.asarray(border, dtype=np.uint8)
 
 
 class PackGraph:
@@ -109,7 +113,7 @@ class PackGraph:
         for i in np.nonzero(land)[0]:
             self.harbor[i] = int(np.sum(~land[self.c[i]]))
         # every burg must stand in (or next to) its own cell
-        bad = 0
+        bad: list[str] = []
         for b in m.live_burgs():
             x, y = b.get("x"), b.get("y")
             if x is None:
@@ -117,9 +121,10 @@ class PackGraph:
             d2 = np.sum((self.p - (x, y)) ** 2, axis=1)
             near = int(np.argmin(d2))
             if near != b["cell"] and b["cell"] not in set(self.c[near].tolist()):
-                bad += 1
-        if bad > max(2, len(m.live_burgs()) // 50):
-            raise MapFormatError(f"rebuilt pack does not match the burgs ({bad} misplaced)")
+                bad.append(f"{b.get('name', b['i'])} (burg {b['i']}, cell {b['cell']}, nearest {near})")
+        if len(bad) > max(2, len(m.live_burgs()) // 50):
+            shown = "; ".join(bad[:5]) + ("; ..." if len(bad) > 5 else "")
+            raise MapFormatError(f"rebuilt pack does not match the burgs ({len(bad)} misplaced: {shown})")
         # edges as arrays for graph algorithms
         rows = np.repeat(np.arange(self.n), [len(x) for x in self.c])
         cols = np.concatenate(self.c)

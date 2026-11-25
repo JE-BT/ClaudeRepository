@@ -75,9 +75,13 @@ The scalar's four jobs in the Generator are then taken back from it:
 
 Each culture's level is set so that the Generator's own regenerated field averages the culture's
 depth: azdev contains an exact port of `Development.generate()` and of the pack rebuild, and corrects
-the levels against it twice. On Batan the port reproduces 99.3% of the saved field, and after the
-uploads the Generator's regenerated field matched the prediction on 99.4% of cells and on every
-culture's average.
+the levels against it twice. The pack rebuild triangulates with an exact port of the Generator's
+Delaunator 5.1.0 (`delaunator.py`), because the order of a grid cell's neighbours decides how coastal
+cells are split and numbered; scipy's triangulation gave the right neighbours in another order, which
+swapped pack cells on split coasts. With it the port reproduces the saved field on every cell of Batan
+(8,036) and Beres (4,627), and every pack cell's neighbours match the Cells GeoJSON in order. With the
+earlier, inexact rebuild, the Generator's regenerated field after the uploads matched the prediction
+on 99.4% of Batan's cells and on every culture's average.
 
 Biome offsets (`--biome-offsets derived`, the default) come from the run: how much more or less
 elaborate a culture's communities are by the biomes they live in, by ridge regression, ±6, only for
@@ -171,10 +175,15 @@ ingredient the map lacks is dropped; a good with none left is skipped and listed
 The Batan package was loaded into the Generator (1.158, run locally, headless) and taken through every
 step above: the map loads with 111 goods and the new era names, both CSV previews apply, the culture
 levels and biome offsets match the files, the notes land, the regenerated development field matches
-azdev's prediction on 99.4% of cells (every culture's average to the decimal), and the economy runs
+azdev's prediction on 99.4% of cells (every culture's average to the decimal; this was before the pack
+rebuild was made exact, see above), and the economy runs
 without errors, with about a quarter of burg output in the new goods (ritual regalia, shell valuables,
 star charts, remedies, voyaging canoes, fermented milk).
 
 ## Tests
 
     AZDEV_TEST_MAP="Azgaar/Batan/Batan 2026-11-11-19-43.map" python -m pytest tests
+
+The Delaunator test runs without a map (its expected output comes from the JavaScript library). If a
+`<World> Cells ….geojson` from the same save sits beside the map, the rebuilt pack's neighbours are
+checked against it cell by cell.

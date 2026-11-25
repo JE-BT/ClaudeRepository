@@ -1,0 +1,232 @@
+{
+ "world": "Beres",
+ "map": "Beres 2026-11-25-06-30.map",
+ "runs": 21,
+ "scenarios": 7,
+ "seeds": 3,
+ "steps": 2500,
+ "start": "present map",
+ "depth_stat": 50,
+ "cultures": [
+  {
+   "Id": 1,
+   "Name": "Norse",
+   "old": 30,
+   "Development": 57,
+   "basin": "Maritime exchange, extractive",
+   "target": 56.4
+  },
+  {
+   "Id": 2,
+   "Name": "Elladan",
+   "old": 36,
+   "Development": 56,
+   "basin": "Seasonal ceremonial aggregation (monument building)",
+   "target": 52.3
+  },
+  {
+   "Id": 3,
+   "Name": "Astellian",
+   "old": 36,
+   "Development": 61,
+   "basin": "Maritime exchange, extractive",
+   "target": 60.0
+  },
+  {
+   "Id": 4,
+   "Name": "Vengrian",
+   "old": 33,
+   "Development": 57,
+   "basin": "Maritime exchange, extractive",
+   "target": 60.0
+  },
+  {
+   "Id": 5,
+   "Name": "Tallian",
+   "old": 42,
+   "Development": 53,
+   "basin": "Maritime exchange, extractive",
+   "target": 56.9
+  },
+  {
+   "Id": 6,
+   "Name": "Luari",
+   "old": 40,
+   "Development": 61,
+   "basin": "Maritime exchange, extractive",
+   "target": 60.0
+  },
+  {
+   "Id": 7,
+   "Name": "Soumi",
+   "old": 28,
+   "Development": 58,
+   "basin": "Maritime exchange, extractive",
+   "target": 59.0
+  },
+  {
+   "Id": 8,
+   "Name": "Angshire",
+   "old": 36,
+   "Development": 52,
+   "basin": "Maritime exchange, extractive",
+   "target": 59.8
+  },
+  {
+   "Id": 9,
+   "Name": "Shwazen",
+   "old": 36,
+   "Development": 58,
+   "basin": "Maritime exchange, extractive",
+   "target": 55.8
+  },
+  {
+   "Id": 10,
+   "Name": "Portuzian",
+   "old": 36,
+   "Development": 60,
+   "basin": "Maritime exchange, extractive",
+   "target": 59.5
+  }
+ ],
+ "basins": [
+  {
+   "name": "Seasonal ceremonial aggregation (monument building)",
+   "top": [
+    "monuments",
+    "regalia",
+    "forage",
+    "garden",
+    "coalmining"
+   ],
+   "robust": true
+  },
+  {
+   "name": "Seasonal ceremonial aggregation (sacred archives)",
+   "top": [
+    "sacredarch",
+    "printing",
+    "ancestral",
+    "oceanships",
+    "calendar"
+   ],
+   "robust": true
+  },
+  {
+   "name": "Maritime exchange, extractive",
+   "top": [
+    "voyaging",
+    "oceanships",
+    "shellvalues",
+    "shipbuilding",
+    "navigation"
+   ],
+   "robust": true
+  }
+ ],
+ "diagnostics": [
+  {
+   "id": "F1",
+   "name": "A ladder has re-emerged",
+   "failed": false,
+   "detail": "first axis carries 37% of the variance; flourishing dimensions load with mixed signs on it"
+  },
+  {
+   "id": "F2",
+   "name": "A monopoly on violence",
+   "failed": false,
+   "detail": "strongest rank correlation 0.61 (capture suffered on axis 2)"
+  },
+  {
+   "id": "F3",
+   "name": "A best society",
+   "failed": false,
+   "detail": "no basin dominates the others on 22 flourishing dimensions"
+  },
+  {
+   "id": "F4",
+   "name": "No content",
+   "failed": false,
+   "detail": "3 of 3 basins appear in at least 5 of 7 scenarios"
+  },
+  {
+   "id": "F5",
+   "name": "Geography is idle",
+   "failed": null,
+   "detail": "not run (use --diagnose)"
+  },
+  {
+   "id": "F6",
+   "name": "No feedback",
+   "failed": null,
+   "detail": "not run (use --diagnose)"
+  },
+  {
+   "id": "P1",
+   "name": "The scalar orders violence",
+   "failed": false,
+   "detail": "rank correlation of development with mobilisable capacity +0.36 (development also decides who trades first in Azgaar)"
+  },
+  {
+   "id": "P2",
+   "name": "The scalar is a ladder",
+   "failed": false,
+   "detail": "development correlates positively with 7 of 22 flourishing dimensions and negatively with 7"
+  },
+  {
+   "id": "R3",
+   "name": "Capture in several forms",
+   "failed": false,
+   "detail": "forms present: raiding, ritual monopoly, household, displacement"
+  },
+  {
+   "id": "R2",
+   "name": "Several basins coexist",
+   "failed": false,
+   "detail": "3 basins hold at least one community as its most frequent home"
+  }
+ ],
+ "new_goods": [
+  "Root crops",
+  "Fermented milk",
+  "Porcelain",
+  "Ledgers",
+  "Printed matter",
+  "Remedies",
+  "Ritual regalia",
+  "Voyaging canoes",
+  "Shell valuables",
+  "Felt",
+  "Composite bows",
+  "Star charts",
+  "Orchard fruit",
+  "Biochar",
+  "Almanacs",
+  "Paper money",
+  "Seed stock",
+  "Feast stores",
+  "Remounts",
+  "Steel",
+  "Ocean ships",
+  "Sea-farm produce",
+  "Sacred archives",
+  "Canal works",
+  "Steam engines",
+  "Rails",
+  "Bred cultivars",
+  "Chemicals",
+  "Steamships",
+  "Electrical goods",
+  "Engines",
+  "Vaccines",
+  "Pedigree horses",
+  "Computers",
+  "Bioreactors",
+  "Reef gardens",
+  "Fusion cores",
+  "Orbital craft",
+  "Living timber",
+  "Memory stones"
+ ],
+ "states_retitled": []
+}
